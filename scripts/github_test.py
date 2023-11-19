@@ -137,7 +137,10 @@ neat stuff"""),
 
 async def main():
     gh = GithubTarget(secrets)
-    await gh.post(posts[0])
+    for post in [posts[1], posts[2]]:
+        print(f"Posting {post.published.strftime("%Y-%m-%d")} {post.title}...")
+        await gh.post(post)
+    print("Complete!")
 
 
 if __name__ == "__main__":

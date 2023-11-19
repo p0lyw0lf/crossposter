@@ -1,7 +1,7 @@
 ---
 layout: ../../templates/cybersec_page.astro
-title: {{title}}
-direct_link: {{main_link}}
+title: {{ title | tojson }}
+direct_link: "{{ main_link }}"
 ---
 
-{{body}}
+{{ body }}
