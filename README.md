@@ -12,6 +12,21 @@ really recommend using it unless ur me :)
 
 ## Platforms
 
+### Discord
+
+Create an application, and under the Settings > Bot tab, copy the Token value
+and put it in the `DISCORD_TOKEN` variable in `shared/secrets.toml`. Turn on
+the Message Content Intent, and when inviting the bot to a server, make sure to
+give it the following permissions:
+* Read Messages/View Channels
+* Send Messages
+
+Also, make sure to set the additional variables in `shared/secrets.toml`:
+* `DISCORD_GUILD_ID`: The id of the main server you expect to run the bot in
+
+The bot will only respond to slash commands given to it by its owner. If u want
+to change that u have to edit the code urself sorry :(
+
 ### Mastodon
 
 In the developer settings tab, create an application and give it the

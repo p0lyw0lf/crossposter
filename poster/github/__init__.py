@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from githubkit import GitHub, TokenAuthStrategy
 from shared.model import Post
 from pathlib import PurePosixPath
@@ -31,6 +32,8 @@ class GithubTarget(Renderable):
 
     async def post(self, post: Post):
         filename = self.output_dir / f"{to_slug(post)}.mdx"
+        # Make copy so this modification doesn't destroy anything
+        post = Post(**asdict(post))
         post.body = post.body.replace(post.main_link, "").strip()
         content = self.render(post)
 
