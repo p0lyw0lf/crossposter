@@ -3,8 +3,7 @@ from shared.model import Post
 from pathlib import PurePosixPath
 import re
 from base64 import b64encode
-
-from .template import render_post
+from ..template import Renderable
 
 
 # Regex of all non-url-safe characters to be replaced with "-"
@@ -21,7 +20,7 @@ def to_slug(post: Post) -> str:
     return f"{post.published.strftime("%Y-%m-%d")}-{safe_title}"
 
 
-class GithubTarget:
+class GithubTarget(Renderable):
 
     def __init__(self, secrets: dict):
         self.gh = GitHub(TokenAuthStrategy(secrets["GITHUB_TOKEN"]))
@@ -33,7 +32,7 @@ class GithubTarget:
     async def post(self, post: Post):
         filename = self.output_dir / f"{to_slug(post)}.mdx"
         post.body = post.body.replace(post.main_link, "").strip()
-        content = render_post(post)
+        content = self.render(post)
 
         response = await self.gh.rest.repos.\
             async_create_or_update_file_contents(

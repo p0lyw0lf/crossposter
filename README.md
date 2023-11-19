@@ -1,9 +1,8 @@
 # Crossposter
 
 This is a project I've made to crosspost things between Discord, Mastodon, and
-my own blog! Very custom-made, just like
-[p2_tagging](https://github.com/p0lyw0lf/p2_tagging) I don't really recommend
-using it unless ur me :)
+my own blog! Very custom-made, so just like all my other projects, I don't
+really recommend using it unless ur me :)
 
 ## Usage
 
@@ -15,7 +14,15 @@ using it unless ur me :)
 
 ### Mastodon
 
-TODO: what API keys are needed and what does the setup process look like?
+In the developer settings tab, create an application and give it the
+`read:statuses` and `write:statuses` permissions. Then, read the "Your Access
+Token" variable and put it into `MASTODON_TOKEN` variable in `secrets.toml`.
+
+Also, provide the following environment variables:
+* `MASTODON_BASE_URL`: the URL of the server the app is registered in
+
+To edit the post layout, see `poster/templates/post.txt.j2`. This is laid out
+using jinja2 templating from the model in `shared/model.py`.
 
 ### GitHub
 
@@ -36,8 +43,8 @@ Additionally, configure the following variables in `secrets.toml`:
 * `GITHUB_BRANCH`: the branch to add posts to automatically
 * `GITHUB_OUTPUT_DIR`: the directory to output posts to
 
-And edit `post.markdown.j2` as desired. It uses jinja2 formatting. To
-control what goes before the `.j2`, see `poster/github/template.py`. To control
+And edit `post.mdx.j2` as desired. It uses jinja2 formatting. To
+control what goes before the `.j2`, see `poster/template.py`. To control
 what the final filename will look like, see `poster/github/__init__.py`.
 
 ## Running
