@@ -23,9 +23,10 @@ give it the following permissions:
 
 Also, make sure to set the additional variables in `secrets.toml`:
 * `DISCORD_GUILD_ID`: The id of the main server you expect to run the bot in
+* `DISCORD_OWNER_ID`: The id of the only authenticated user allowed to run
+    commands
 
-The bot will only respond to slash commands given to it by its owner. If u want
-to change that u have to edit the code urself sorry :(
+If you want any other functionality you'll have to edit the bot urself sorry :(
 
 ### Mastodon
 

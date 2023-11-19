@@ -8,6 +8,7 @@ from poster.mastodon import MastodonTarget
 from zoneinfo import ZoneInfo
 
 GUILD = discord.Object(id=secrets["DISCORD_GUILD_ID"])
+OWNER_ID = secrets["DISCORD_OWNER_ID"]
 
 
 class Bot(discord.Client):
@@ -40,6 +41,10 @@ async def repost(
     message_id: str,
     title: str,
 ):
+    if interaction.user.id != OWNER_ID:
+        await interaction.response.send_message("THAT'S MY PURSE! I DON'T KNOW YOU!!")
+        return
+
     try:
         message = await interaction.channel.fetch_message(int(message_id))
     except Exception:
