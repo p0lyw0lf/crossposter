@@ -19,7 +19,26 @@ TODO: what API keys are needed and what does the setup process look like?
 
 ### GitHub
 
-TODO: what API keys are needed and what does the setup process look like?
+[Create a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+and put in in the `GITHUB_TOKEN` variable in `secrets.toml`. If creating a
+fine-grained token, make sure to give it access to the repository you want to
+crosspost to. Specifically, give it read-write access in the following
+categories:
+* Contents
+
+What this target will do is, for a given post, create a commit adding the post
+file to the main branch. This assumes that the branch has a automatic deploy
+action set on push already.
+
+Additionally, configure the following variables in `secrets.toml`:
+* `GITHUB_USERNAME`: the owner of the repository
+* `GITHUB_REPO`: the repository name
+* `GITHUB_BRANCH`: the branch to add posts to automatically
+* `GITHUB_OUTPUT_DIR`: the directory to output posts to
+
+And edit `post.markdown.j2` as desired. It uses jinja2 formatting. To
+control what goes before the `.j2`, see `poster/github/template.py`. To control
+what the final filename will look like, see `poster/github/__init__.py`.
 
 ## Running
 
@@ -41,9 +60,8 @@ and that's it! enjoy :)))
 * `poster/`: Code for all the crossposting targets
     * `mastodon/`: The mastodon target
     * `github/`: The github target
-    * `target.py`: Class definition for a valid target
-    * `model.py`: Data model
 * `shared/`: Shared utility code
+    * `model.py`: Data model
     * `secrets.py`: Utilities for reading secrets
 * `scripts/`: Scripts to test things out
 

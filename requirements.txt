@@ -1,2 +1,3 @@
-PyGithub
+githubkit[auth-app]
+jinja2
 tzdata

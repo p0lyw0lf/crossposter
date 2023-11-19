@@ -12,7 +12,7 @@ class Post:
     """
 
     main_link: Url
-    title: str,
+    title: str
     body: str
     published: datetime # absolute time, tz-aware
 
