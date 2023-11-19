@@ -18,7 +18,7 @@ def to_slug(post: Post) -> str:
     Resulting slugs will look like "2023-01-02-some-title"
     """
     safe_title = UNSAFE_REGEX.subn("-", post.title)[0]
-    return f"{post.published.strftime("%Y-%m-%d")}-{safe_title}"
+    return f"{post.published.strftime('%Y-%m-%d')}-{safe_title}"
 
 
 class GithubTarget(Renderable):
