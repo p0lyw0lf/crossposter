@@ -77,6 +77,15 @@ async def repost(
         f"Successfully posted {title} to all platforms!")
 
 
+@client.tree.command(
+    name="awoo",
+    description="awoo",
+    guild=GUILD,
+)
+async def awoo(interaction: discord.Interaction):
+    await interaction.response.send_message("awoooo!")
+
+
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}!")
