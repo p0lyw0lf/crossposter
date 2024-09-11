@@ -3,3 +3,4 @@ githubkit[auth-app]
 jinja2
 Mastodon.py
 tzdata
+tomli
