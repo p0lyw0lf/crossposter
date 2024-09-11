@@ -8,16 +8,18 @@ env = Environment(
 )
 
 class_to_template = {
-    "GithubTarget": "post.mdx.j2",
+    "GithubTarget": "post.md.j2",
     "MastodonTarget": "post.txt.j2",
 }
 
 class_to_template = {
-    c: env.get_template(t) for c, t in class_to_template.items()
+    c: env.get_template(t)
+    for c, t in class_to_template.items()
 }
 
 
 class Renderable:
+
     def render(self, post: Post) -> str:
         """
         Renders a post to a template, based on the inheriting class

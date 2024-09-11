@@ -6,7 +6,6 @@ import re
 from base64 import b64encode
 from ..template import Renderable
 
-
 # Regex of all non-url-safe characters to be replaced with "-"
 UNSAFE_REGEX = re.compile(r"[^a-zA-Z0-9]+")
 
@@ -31,7 +30,7 @@ class GithubTarget(Renderable):
         self.output_dir = PurePosixPath(secrets["GITHUB_OUTPUT_DIR"])
 
     async def post(self, post: Post):
-        filename = self.output_dir / f"{to_slug(post)}.mdx"
+        filename = self.output_dir / f"{to_slug(post)}.md"
         # Make copy so this modification doesn't destroy anything
         post = Post(**asdict(post))
         post.body = post.body.replace(post.main_link, "").strip()
