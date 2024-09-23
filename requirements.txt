@@ -1,6 +1,7 @@
+Mastodon.py
 discord.py
 githubkit[auth-app]
 jinja2
-Mastodon.py
-tzdata
+sanic
 tomli
+tzdata

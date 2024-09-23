@@ -1,10 +1,10 @@
 import discord
 from discord import app_commands
 from shared.secrets import secrets
+from shared.config import config
 from shared.model import Post, parse_main_link
 import asyncio
-from poster.github import GithubTarget
-from poster.mastodon import MastodonTarget
+from poster import posting_target
 from zoneinfo import ZoneInfo
 
 GUILD = discord.Object(id=secrets["DISCORD_GUILD_ID"])
@@ -25,8 +25,8 @@ intents = discord.Intents.default()
 client = Bot(intents=intents)
 
 posters = {
-    "Github": GithubTarget(secrets),
-    "Mastodon": MastodonTarget(secrets),
+    target: posting_target(target, config, secrets)
+    for target in config["sources"]["bot"]
 }
 
 

@@ -15,16 +15,18 @@ really recommend using it unless ur me :)
 ### Discord
 
 Create an application, and under the Settings > Bot tab, copy the Token value
-and put it in the `DISCORD_TOKEN` variable in `shared/secrets/secrets.toml`. Turn on
+and put it in the `DISCORD_TOKEN` variable in `shared/secrets.toml`. Turn on
 the Message Content Intent, and when inviting the bot to a server, make sure to
 give it the following permissions:
-* Read Messages/View Channels
-* Send Messages
+
+- Read Messages/View Channels
+- Send Messages
 
 Also, make sure to set the additional variables in `secrets.toml`:
-* `DISCORD_GUILD_ID`: The id of the main server you expect to run the bot in
-* `DISCORD_OWNER_ID`: The id of the only authenticated user allowed to run
-    commands
+
+- `DISCORD_GUILD_ID`: The id of the main server you expect to run the bot in
+- `DISCORD_OWNER_ID`: The id of the only authenticated user allowed to run
+  commands
 
 If you want any other functionality you'll have to edit the bot urself sorry :(
 
@@ -35,7 +37,8 @@ In the developer settings tab, create an application and give it the
 Token" variable and put it into `MASTODON_TOKEN` variable in `secrets.toml`.
 
 Also, provide the following environment variables:
-* `MASTODON_BASE_URL`: the URL of the server the app is registered in
+
+- `MASTODON_BASE_URL`: the URL of the server the app is registered in
 
 To edit the post layout, see `poster/templates/post.txt.j2`. This is laid out
 using jinja2 templating from the model in `shared/model.py`.
@@ -47,19 +50,21 @@ and put in in the `GITHUB_TOKEN` variable in `secrets.toml`. If creating a
 fine-grained token, make sure to give it access to the repository you want to
 crosspost to. Specifically, give it read-write access in the following
 categories:
-* Contents
+
+- Contents
 
 What this target will do is, for a given post, create a commit adding the post
 file to the main branch. This assumes that the branch has a automatic deploy
 action set on push already.
 
-Additionally, configure the following variables in `secrets.toml`:
-* `GITHUB_USERNAME`: the owner of the repository
-* `GITHUB_REPO`: the repository name
-* `GITHUB_BRANCH`: the branch to add posts to automatically
-* `GITHUB_OUTPUT_DIR`: the directory to output posts to
+Additionally, configure the following variables in `config.toml`:
 
-And edit `post.mdx.j2` as desired. It uses jinja2 formatting. To
+- `GITHUB_USERNAME`: the owner of the repository
+- `GITHUB_REPO`: the repository name
+- `GITHUB_BRANCH`: the branch to add posts to automatically
+- `GITHUB_OUTPUT_DIR`: the directory to output posts to
+
+And edit `post.md.j2` as desired. It uses jinja2 formatting. To
 control what goes before the `.j2`, see `poster/template.py`. To control
 what the final filename will look like, see `poster/github/__init__.py`.
 
@@ -79,14 +84,14 @@ and that's it! enjoy :)))
 
 ## Code Structure
 
-* `bot/`: Code for the Discord bot
-* `poster/`: Code for all the crossposting targets
-    * `mastodon/`: The mastodon target
-    * `github/`: The github target
-* `shared/`: Shared utility code
-    * `model.py`: Data model
-    * `secrets.py`: Utilities for reading secrets
-* `scripts/`: Scripts to test things out
+- `bot/`: Code for the Discord bot
+- `poster/`: Code for all the crossposting targets
+  - `mastodon/`: The mastodon target
+  - `github/`: The github target
+- `shared/`: Shared utility code
+  - `model.py`: Data model
+  - `secrets.py`: Utilities for reading secrets
+- `scripts/`: Scripts to test things out
 
 Because of the module structure, everything needs to be run with `python -m` to
 work correctly. Bit weird but u get used to it!

@@ -1,0 +1,24 @@
+[github_cybersec]
+# Repository information, for where to place completed posts
+GITHUB_USERNAME="p0lyw0lf"
+GITHUB_REPO="website"
+GITHUB_BRANCH="main"
+GITHUB_OUTPUT_DIR="src/content/cybersec"
+# What template to use
+template="cybersec_post.md.j2"
+
+[github_blog]
+GITHUB_USERNAME="p0lyw0lf"
+GITHUB_REPO="website"
+GITHUB_BRANCH="main"
+GITHUB_OUTPUT_DIR="src/content/blog"
+template="blog_post.md.j2"
+
+[mastodon]
+template="post.txt.j2"
+
+[sources.bot]
+outputs = ["github_cybersec", "mastodon"]
+
+[sources.server]
+outputs = ["github_blog"]

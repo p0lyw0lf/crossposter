@@ -1,27 +1,31 @@
 from jinja2 import Environment, PackageLoader, select_autoescape
 from shared.model import Post
+from shared.config import config
 from dataclasses import asdict
 
 env = Environment(
     loader=PackageLoader(__name__),
     autoescape=select_autoescape(),
+    enable_async=True,
 )
 
-class_to_template = {
-    "GithubTarget": "post.md.j2",
-    "MastodonTarget": "post.txt.j2",
-}
 
-class_to_template = {
-    c: env.get_template(t)
-    for c, t in class_to_template.items()
+templates = {
+    t: env.get_template(t)
+    for t in [
+        "cybersec_post.md.j2",
+        "blog_post.md.j2",
+        "post.txt.j2",
+    ]
 }
 
 
 class Renderable:
+    target: str
 
-    def render(self, post: Post) -> str:
+    async def render(self, post: Post) -> str:
         """
         Renders a post to a template, based on the inheriting class
         """
-        return class_to_template[type(self).__name__].render(**asdict(post))
+        template = config[self.target].template
+        return await templates[template].render_async(**asdict(post))

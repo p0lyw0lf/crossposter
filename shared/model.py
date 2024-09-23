@@ -5,6 +5,7 @@ import re
 
 Url: TypeAlias = str
 
+
 @dataclass
 class Post:
     """
@@ -14,10 +15,12 @@ class Post:
     main_link: Url
     title: str
     body: str
-    published: datetime # absolute time, tz-aware
+    published: datetime  # absolute time, tz-aware
+
 
 # Very not secure. Fortunately I think only I'll be using it?
 URL_REGEX = re.compile(r"\bhttps?://[^\s]+")
+
 
 def parse_main_link(body: str) -> Url:
     """
@@ -28,4 +31,3 @@ def parse_main_link(body: str) -> Url:
     if match is None:
         raise ValueError("URL not found in body!")
     return match.group(0)
-

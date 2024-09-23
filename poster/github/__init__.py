@@ -22,12 +22,14 @@ def to_slug(post: Post) -> str:
 
 class GithubTarget(Renderable):
 
-    def __init__(self, secrets: dict):
+    def __init__(self, prefix: str, config: dict, secrets: dict):
+        config = config[prefix]
+        secrets = secrets[prefix]
         self.gh = GitHub(TokenAuthStrategy(secrets["GITHUB_TOKEN"]))
-        self.owner = secrets["GITHUB_USERNAME"]
-        self.repo = secrets["GITHUB_REPO"]
-        self.branch = secrets["GITHUB_BRANCH"]
-        self.output_dir = PurePosixPath(secrets["GITHUB_OUTPUT_DIR"])
+        self.owner = config["GITHUB_USERNAME"]
+        self.repo = config["GITHUB_REPO"]
+        self.branch = config["GITHUB_BRANCH"]
+        self.output_dir = PurePosixPath(config["GITHUB_OUTPUT_DIR"])
 
     async def post(self, post: Post):
         filename = self.output_dir / f"{to_slug(post)}.md"
