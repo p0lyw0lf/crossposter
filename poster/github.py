@@ -4,7 +4,7 @@ from shared.model import Post
 from pathlib import PurePosixPath
 import re
 from base64 import b64encode
-from ..template import Renderable
+from .template import Renderable
 
 # Regex of all non-url-safe characters to be replaced with "-"
 UNSAFE_REGEX = re.compile(r"[^a-zA-Z0-9]+")

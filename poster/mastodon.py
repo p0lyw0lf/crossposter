@@ -1,7 +1,7 @@
 from mastodon import Mastodon
 from shared.model import Post
 import asyncio
-from ..template import Renderable
+from .template import Renderable
 
 
 class MastodonTarget(Renderable):
