@@ -26,7 +26,7 @@ client = Bot(intents=intents)
 
 posters = {
     target: posting_target(target, config, secrets)
-    for target in config["sources"]["bot"]
+    for target in config["outputs"]["bot"]
 }
 
 

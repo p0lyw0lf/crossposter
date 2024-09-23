@@ -17,8 +17,6 @@ template="blog_post.md.j2"
 [mastodon]
 template="post.txt.j2"
 
-[sources.bot]
-outputs = ["github_cybersec", "mastodon"]
-
-[sources.server]
-outputs = ["github_blog"]
+[outputs]
+bot = ["github_cybersec", "mastodon"]
+server = ["github_blog"]

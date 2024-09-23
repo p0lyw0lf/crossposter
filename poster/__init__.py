@@ -4,9 +4,9 @@ from .mastodon import MastodonTarget
 
 
 def posting_target(target: str, config: dict, secrets: dict) -> Renderable:
-    if target.starts_with("github"):
+    if target.startswith("github"):
         return GithubTarget(target, config, secrets)
-    elif target.starts_with("mastodon"):
+    elif target.startswith("mastodon"):
         return MastodonTarget(target, secrets)
     else:
         raise ValueError(f"invalid {target=}")
