@@ -15,9 +15,9 @@ really recommend using it unless ur me :)
 ### Discord
 
 Create an application, and under the Settings > Bot tab, copy the Token value
-and put it in the `DISCORD_TOKEN` variable in `shared/secrets.toml`. Turn on
-the Message Content Intent, and when inviting the bot to a server, make sure to
-give it the following permissions:
+and put it in the `DISCORD_TOKEN` variable in `shared/secrets/secrets.toml`.
+Turn on the Message Content Intent, and when inviting the bot to a server, make
+sure to give it the following permissions:
 
 - Read Messages/View Channels
 - Send Messages
