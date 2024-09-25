@@ -22,9 +22,10 @@ def to_slug(post: Post) -> str:
 
 class GithubTarget(Renderable):
 
-    def __init__(self, prefix: str, config: dict, secrets: dict):
-        config = config[prefix]
-        secrets = secrets[prefix]
+    def __init__(self, target: str, config: dict, secrets: dict):
+        self.target = target
+        config = config[target]
+        secrets = secrets[target]
         self.gh = GitHub(TokenAuthStrategy(secrets["GITHUB_TOKEN"]))
         self.owner = config["GITHUB_USERNAME"]
         self.repo = config["GITHUB_REPO"]
@@ -35,8 +36,8 @@ class GithubTarget(Renderable):
         filename = self.output_dir / f"{to_slug(post)}.md"
         # Make copy so this modification doesn't destroy anything
         post = Post(**asdict(post))
-        post.body = post.body.replace(post.main_link, "").strip()
-        content = self.render(post)
+        post.body = post.body.replace(post.repost_link, "").strip()
+        content = await self.render(post)
 
         response = await self.gh.rest.repos.\
             async_create_or_update_file_contents(

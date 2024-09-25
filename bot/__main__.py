@@ -1,11 +1,12 @@
 import discord
+import asyncio
 from discord import app_commands
+from zoneinfo import ZoneInfo
+
 from shared.secrets import secrets
 from shared.config import config
-from shared.model import Post, parse_main_link
-import asyncio
+from shared.model import Post, parse_repost_link
 from poster import posting_target
-from zoneinfo import ZoneInfo
 
 GUILD = discord.Object(id=secrets["DISCORD_GUILD_ID"])
 OWNER_ID = secrets["DISCORD_OWNER_ID"]
@@ -42,28 +43,34 @@ async def repost(
     title: str,
 ):
     if interaction.user.id != OWNER_ID:
-        await interaction.response.send_message("THAT'S MY PURSE! I DON'T KNOW YOU!!")
+        await interaction.response.send_message("""\
+THAT'S MY PURSE! I DON'T KNOW YOU!!\
+""")
         return
 
     try:
         message = await interaction.channel.fetch_message(int(message_id))
     except Exception:
-        await interaction.response.send_message(
-            f"Could not get message with id {message_id}. Am I in the same channel?")
+        await interaction.response.send_message(f"""\
+Could not get message with id {message_id}. Am I in the same channel?\
+""")
         return
     try:
-        main_link = parse_main_link(message.content)
+        repost_link = parse_repost_link(message.content)
     except Exception:
-        await interaction.response.send_message(
-            "Could not parse the url out of that message. Please edit and try again.")
+        await interaction.response.send_message("""\
+Could not parse the url out of that message. Please edit and try again.\
+""")
         return
 
     post = Post(
-        main_link=main_link,
         title=title,
-        body=message.content,
+        description=None,
+        tags=[],
         published=message.created_at.astimezone(
             ZoneInfo(secrets["timezone"])),
+        repost_link=repost_link,
+        body=message.content,
     )
 
     for platform, poster in posters.items():

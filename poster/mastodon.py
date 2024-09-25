@@ -5,8 +5,9 @@ from .template import Renderable
 
 
 class MastodonTarget(Renderable):
-    def __init__(self, prefix: str, secrets: dict):
-        secrets = secrets[prefix]
+    def __init__(self, target: str, secrets: dict):
+        self.target = target
+        secrets = secrets[target]
         self.m = Mastodon(
             api_base_url=secrets["MASTODON_BASE_URL"],
             access_token=secrets["MASTODON_TOKEN"],
@@ -15,5 +16,5 @@ class MastodonTarget(Renderable):
     async def post(self, post: Post):
         await asyncio.to_thread(
             self.m.toot,
-            self.render(post),
+            await self.render(post),
         )
