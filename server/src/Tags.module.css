@@ -1,0 +1,47 @@
+@import "./colors.css";
+
+.tag-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    background-color: inherit;
+    color: inherit;
+    font: inherit;
+    border: none;
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}
+
+.tag {
+  background-color: var(--color-mango);
+  color: var(--color-black);
+
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+
+  padding: 2px 10px;
+  border-radius: 1000rem;
+
+  button {
+    display: none;
+    border: none;
+    background-color: var(--color-black);
+    color: var(--color-mango);
+
+    border-radius: 1000rem;
+
+    padding: 0 4px;
+  }
+
+  &:hover button {
+    display: flex;
+  }
+}

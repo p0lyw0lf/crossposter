@@ -1,33 +1,16 @@
+@import "./colors.css";
+
 .App {
-  text-align: center;
-}
+  background-color: var(--color-not-black);
+  color: var(--color-white);
 
-.logo {
-  animation: logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
+  position: absolute;
+  inset: 0;
 
-.header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+  align-items: stretch;
+  gap: 24px;
 
-.link {
-  color: #b318f0;
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  padding: 16px;
 }
