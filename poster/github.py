@@ -38,7 +38,7 @@ class GithubTarget(Renderable):
         post = Post(**asdict(post))
         if post.repost_link:
             post.body = post.body.replace(post.repost_link, "")
-        post.body = post.body.strip()
+        post.body = post.body.replace("\r", "").strip()
         content = await self.render(post)
 
         response = await self.gh.rest.repos.\
