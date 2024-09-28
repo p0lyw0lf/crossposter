@@ -27,5 +27,5 @@ class Renderable:
         """
         Renders a post to a template, based on the inheriting class
         """
-        template = config[self.target].template
+        template = config[self.target]["template"]
         return await templates[template].render_async(**asdict(post))

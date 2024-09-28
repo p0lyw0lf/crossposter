@@ -19,6 +19,11 @@
         <h4>Logged in as {{ username }}</h4>
       </header>
       <div id="root"></div>
+      {% if message is defined %}
+      <p class="message">{{ message }}</p>
+      {% endif %} {% if error is defined %}
+      <p class="message error">{{ error }}</p>
+      {% endif %}
       <footer>Have a nice day!!</footer>
     </main>
   </body>

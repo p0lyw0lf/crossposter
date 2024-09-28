@@ -36,7 +36,9 @@ class GithubTarget(Renderable):
         filename = self.output_dir / f"{to_slug(post)}.md"
         # Make copy so this modification doesn't destroy anything
         post = Post(**asdict(post))
-        post.body = post.body.replace(post.repost_link, "").strip()
+        if post.repost_link:
+            post.body = post.body.replace(post.repost_link, "")
+        post.body = post.body.strip()
         content = await self.render(post)
 
         response = await self.gh.rest.repos.\

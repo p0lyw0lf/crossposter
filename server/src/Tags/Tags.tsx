@@ -1,5 +1,6 @@
 import { createSignal, For, onMount, type Component } from "solid-js";
-import { TextInput } from "./TextInput";
+import { TextInput } from "../TextInput";
+import { Tag } from "./Tag";
 
 import styles from "./Tags.module.css";
 
@@ -11,10 +12,10 @@ export const Tags: Component = () => {
     if (!input) return;
 
     input.addEventListener("keydown", (ev) => {
-      console.log(ev.code);
       if (ev.code === "Enter" || ev.code === "Comma") {
         ev.stopPropagation();
         ev.preventDefault();
+        if (!input.value) return;
         setTags((tags) => [
           ...tags.filter((tag) => tag !== input.value),
           input.value,
@@ -33,16 +34,12 @@ export const Tags: Component = () => {
     <div class={styles["tag-list"]}>
       <For each={tags()}>
         {(tag) => (
-          <span class={styles.tag}>
-            <button
-              onclick={() =>
-                setTags((tags) => tags.filter((oldTag) => oldTag !== tag))
-              }
-            >
-              x
-            </button>
-            {`#${tag}`}
-          </span>
+          <Tag
+            tag={tag}
+            onClose={() =>
+              setTags((tags) => tags.filter((oldTag) => oldTag !== tag))
+            }
+          />
         )}
       </For>
       <TextInput ref={input} type="text" placeholder="#add tags" />

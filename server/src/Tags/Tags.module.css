@@ -1,4 +1,4 @@
-@import "./colors.css";
+@import "../colors.css";
 
 .tag-list {
   display: flex;
@@ -31,17 +31,30 @@
   border-radius: 1000rem;
 
   button {
-    display: none;
+    background-color: inherit;
+    color: inherit;
     border: none;
-    background-color: var(--color-black);
-    color: var(--color-mango);
 
+    display: flex;
+    width: 1em;
+    height: 1em;
+    align-items: center;
+    justify-content: center;
+
+    padding: 2px;
     border-radius: 1000rem;
 
-    padding: 0 4px;
+    &::before {
+      content: "#";
+    }
   }
 
   &:hover button {
-    display: flex;
+    background-color: var(--color-black);
+    color: var(--color-mango);
+
+    &::before {
+      content: "⨯";
+    }
   }
 }
