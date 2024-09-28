@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>PolyWolf's Post Composer - Login</title>
+    <style>
+      * {
+        font-family: sans-serif;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .error {
+        color: darkred;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Login</h1>
+    <form action="/login" method="POST">
+      <label>Username: <input type="text" name="username" required /></label>
+      <label
+        >Password: <input type="password" name="password" required
+      /></label>
+      <button type="submit">Login</button>
+    </form>
+    {% if error is defined %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+  </body>
+</html>

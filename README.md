@@ -4,6 +4,9 @@ This is a project I've made to crosspost things between Discord, Mastodon, and
 my own blog! Very custom-made, so just like all my other projects, I don't
 really recommend using it unless ur me :)
 
+The below instructions are for the Discord bot. For additional instructions
+that need to be followed to get the server running, see `server/README.md`.
+
 ## Usage
 
 1. Send a message in Discord in a channel where the bot has read permissions

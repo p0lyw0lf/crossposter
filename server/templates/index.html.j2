@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>PolyWolf's Post Composer</title>
+    <script type="module" src="/{{ index['file'] }}"></script>
+    {% for file in index['css'] %}
+    <link rel="stylesheet" href="/{{ file }}" />
+    {% endfor %}
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <main>
+      <header>
+        <h2>PolyWolf's Post Composer</h2>
+        <h4>Logged in as {{ username }}</h4>
+      </header>
+      <div id="root"></div>
+      <footer>Have a nice day!!</footer>
+    </main>
+  </body>
+</html>
