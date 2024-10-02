@@ -1,0 +1,9 @@
+:root {
+  --dim-font-large: 1.75rem;
+  --dim-font-small: 0.875rem;
+
+  @media (max-width: 600px) {
+    --dim-font-large: 2rem;
+    --dim-font-small: 1rem;
+  }
+}

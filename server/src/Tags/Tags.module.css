@@ -1,4 +1,5 @@
 @import "../colors.css";
+@import "../dims.css";
 
 .tag-list {
   display: flex;
@@ -21,6 +22,7 @@
 .tag {
   background-color: var(--color-mango);
   color: var(--color-black);
+  font-size: var(--dim-font-small);
 
   display: inline-flex;
   flex-direction: row;
@@ -33,6 +35,7 @@
   button {
     background-color: inherit;
     color: inherit;
+    font-size: inherit;
     border: none;
 
     display: flex;

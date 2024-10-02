@@ -1,4 +1,5 @@
 @import "./colors.css";
+@import "./dims.css";
 
 .composer {
   display: flex;
@@ -35,8 +36,12 @@
 }
 
 .title {
-  font-size: 1.5em;
+  font-size: var(--dim-font-large);
   font-weight: 600;
+}
+
+.body {
+  font-size: var(--dim-font-small);
 }
 
 .toolbar {

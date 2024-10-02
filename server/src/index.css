@@ -1,12 +1,31 @@
 @import "./colors.css";
+@import "./dims.css";
 
 body {
+  background-color: var(--color-not-black);
+  color: var(--color-white);
+
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: var(--dim-font-small);
+}
+
+h1,
+h2,
+h3 {
+  font-size: var(--dim-font-large);
+  margin: 0;
+}
+
+h4,
+h5,
+h6 {
+  font-size: var(--dim-font-small);
+  margin: 0;
 }
 
 code {
@@ -15,12 +34,6 @@ code {
 }
 
 main {
-  background-color: var(--color-not-black);
-  color: var(--color-white);
-
-  position: absolute;
-  inset: 0;
-
   display: flex;
   flex-direction: column;
   align-items: stretch;

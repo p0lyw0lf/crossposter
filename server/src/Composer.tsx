@@ -17,6 +17,7 @@ export const Composer: Component = () => {
           required
         />
         <Textarea
+          class={styles.body}
           name="body"
           placeholder="post body (accepts markdown!)"
           required
