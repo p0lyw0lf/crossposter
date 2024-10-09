@@ -7,12 +7,15 @@ import { PostButton } from "./PostButton";
 import { v7 as uuidv7 } from "uuid";
 
 import styles from "./Composer.module.css";
+import { DraftList } from "./DraftList";
 
 export const Composer: Component = () => {
   let formRef: HTMLFormElement;
 
   const [message, setMessage] = createSignal("");
   const [error, setError] = createSignal("");
+
+  const [tags, setTags] = createSignal<string[]>([]);
 
   return (
     <>
@@ -32,7 +35,7 @@ export const Composer: Component = () => {
             placeholder="post body (accepts markdown!)"
             required
           />
-          <Tags />
+          <Tags tags={tags} setTags={setTags} />
         </div>
         <div class={styles.toolbar}>
           <Toggle />
@@ -49,6 +52,7 @@ export const Composer: Component = () => {
       <Show when={!!message()}>
         <p classList={{ message: true }}>{message()}</p>
       </Show>
+      <DraftList formRef={formRef!} setTags={setTags} />
     </>
   );
 };

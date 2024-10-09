@@ -49,7 +49,7 @@ export const listDraftKeys = (): string[] => {
   ];
 };
 
-export const listsDrafts = (): Draft[] => {
+export const listDrafts = (): Draft[] => {
   const draftMappings = listDraftKeys().flatMap(
     (draftKey): Array<[string, Draft]> => {
       const draft = draftFromString(

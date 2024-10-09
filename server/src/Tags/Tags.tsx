@@ -1,16 +1,19 @@
-import { createSignal, For, onMount, type Component } from "solid-js";
+import { For, onMount } from "solid-js";
+import type { Component } from "solid-js";
 import { TextInput } from "../TextInput";
 import { Tag } from "./Tag";
 
 import styles from "./Tags.module.css";
 
-export const Tags: Component = () => {
-  let input: HTMLInputElement | undefined;
-  const [tags, setTags] = createSignal<string[]>([]);
+interface Props {
+  tags: () => string[];
+  setTags: (update: (oldTags: string[]) => string[]) => void;
+}
+
+export const Tags: Component<Props> = ({ tags, setTags }) => {
+  let input: HTMLInputElement;
 
   onMount(() => {
-    if (!input) return;
-
     input.addEventListener("keydown", (ev) => {
       if (ev.code === "Enter" || ev.code === "Comma") {
         ev.stopPropagation();
@@ -42,7 +45,7 @@ export const Tags: Component = () => {
           />
         )}
       </For>
-      <TextInput ref={input} type="text" placeholder="#add tags" />
+      <TextInput ref={input!} type="text" placeholder="#add tags" />
     </div>
   );
 };
