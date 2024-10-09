@@ -1,0 +1,26 @@
+@import "./colors.css";
+
+.container {
+  border-radius: 8px;
+  overflow: hidden;
+
+  .button {
+    background-color: var(--color-mango);
+    color: var(--color-black);
+
+    padding: 4px 8px;
+    border: none;
+
+    font: inherit;
+
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--color-longan);
+    }
+  }
+}
+
+.button.toggle {
+  border-left: solid 1px var(--color-black);
+}

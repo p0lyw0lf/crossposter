@@ -4,10 +4,8 @@ import type { JSX } from "solid-js";
 export const Textarea: Component<
   JSX.TextareaHTMLAttributes<HTMLTextAreaElement>
 > = (props) => {
-  let textarea: HTMLTextAreaElement | undefined;
+  let textarea: HTMLTextAreaElement;
   onMount(() => {
-    if (!textarea) return;
-
     // Magic code from https://stackoverflow.com/a/25621277
     textarea.style.height = textarea.scrollHeight + "px";
     textarea.style.overflowY = "hidden";
@@ -23,5 +21,5 @@ export const Textarea: Component<
     });
   });
 
-  return <textarea ref={textarea} {...props} />;
+  return <textarea ref={textarea!} {...props} />;
 };
