@@ -43,8 +43,15 @@ Also, provide the following environment variables:
 
 - `MASTODON_BASE_URL`: the URL of the server the app is registered in
 
-To edit the post layout, see `poster/templates/post.txt.j2`. This is laid out
-using jinja2 templating from the model in `shared/model.py`.
+To edit the post layout, see `poster/templates/mastodon_cybersec.txt.j2`. This
+is laid out using jinja2 templating from the model in `shared/model.py`.
+
+### Bluesky
+
+First, add your homeserver to `BLUESKY_HOMESERVER` (e.x. `https://bsky.app` or
+`https://girl.technology`), and then add your full username (e.x.
+`wolf.girl.technology`) and password under `BLUESKY_USERNAME` and
+`BLUESKY_PASSWORD` respectively.
 
 ### GitHub
 
@@ -90,6 +97,7 @@ and that's it! enjoy :)))
 - `bot/`: Code for the Discord bot
 - `poster/`: Code for all the crossposting targets
   - `mastodon/`: The mastodon target
+  - `bluesky/`: The bluesky target
   - `github/`: The github target
 - `shared/`: Shared utility code
   - `model.py`: Data model

@@ -1,12 +1,12 @@
 from shared.config import config
 from shared.secrets import secrets
-from poster.mastodon import MastodonTarget
+from poster.bluesky import BlueskyTarget
 import asyncio
 from .posts import posts
 
 
 async def main():
-    m = MastodonTarget("mastodon_blog", config, secrets)
+    m = BlueskyTarget("bluesky_blog", config, secrets)
     for post in posts:
         print(f"Posting {post.published.strftime("%Y-%m-%d")} {post.title}...")
         await m.post(post)

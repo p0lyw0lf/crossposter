@@ -1,5 +1,5 @@
 from jinja2 import Environment, PackageLoader, select_autoescape
-from shared.model import Post
+from shared.model import Post, to_slug
 from shared.config import config
 from dataclasses import asdict
 
@@ -8,14 +8,17 @@ env = Environment(
     autoescape=select_autoescape(),
     enable_async=True,
 )
+env.filters["to_slug"] = to_slug
 
 
 templates = {
     t: env.get_template(t)
     for t in [
-        "cybersec_post.md.j2",
-        "blog_post.md.j2",
-        "post.txt.j2",
+        "github_cybersec.md.j2",
+        "github_blog.md.j2",
+        "mastodon_cybersec.txt.j2",
+        "mastodon_blog.txt.j2",
+        "bluesky_blog.md.j2",
     ]
 }
 
@@ -28,4 +31,7 @@ class Renderable:
         Renders a post to a template, based on the inheriting class
         """
         template = config[self.target]["template"]
-        return await templates[template].render_async(**asdict(post))
+        return await templates[template].render_async(
+            slug=to_slug(post),
+            **asdict(post),
+        )

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from shared.model import Post, parse_main_link
+from shared.model import Post, parse_repost_link
 from shared.secrets import secrets
 
 
@@ -27,14 +27,17 @@ class IncompletePost:
         Creates a full `Post` out of the `IncompletePost`
         """
         return Post(
-            main_link=parse_main_link(self.body),
             title=self.title,
-            body=self.body,
+            description=None,
+            tags=[],
             published=to_datetime(self.timestring),
+            repost_link=parse_repost_link(self.body),
+            body=self.body,
         )
 
 
 posts = list(map(lambda t: IncompletePost(*t).to_post(), [
     # ("2020-99-99", "post title", """Post Body"""),
-    ("2023-11-18", "random post title", """random post body https://wolfgirl.dev/cybersec/""")
+    ("2023-11-18", "testing post title",
+     """random post body https://wolfgirl.dev/cybersec/""")
 ]))
