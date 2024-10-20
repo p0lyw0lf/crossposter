@@ -44,6 +44,7 @@ async def upload(request: Request, username: str):
             await asyncio.to_thread(f.write, body)
 
         # Step 2: upload file to S3
+        f.seek(0)
         await asyncio.to_thread(
             s3.upload_fileobj,
             f, bucket_name, file_name,

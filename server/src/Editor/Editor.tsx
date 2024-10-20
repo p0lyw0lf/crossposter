@@ -3,7 +3,7 @@ import { createSignal, Show } from "solid-js";
 import { Tags } from "./Tags/Tags";
 import { resizeTextArea, TextArea } from "../components/TextArea";
 import styles from "./Editor.module.css";
-import { uploadFiles } from "../fileUpload";
+import { uploadFiles, uploadFilesAndInsert } from "../fileUpload";
 import { getFormElements, useComposerContext } from "../ComposerContext";
 
 export const Editor: Component = () => {
@@ -13,7 +13,6 @@ export const Editor: Component = () => {
     <div
       class={styles.editor}
       onDrop={(event) => {
-        console.log("onDrop");
         event.preventDefault();
         setDragging(false);
 
@@ -29,23 +28,12 @@ export const Editor: Component = () => {
           files = [...event.dataTransfer.files];
         }
 
-        setStore("error", "");
-        setStore("message", "");
+        setStore("message", "Uploading...");
 
-        const id = getFormElements(store.formRef).draftId.value;
-
-        uploadFiles(id, files)
+        uploadFilesAndInsert(store.formRef, files)
           .then((filenames) => {
             setStore("error", "");
-            setStore("message", `files uploaded to ${filenames.join(", ")}`);
-
-            const { body } = getFormElements(store.formRef);
-            body.setRangeText(
-              filenames
-                .map((filename) => `<img src="${filename}" />`)
-                .join("\n"),
-            );
-            resizeTextArea(body);
+            setStore("message", `Files uploaded to ${filenames.join(", ")}`);
           })
           .catch((err) => {
             setStore("error", `Error uploading file: ${err}`);

@@ -1,9 +1,12 @@
+import { getFormElements } from "./ComposerContext";
+import { resizeTextArea } from "./components/TextArea";
+
 /**
- * Returns the resulting file URLs
+ * Returns the uploaded file URLs
  */
 export const uploadFiles = async (
   id: string,
-  files: File[],
+  files: File[]
 ): Promise<string[]> => {
   return await Promise.all(
     files.map(async (file) => {
@@ -14,6 +17,27 @@ export const uploadFiles = async (
         throw new Error(`server response ${response.status}`);
       }
       return await response.text();
-    }),
+    })
   );
+};
+
+/**
+ * Uploads files and inserts the resulting urls as `<img>` tags into the form's body text.
+ *
+ * Returns the uploaded file URLs
+ */
+export const uploadFilesAndInsert = async (
+  formRef: HTMLFormElement,
+  files: File[]
+): Promise<string[]> => {
+  const id = getFormElements(formRef).draftId.value;
+  const filenames = await uploadFiles(id, files);
+
+  const { body } = getFormElements(formRef);
+  body.setRangeText(
+    filenames.map((filename) => `<img src="${filename}" />`).join("\n")
+  );
+  resizeTextArea(body);
+
+  return filenames;
 };

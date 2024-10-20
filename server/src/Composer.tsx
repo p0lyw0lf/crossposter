@@ -9,6 +9,8 @@ import { listDrafts } from "./drafts";
 import { createStore } from "solid-js/store";
 import { ComposerProvider } from "./ComposerContext";
 import { Editor } from "./Editor/Editor";
+import { FileInput } from "./components/FileInput";
+import { uploadFilesAndInsert } from "./fileUpload";
 
 export const Composer: Component = () => {
   let formRef!: HTMLFormElement;
@@ -34,6 +36,30 @@ export const Composer: Component = () => {
         <Editor />
         <div class={styles.toolbar}>
           <Toggle />
+          <FileInput
+            multiple
+            accept="image/*"
+            onChange={(event) => {
+              const files = event.target.files;
+              if (files && files.length > 0) {
+                setStore("message", "Uploading...");
+                uploadFilesAndInsert(formRef, [...files])
+                  .then((filenames) => {
+                    setStore("error", "");
+                    setStore(
+                      "message",
+                      `Files uploaded to ${filenames.join(", ")}`
+                    );
+                  })
+                  .catch((err) => {
+                    setStore("error", `Error uploading file: ${err}`);
+                    setStore("message", "");
+                  });
+              }
+            }}
+          >
+            add attachment
+          </FileInput>
           <PostButton />
         </div>
       </form>
