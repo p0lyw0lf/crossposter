@@ -1,3 +1,5 @@
+import { getFormElements } from "./ComposerContext";
+
 export interface Draft {
   draftId: string;
   title: string;
@@ -42,11 +44,10 @@ export const populateFormFromDraft = (
   form: HTMLFormElement,
   draft: Draft
 ): void => {
-  // NOTE: need to do this because typescript HATES elements
-  const elements: any = form.elements;
-  elements.draftId.value = draft.draftId;
-  elements.title.value = draft.title;
-  elements.body.value = draft.body;
+  const { draftId, title, body } = getFormElements(form);
+  draftId.value = draft.draftId;
+  title.value = draft.title;
+  body.value = draft.body;
 
   // NOTE: tags must be restored separately
 };

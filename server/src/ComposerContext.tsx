@@ -28,3 +28,14 @@ export const useComposerContext = (): Context => {
 };
 
 export const ComposerProvider = ComposerContext.Provider;
+
+interface FormElements {
+  draftId: HTMLInputElement;
+  body: HTMLTextAreaElement;
+  title: HTMLTextAreaElement;
+}
+
+export const getFormElements = (formRef: HTMLFormElement): FormElements => {
+  // SAFETY: this is how the form is laid out
+  return formRef.elements as any;
+};

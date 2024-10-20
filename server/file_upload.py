@@ -1,7 +1,7 @@
 import asyncio
+import tempfile
 import traceback
 
-import aiofiles
 import boto3
 from sanic.response import text
 from sanic import Blueprint, Request
@@ -9,7 +9,7 @@ from sanic import Blueprint, Request
 from shared.secrets import secrets
 from .auth import login_required
 
-bp = Blueprint("file_upload")
+bp = Blueprint("file_upload", url_prefix="/upload")
 s3 = None
 bucket_name = None
 try:
@@ -26,26 +26,27 @@ except Exception:
 
 @bp.post("/", stream=True)
 @login_required
-async def upload(request: Request):
+async def upload(request: Request, username: str):
     if s3 is None or bucket_name is None:
         return text("not implemented", status=501)
 
     file_name = request.args.get("f", None)
     if not file_name:
         return text("file name not provided", status=400)
+    file_name = f"{username}/{file_name}"
 
-    async with aiofiles.tempfile.NamedTemporaryFile("wb+") as f:
+    with tempfile.NamedTemporaryFile("wb+") as f:
         # Step 1: read streamed data into file
         while True:
             body = await request.stream.read()
             if body is None:
                 break
-            await f.write(body)
+            await asyncio.to_thread(f.write, body)
 
         # Step 2: upload file to S3
         await asyncio.to_thread(
             s3.upload_fileobj,
-            (f, bucket_name, file_name),
+            f, bucket_name, file_name,
         )
 
-    return text("ok")
+    return text(f"https://{bucket_name}/{file_name}")

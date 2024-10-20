@@ -11,39 +11,6 @@
   overflow: hidden;
 }
 
-.editor {
-  background-color: var(--color-black);
-  color: var(--color-white);
-
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 16px;
-
-  padding: 16px;
-
-  textarea {
-    background-color: inherit;
-    color: inherit;
-    font-family: inherit;
-    border: none;
-    resize: none;
-
-    &:focus-visible {
-      outline: none;
-    }
-  }
-}
-
-.title {
-  font-size: var(--dim-font-large);
-  font-weight: 600;
-}
-
-.body {
-  font-size: var(--dim-font-small);
-}
-
 .toolbar {
   background-color: var(--color-not-black);
   border-top: solid 1px var(--color-gray);
