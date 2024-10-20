@@ -1,35 +1,39 @@
 import type { Component } from "solid-js";
-import { removeDraft, type Draft as DraftModel } from "./drafts";
+import { populateFormFromDraft, removeDraft } from "./drafts";
+import type { Draft as DraftModel } from "./drafts";
+import styles from "./Draft.module.css";
+import buttonStyles from "./Button.module.css";
+import { useComposerContext } from "./ComposerContext";
 
 export interface DraftProps {
   draft: DraftModel;
-  formRef: HTMLFormElement;
-  setTags: (tags: string[]) => void;
 }
 
-export const Draft: Component<DraftProps> = ({ draft, formRef, setTags }) => {
+export const Draft: Component<DraftProps> = ({ draft }) => {
+  const { store, setStore } = useComposerContext();
   return (
-    <>
+    <span class={styles.draft}>
       <span>{draft.title}</span>
       <button
+        class={buttonStyles.button}
         onClick={() => {
-          // NOTE: need to do this because typescript HATES elements
-          const elements: any = formRef.elements;
-          elements.draftId.value = draft.draftId;
-          elements.title.value = draft.title;
-          elements.body.value = draft.body;
-          setTags(draft.tags);
+          populateFormFromDraft(store.formRef, draft);
+          setStore("tags", draft.tags);
         }}
       >
         load
       </button>
       <button
+        class={buttonStyles.button}
         onClick={() => {
           removeDraft(draft.draftId);
+          setStore("drafts", (drafts: DraftModel[]) =>
+            drafts.filter((oldDraft) => draft.draftId !== oldDraft.draftId)
+          );
         }}
       >
         delete
       </button>
-    </>
+    </span>
   );
 };

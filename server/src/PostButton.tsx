@@ -1,52 +1,80 @@
-import type { Component, JSXElement } from "solid-js";
+import type { Component } from "solid-js";
 import { createSignal } from "solid-js";
-import { addDraft, draftFromFormData } from "./drafts";
-
+import { addDraft, draftFromFormData, populateFormFromDraft } from "./drafts";
 import styles from "./PostButton.module.css";
-
-interface Props {
-  formRef: HTMLFormElement;
-  showError: (error: string) => void;
-  showMessage: (message: string) => void;
-}
+import buttonStyles from "./Button.module.css";
+import { useComposerContext } from "./ComposerContext";
+import { produce } from "solid-js/store";
+import { v7 as uuidv7 } from "uuid";
 
 type Mode = "post" | "save-draft";
 
-export const PostButton: Component<Props> = ({
-  formRef,
-  showError,
-  showMessage,
-}) => {
+export const PostButton: Component = () => {
   const [mode, setMode] = createSignal<Mode>("post");
+  const { store, setStore } = useComposerContext();
+
+  const showError = (err: string) => {
+    setStore("message", "");
+    setStore("error", err);
+  };
+
+  const showMessage = (msg: string) => {
+    setStore("message", msg);
+    setStore("error", "");
+  };
+
+  const clear = () => {
+    setStore("message", "");
+    setStore("error", "");
+  };
 
   const postButton = () => {
     switch (mode()) {
       case "post":
-        showError("");
-        showMessage("");
+        clear();
         return (
-          <button class={styles.button} type={"submit"}>
+          <button class={buttonStyles.button} type={"submit"}>
             post now
           </button>
         );
       case "save-draft":
         return (
           <button
-            class={styles.button}
+            class={buttonStyles.button}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              const data = new FormData(formRef);
+              const data = new FormData(store.formRef);
               const draft = draftFromFormData(data);
               if (!draft) {
-                showError(
-                  "ERROR: something went wrong. Are you missing a field?"
-                );
-                showMessage("");
+                showError("ERROR: something went wrong.");
                 return;
               }
+
               addDraft(draft);
-              showError("");
+              setStore(
+                "drafts",
+                produce((drafts) => {
+                  const existingIndex = drafts.findIndex(
+                    (existingDraft) => existingDraft.draftId === draft.draftId
+                  );
+                  if (existingIndex >= 0) {
+                    drafts[existingIndex] = draft;
+                  } else {
+                    drafts[drafts.length] = draft;
+                  }
+                })
+              );
+
+              // Create fresh post so that further typing doesn't overwrite draft
+              populateFormFromDraft(store.formRef, {
+                draftId: uuidv7(),
+                title: "",
+                body: "",
+                tags: [],
+              });
+              setStore("tags", []);
+
               showMessage("Draft saved successfully!");
             }}
           >
@@ -60,7 +88,7 @@ export const PostButton: Component<Props> = ({
     <div class={styles.container}>
       {postButton()}
       <button
-        classList={{ [styles.button]: true, [styles.toggle]: true }}
+        classList={{ [buttonStyles.button]: true, [styles.toggle]: true }}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();

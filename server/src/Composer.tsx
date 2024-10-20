@@ -1,25 +1,34 @@
-import { createSignal, Show } from "solid-js";
+import { createEffect, Show } from "solid-js";
 import type { Component } from "solid-js";
 import { Tags } from "./Tags/Tags";
 import { Toggle } from "./Toggle";
 import { Textarea } from "./Textarea";
 import { PostButton } from "./PostButton";
 import { v7 as uuidv7 } from "uuid";
-
 import styles from "./Composer.module.css";
 import { DraftList } from "./DraftList";
+import { listDrafts } from "./drafts";
+import { createStore } from "solid-js/store";
+import { ComposerProvider } from "./ComposerContext";
 
 export const Composer: Component = () => {
-  let formRef: HTMLFormElement;
+  let formRef!: HTMLFormElement;
 
-  const [message, setMessage] = createSignal("");
-  const [error, setError] = createSignal("");
+  const [store, setStore] = createStore({
+    formRef,
+    tags: [] as string[],
+    message: "",
+    error: "",
+    drafts: listDrafts(),
+  });
 
-  const [tags, setTags] = createSignal<string[]>([]);
+  createEffect(() => {
+    setStore("formRef", formRef);
+  });
 
   return (
-    <>
-      <form ref={formRef!} class={styles.composer} action="/" method="post">
+    <ComposerProvider value={{ store, setStore }}>
+      <form ref={formRef} class={styles.composer} action="/" method="post">
         <input type="hidden" name="draftId" value={uuidv7()} />
         <div class={styles.editor}>
           <Textarea
@@ -35,24 +44,20 @@ export const Composer: Component = () => {
             placeholder="post body (accepts markdown!)"
             required
           />
-          <Tags tags={tags} setTags={setTags} />
+          <Tags />
         </div>
         <div class={styles.toolbar}>
           <Toggle />
-          <PostButton
-            formRef={formRef!}
-            showError={setError}
-            showMessage={setMessage}
-          />
+          <PostButton />
         </div>
       </form>
-      <Show when={!!error()}>
-        <p classList={{ message: true, error: true }}>{error()}</p>
+      <Show when={store.error}>
+        <p classList={{ message: true, error: true }}>{store.error}</p>
       </Show>
-      <Show when={!!message()}>
-        <p classList={{ message: true }}>{message()}</p>
+      <Show when={store.message}>
+        <p classList={{ message: true }}>{store.message}</p>
       </Show>
-      <DraftList formRef={formRef!} setTags={setTags} />
-    </>
+      <DraftList />
+    </ComposerProvider>
   );
 };

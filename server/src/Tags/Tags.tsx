@@ -2,16 +2,13 @@ import { For, onMount } from "solid-js";
 import type { Component } from "solid-js";
 import { TextInput } from "../TextInput";
 import { Tag } from "./Tag";
-
 import styles from "./Tags.module.css";
+import { useComposerContext } from "../ComposerContext";
 
-interface Props {
-  tags: () => string[];
-  setTags: (update: (oldTags: string[]) => string[]) => void;
-}
-
-export const Tags: Component<Props> = ({ tags, setTags }) => {
+export const Tags: Component = () => {
   let input: HTMLInputElement;
+
+  const { store, setStore } = useComposerContext();
 
   onMount(() => {
     input.addEventListener("keydown", (ev) => {
@@ -19,7 +16,7 @@ export const Tags: Component<Props> = ({ tags, setTags }) => {
         ev.stopPropagation();
         ev.preventDefault();
         if (!input.value) return;
-        setTags((tags) => [
+        setStore("tags", (tags: string[]) => [
           ...tags.filter((tag) => tag !== input.value),
           input.value,
         ]);
@@ -28,19 +25,21 @@ export const Tags: Component<Props> = ({ tags, setTags }) => {
       if (ev.code === "Backspace" && !input.value) {
         ev.stopPropagation();
         ev.preventDefault();
-        setTags((tags) => tags.slice(0, -1));
+        setStore("tags", (tags: string[]) => tags.slice(0, -1));
       }
     });
   });
 
   return (
     <div class={styles["tag-list"]}>
-      <For each={tags()}>
+      <For each={store.tags}>
         {(tag) => (
           <Tag
             tag={tag}
             onClose={() =>
-              setTags((tags) => tags.filter((oldTag) => oldTag !== tag))
+              setStore("tags", (tags: string[]) =>
+                tags.filter((oldTag) => oldTag !== tag)
+              )
             }
           />
         )}

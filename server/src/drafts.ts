@@ -32,13 +32,23 @@ const draftFromString = (s: string): Draft | undefined => {
 export const draftFromFormData = (f: FormData): Draft | undefined => {
   const draftId = f.get("draftId")?.toString();
   if (!draftId) return undefined;
-  const title = f.get("title")?.toString();
-  if (!title) return undefined;
-  const body = f.get("body")?.toString();
-  if (!body) return undefined;
-  const tags = f.getAll("tags")?.map((tag) => tag.toString());
-  if (!tags) return undefined;
+  const title = f.get("title")?.toString() || "untitled";
+  const body = f.get("body")?.toString() || "empty";
+  const tags = f.getAll("tags")?.map((tag) => tag.toString()) ?? [];
   return { draftId, title, body, tags };
+};
+
+export const populateFormFromDraft = (
+  form: HTMLFormElement,
+  draft: Draft
+): void => {
+  // NOTE: need to do this because typescript HATES elements
+  const elements: any = form.elements;
+  elements.draftId.value = draft.draftId;
+  elements.title.value = draft.title;
+  elements.body.value = draft.body;
+
+  // NOTE: tags must be restored separately
 };
 
 export const listDraftKeys = (): string[] => {
