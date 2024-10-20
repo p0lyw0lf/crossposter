@@ -43,7 +43,7 @@ export const Editor: Component = () => {
             body.setRangeText(
               filenames
                 .map((filename) => `<img src="${filename}" />`)
-                .join("\n")
+                .join("\n"),
             );
             resizeTextArea(body);
           })

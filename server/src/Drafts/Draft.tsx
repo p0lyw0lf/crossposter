@@ -28,7 +28,7 @@ export const Draft: Component<DraftProps> = ({ draft }) => {
         onClick={() => {
           removeDraft(draft.draftId);
           setStore("drafts", (drafts: DraftModel[]) =>
-            drafts.filter((oldDraft) => draft.draftId !== oldDraft.draftId)
+            drafts.filter((oldDraft) => draft.draftId !== oldDraft.draftId),
           );
         }}
       >

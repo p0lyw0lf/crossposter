@@ -42,7 +42,7 @@ export const draftFromFormData = (f: FormData): Draft | undefined => {
 
 export const populateFormFromDraft = (
   form: HTMLFormElement,
-  draft: Draft
+  draft: Draft,
 ): void => {
   const { draftId, title, body } = getFormElements(form);
   draftId.value = draft.draftId;
@@ -55,7 +55,7 @@ export const populateFormFromDraft = (
 export const listDraftKeys = (): string[] => {
   return [
     ...new Set(
-      (window.localStorage.getItem(allDraftsKey) ?? "").split(",")
+      (window.localStorage.getItem(allDraftsKey) ?? "").split(","),
     ).values(),
   ];
 };
@@ -64,10 +64,10 @@ export const listDrafts = (): Draft[] => {
   const draftMappings = listDraftKeys().flatMap(
     (draftKey): Array<[string, Draft]> => {
       const draft = draftFromString(
-        window.localStorage.getItem(draftKey) ?? "{}"
+        window.localStorage.getItem(draftKey) ?? "{}",
       );
       return draft ? [[draftKey, draft]] : [];
-    }
+    },
   );
 
   const newDraftKeys = draftMappings.map(([draftKey]) => draftKey).join(",");

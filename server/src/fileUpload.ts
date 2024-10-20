@@ -3,7 +3,7 @@
  */
 export const uploadFiles = async (
   id: string,
-  files: File[]
+  files: File[],
 ): Promise<string[]> => {
   return await Promise.all(
     files.map(async (file) => {
@@ -14,6 +14,6 @@ export const uploadFiles = async (
         throw new Error(`server response ${response.status}`);
       }
       return await response.text();
-    })
+    }),
   );
 };

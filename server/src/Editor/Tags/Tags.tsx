@@ -38,7 +38,7 @@ export const Tags: Component = () => {
             tag={tag}
             onClose={() =>
               setStore("tags", (tags: string[]) =>
-                tags.filter((oldTag) => oldTag !== tag)
+                tags.filter((oldTag) => oldTag !== tag),
               )
             }
           />

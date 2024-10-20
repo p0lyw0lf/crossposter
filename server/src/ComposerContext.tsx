@@ -21,7 +21,7 @@ export const useComposerContext = (): Context => {
   const context = useContext(ComposerContext);
   if (context === undefined) {
     throw new Error(
-      "useComposerContext must be used inside a ComposerProvider"
+      "useComposerContext must be used inside a ComposerProvider",
     );
   }
   return context;

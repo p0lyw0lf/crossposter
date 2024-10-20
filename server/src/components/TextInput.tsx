@@ -3,7 +3,7 @@ import type { JSX } from "solid-js";
 import { onMount } from "solid-js";
 
 export const TextInput: Component<JSX.InputHTMLAttributes<HTMLInputElement>> = (
-  props
+  props,
 ) => {
   let input: HTMLInputElement | undefined;
   onMount(() => {

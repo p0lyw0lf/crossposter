@@ -56,14 +56,14 @@ export const PostButton: Component = () => {
                 "drafts",
                 produce((drafts) => {
                   const existingIndex = drafts.findIndex(
-                    (existingDraft) => existingDraft.draftId === draft.draftId
+                    (existingDraft) => existingDraft.draftId === draft.draftId,
                   );
                   if (existingIndex >= 0) {
                     drafts[existingIndex] = draft;
                   } else {
                     drafts[drafts.length] = draft;
                   }
-                })
+                }),
               );
 
               // Create fresh post so that further typing doesn't overwrite draft
