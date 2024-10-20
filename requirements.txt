@@ -1,6 +1,7 @@
 Mastodon.py
 PyJWT
 atproto
+boto3
 discord.py
 githubkit[auth-app]
 jinja2
