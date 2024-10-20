@@ -1,9 +1,9 @@
 import type { Component } from "solid-js";
-import { populateFormFromDraft, removeDraft } from "./drafts";
-import type { Draft as DraftModel } from "./drafts";
+import { populateFormFromDraft, removeDraft } from "../drafts";
+import type { Draft as DraftModel } from "../drafts";
 import styles from "./Draft.module.css";
-import buttonStyles from "./Button.module.css";
-import { useComposerContext } from "./ComposerContext";
+import buttonStyles from "../components/Button.module.css";
+import { useComposerContext } from "../ComposerContext";
 
 export interface DraftProps {
   draft: DraftModel;

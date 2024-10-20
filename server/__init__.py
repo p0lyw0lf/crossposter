@@ -15,9 +15,6 @@ from poster import posting_target
 from .auth import login_required
 from .file_upload import bp as file_upload_bp
 
-DEV = True
-VITE_MANIFEST = None
-
 app = Sanic("crossposter")
 app.config.TEMPLATING_PATH_TO_TEMPLATES = "./server/templates"
 app.config.SECRET = secrets["SERVER_SECRET"]
@@ -25,20 +22,15 @@ app.config.SECRET = secrets["SERVER_SECRET"]
 app.static("/assets", "./server/dist/assets", name="assets")
 app.blueprint(file_upload_bp)
 
-
-async def get_manifest():
-    global VITE_MANIFEST
-    if VITE_MANIFEST is None or DEV:
-        async with aiofiles.open("./server/dist/.vite/manifest.json", "rb") \
-                as f:
-            VITE_MANIFEST = json.loads(await f.read())
-    return VITE_MANIFEST
-
-
 posters = {
     target: posting_target(target, config, secrets)
     for target in config["outputs"]["server"]
 }
+
+
+async def get_manifest():
+    async with aiofiles.open("./server/dist/.vite/manifest.json", "rb") as f:
+        return json.loads(await f.read())
 
 
 @app.get("/")

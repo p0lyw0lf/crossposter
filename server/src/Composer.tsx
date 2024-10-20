@@ -1,15 +1,14 @@
 import { createEffect, Show } from "solid-js";
 import type { Component } from "solid-js";
-import { Toggle } from "./Toggle";
-import { TextArea } from "./TextArea";
+import { Toggle } from "./components/Toggle";
 import { PostButton } from "./PostButton";
 import { v7 as uuidv7 } from "uuid";
 import styles from "./Composer.module.css";
-import { DraftList } from "./DraftList";
+import { DraftList } from "./Drafts/DraftList";
 import { listDrafts } from "./drafts";
 import { createStore } from "solid-js/store";
 import { ComposerProvider } from "./ComposerContext";
-import { Editor } from "./Editor";
+import { Editor } from "./Editor/Editor";
 
 export const Composer: Component = () => {
   let formRef!: HTMLFormElement;

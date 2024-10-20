@@ -1,6 +1,3 @@
-@import "./colors.css";
-@import "./dims.css";
-
 .composer {
   display: flex;
   flex-direction: column;

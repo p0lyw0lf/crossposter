@@ -1,10 +1,10 @@
 import type { Component } from "solid-js";
 import { createSignal, Show } from "solid-js";
 import { Tags } from "./Tags/Tags";
-import { resizeTextArea, TextArea } from "./TextArea";
+import { resizeTextArea, TextArea } from "../components/TextArea";
 import styles from "./Editor.module.css";
-import { uploadFiles } from "./fileUpload";
-import { getFormElements, useComposerContext } from "./ComposerContext";
+import { uploadFiles } from "../fileUpload";
+import { getFormElements, useComposerContext } from "../ComposerContext";
 
 export const Editor: Component = () => {
   const { store, setStore } = useComposerContext();

@@ -2,7 +2,7 @@ import type { Component } from "solid-js";
 import { createSignal } from "solid-js";
 import { addDraft, draftFromFormData, populateFormFromDraft } from "./drafts";
 import styles from "./PostButton.module.css";
-import buttonStyles from "./Button.module.css";
+import buttonStyles from "./components/Button.module.css";
 import { useComposerContext } from "./ComposerContext";
 import { produce } from "solid-js/store";
 import { v7 as uuidv7 } from "uuid";
