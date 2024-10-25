@@ -1,3 +1,4 @@
+import { resizeTextArea } from "./components/TextArea";
 import { getFormElements, useComposerContext } from "./ComposerContext";
 import { produce } from "solid-js/store";
 
@@ -49,6 +50,9 @@ export const populateFormFromDraft = (
   draftId.value = draft.draftId;
   title.value = draft.title;
   body.value = draft.body;
+
+  resizeTextArea(title);
+  resizeTextArea(body);
 
   // NOTE: tags must be restored separately
 };

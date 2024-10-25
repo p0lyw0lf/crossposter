@@ -38,7 +38,7 @@ export const PostButton: Component = () => {
       case "save-draft":
         return (
           <button
-            type="submit"
+            type="button"
             class={buttonStyles.button}
             onClick={() => {
               if (!saveDraft()) {
