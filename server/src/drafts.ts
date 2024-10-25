@@ -1,4 +1,5 @@
-import { getFormElements } from "./ComposerContext";
+import { getFormElements, useComposerContext } from "./ComposerContext";
+import { produce } from "solid-js/store";
 
 export interface Draft {
   draftId: string;
@@ -42,7 +43,7 @@ export const draftFromFormData = (f: FormData): Draft | undefined => {
 
 export const populateFormFromDraft = (
   form: HTMLFormElement,
-  draft: Draft,
+  draft: Draft
 ): void => {
   const { draftId, title, body } = getFormElements(form);
   draftId.value = draft.draftId;
@@ -55,7 +56,7 @@ export const populateFormFromDraft = (
 export const listDraftKeys = (): string[] => {
   return [
     ...new Set(
-      (window.localStorage.getItem(allDraftsKey) ?? "").split(","),
+      (window.localStorage.getItem(allDraftsKey) ?? "").split(",")
     ).values(),
   ];
 };
@@ -64,10 +65,10 @@ export const listDrafts = (): Draft[] => {
   const draftMappings = listDraftKeys().flatMap(
     (draftKey): Array<[string, Draft]> => {
       const draft = draftFromString(
-        window.localStorage.getItem(draftKey) ?? "{}",
+        window.localStorage.getItem(draftKey) ?? "{}"
       );
       return draft ? [[draftKey, draft]] : [];
-    },
+    }
   );
 
   const newDraftKeys = draftMappings.map(([draftKey]) => draftKey).join(",");
@@ -86,4 +87,36 @@ export const removeDraft = (draftId: string) => {
   const draftKeys = new Set(listDraftKeys());
   draftKeys.delete(draftId);
   window.localStorage.setItem(allDraftsKey, [...draftKeys.values()].join(","));
+};
+
+// Creates a function that will save the current form into a draft.
+// The returned function returns whether the save was successful.
+export const useSaveDraft = (): (() => boolean) => {
+  const { store, setStore } = useComposerContext();
+  return () => {
+    const data = new FormData(store.formRef);
+    const draft = draftFromFormData(data);
+    if (!draft) {
+      setStore("message", "");
+      setStore("error", "ERROR: something went wrong");
+      return false;
+    }
+
+    addDraft(draft);
+    setStore(
+      "drafts",
+      produce((drafts) => {
+        const existingIndex = drafts.findIndex(
+          (existingDraft) => existingDraft.draftId === draft.draftId
+        );
+        if (existingIndex >= 0) {
+          drafts[existingIndex] = draft;
+        } else {
+          drafts[drafts.length] = draft;
+        }
+      })
+    );
+
+    return true;
+  };
 };
