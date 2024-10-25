@@ -22,7 +22,8 @@ export const uploadFiles = async (
 };
 
 /**
- * Uploads files and inserts the resulting urls as `<img>` tags into the form's body text.
+ * Uploads files and inserts the resulting urls as Markdown image links into
+ * the form's body text.
  *
  * Returns the uploaded file URLs
  */
@@ -35,7 +36,7 @@ export const uploadFilesAndInsert = async (
 
   const { body } = getFormElements(formRef);
   body.setRangeText(
-    filenames.map((filename) => `<img src="${filename}" />`).join("\n")
+    filenames.map((filename) => `![](${filename})`).join("\n\n")
   );
   resizeTextArea(body);
 
