@@ -15,6 +15,7 @@ export const Draft: Component<DraftProps> = ({ draft }) => {
     <span class={styles.draft}>
       <span>{draft.title}</span>
       <button
+        type="button"
         class={buttonStyles.button}
         onClick={() => {
           populateFormFromDraft(store.formRef, draft);
@@ -24,11 +25,12 @@ export const Draft: Component<DraftProps> = ({ draft }) => {
         load
       </button>
       <button
+        type="button"
         class={buttonStyles.button}
         onClick={() => {
           removeDraft(draft.draftId);
           setStore("drafts", (drafts: DraftModel[]) =>
-            drafts.filter((oldDraft) => draft.draftId !== oldDraft.draftId),
+            drafts.filter((oldDraft) => draft.draftId !== oldDraft.draftId)
           );
         }}
       >

@@ -4,6 +4,7 @@ import type { SetStoreFunction } from "solid-js/store";
 
 interface ComposerStore {
   formRef: HTMLFormElement;
+  preview: boolean;
   message: string;
   error: string;
   tags: string[];
@@ -21,7 +22,7 @@ export const useComposerContext = (): Context => {
   const context = useContext(ComposerContext);
   if (context === undefined) {
     throw new Error(
-      "useComposerContext must be used inside a ComposerProvider",
+      "useComposerContext must be used inside a ComposerProvider"
     );
   }
   return context;

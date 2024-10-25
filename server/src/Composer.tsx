@@ -1,6 +1,6 @@
 import { createEffect, Show } from "solid-js";
 import type { Component } from "solid-js";
-import { Toggle } from "./components/Toggle";
+import { Toggle } from "./Toggle";
 import { PostButton } from "./PostButton";
 import { v7 as uuidv7 } from "uuid";
 import styles from "./Composer.module.css";
@@ -17,6 +17,7 @@ export const Composer: Component = () => {
 
   const [store, setStore] = createStore({
     formRef,
+    preview: false,
     tags: [] as string[],
     message: "",
     error: "",

@@ -12,7 +12,7 @@ export const Tag: Component<Props> = ({ tag, onClose }) => {
     <>
       <input type="hidden" name="tags" value={tag} />
       <span class={styles.tag}>
-        <button onclick={onClose} />
+        <button type="button" onclick={onClose} />
         {tag}
       </span>
     </>

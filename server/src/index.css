@@ -1,6 +1,10 @@
 @import "./colors.css";
 @import "./dims.css";
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   background-color: var(--color-not-black);
   color: var(--color-white);

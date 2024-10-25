@@ -3,8 +3,9 @@ import { createSignal, createEffect, onCleanup } from "solid-js";
 import { useSaveDraft, populateFormFromDraft } from "./drafts";
 import styles from "./PostButton.module.css";
 import buttonStyles from "./components/Button.module.css";
-import { useComposerContext } from "./ComposerContext";
+import { getFormElements, useComposerContext } from "./ComposerContext";
 import { v7 as uuidv7 } from "uuid";
+import { resizeTextArea } from "./components/TextArea";
 
 type Mode = "post" | "save-draft";
 
@@ -30,17 +31,16 @@ export const PostButton: Component = () => {
         setStore("message", "");
         setStore("error", "");
         return (
-          <button class={buttonStyles.button} type={"submit"}>
+          <button type="submit" class={buttonStyles.button}>
             post now
           </button>
         );
       case "save-draft":
         return (
           <button
+            type="submit"
             class={buttonStyles.button}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
+            onClick={() => {
               if (!saveDraft()) {
                 return;
               }
@@ -53,6 +53,9 @@ export const PostButton: Component = () => {
                 tags: [],
               });
               setStore("tags", []);
+              const { title, body } = getFormElements(store.formRef);
+              resizeTextArea(title);
+              resizeTextArea(body);
 
               setStore("message", "Draft saved successfully!");
               setStore("error", "");
@@ -68,10 +71,9 @@ export const PostButton: Component = () => {
     <div class={styles.container}>
       {postButton()}
       <button
+        type="button"
         classList={{ [buttonStyles.button]: true, [styles.toggle]: true }}
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
+        onClick={() => {
           setMode((prevMode) => {
             switch (prevMode) {
               case "post":

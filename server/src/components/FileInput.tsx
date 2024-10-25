@@ -35,6 +35,7 @@ export const FileInput: ParentComponent<Props> = ({
       />
       <button
         ref={buttonRef}
+        type="button"
         classList={{ [styles.button]: true, ...buttonClassList }}
       >
         {safeChildren()}
