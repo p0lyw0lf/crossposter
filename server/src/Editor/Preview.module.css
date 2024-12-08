@@ -3,4 +3,12 @@
   color: var(--color-white);
 
   padding: 16px;
+
+  a {
+    color: var(--color-strawberry);
+  }
+
+  img {
+    width: 100%;
+  }
 }

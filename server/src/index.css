@@ -32,9 +32,34 @@ h6 {
   margin: 0;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  a {
+    text-decoration: none;
+  }
+}
+
+blockquote {
+  margin-left: 0.2em;
+  padding-left: 0.8em;
+  border-left: 0.2em solid var(--color-longan);
+  background-color: var(--color-cherry);
+  color: var(--color-longan);
+
+  a {
+    color: var(--color-longan) !important;
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+  background-color: var(--color-cherry);
+  color: var(--color-longan);
 }
 
 main {
