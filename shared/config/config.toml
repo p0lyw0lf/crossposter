@@ -19,9 +19,11 @@ template="mastodon_cybersec.txt.j2"
 
 [mastodon_blog]
 template="mastodon_blog.txt.j2"
+add_tags=1
 
 [bluesky_blog]
 template="bluesky_blog.md.j2"
+add_tags=1
 
 [outputs]
 bot = ["github_cybersec", "mastodon_cybersec"]
