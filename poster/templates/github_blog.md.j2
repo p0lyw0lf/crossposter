@@ -3,6 +3,8 @@ title: {{ title | tojson }}
 description: {{ description | tojson }}
 tags: {{ tags | tojson }}
 published: {{ published.timestamp() | int }}
+mastodon: {{ mastodon_blog | tojson }}
+bluesky: {{ bluesky_blog | tojson }}
 ---
 
 {{ body }}

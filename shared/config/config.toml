@@ -27,4 +27,4 @@ add_tags=1
 
 [outputs]
 bot = ["github_cybersec", "mastodon_cybersec"]
-server = ["github_blog", "mastodon_blog", "bluesky_blog"]
+server = ["mastodon_blog", "bluesky_blog", "github_blog"]

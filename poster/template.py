@@ -26,12 +26,19 @@ templates = {
 class Renderable:
     target: str
 
-    async def render(self, post: Post) -> str:
+    async def render(self, post: Post, ctx: dict[str, str]) -> str:
         """
-        Renders a post to a template, based on the inheriting class
+        Renders a post to a template, based on the inheriting class.
+
+        post: the post to render
+        ctx:  the context of posts from all platforms that have been rendered
+              previously. What's inside depends on the poster type, but so
+              far it's used to pass completed social media URLs to the blog
+              template.
         """
         template = config[self.target]["template"]
         return await templates[template].render_async(
             slug=to_slug(post),
             **asdict(post),
+            **ctx,
         )

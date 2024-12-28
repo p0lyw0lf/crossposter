@@ -16,8 +16,8 @@ class MastodonTarget(Renderable):
         )
         self.add_tags = bool(config.get("add_tags", False))
 
-    async def post(self, post: Post):
-        post_text = await self.render(post)
+    async def post(self, post: Post, ctx: dict[str, str]) -> str:
+        post_text = await self.render(post, ctx)
         if self.add_tags and post.tags:
             # Add all tags to the rendered post, like #tag1 #tag2
             post_text += "\n\n"
@@ -26,7 +26,8 @@ class MastodonTarget(Renderable):
                     post_text += " "
                 tag = post.tags[i]
                 post_text += f"#{tag}"
-        await asyncio.to_thread(
+        toot = await asyncio.to_thread(
             self.m.toot,
             post_text,
         )
+        return toot["url"]

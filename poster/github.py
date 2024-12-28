@@ -18,14 +18,14 @@ class GithubTarget(Renderable):
         self.branch = config["GITHUB_BRANCH"]
         self.output_dir = PurePosixPath(config["GITHUB_OUTPUT_DIR"])
 
-    async def post(self, post: Post):
+    async def post(self, post: Post, ctx: dict[str, str]):
         filename = self.output_dir / f"{to_slug(post)}.md"
         # Make copy so this modification doesn't destroy anything
         post = Post(**asdict(post))
         if post.repost_link:
             post.body = post.body.replace(post.repost_link, "")
         post.body = post.body.replace("\r", "").strip()
-        content = await self.render(post)
+        content = await self.render(post, ctx)
 
         response = await self.gh.rest.repos.\
             async_create_or_update_file_contents(

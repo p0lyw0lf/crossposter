@@ -21,8 +21,8 @@ class BlueskyTarget(Renderable):
         )
         self.add_tags = bool(config.get("add_tags", False))
 
-    async def post(self, post: Post):
-        post_text = await self.render(post)
+    async def post(self, post: Post, ctx: dict[str, str]):
+        post_text = await self.render(post, ctx)
         builder = mistletoe.markdown(post_text, BlueskyRenderer)
         if self.add_tags and post.tags:
             # Add all tags as a sequence of tagged strings like #tag1 #tag2
@@ -32,10 +32,11 @@ class BlueskyTarget(Renderable):
                     builder.text(" ")
                 tag = post.tags[i]
                 builder.tag(f"#{tag}", tag)
-        await asyncio.to_thread(
+        toot = await asyncio.to_thread(
             self.client.send_post,
             builder,
         )
+        return toot["uri"]
 
 
 class BlueskyRenderer(BaseRenderer):

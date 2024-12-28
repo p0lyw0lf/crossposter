@@ -70,9 +70,14 @@ async def index_post(request, username):
         body=body,
     )
 
+    post_ctx = dict()
     for platform, poster in posters.items():
         try:
-            await poster.post(post)
+            # NOTE: We don't track dependencies automatically; if a certain
+            # poster depends on a previous poster, it must be manually
+            # ordered after in the list. This works because Python dicts
+            # have a stable iteration order based on insertion order.
+            post_ctx[platform] = await poster.post(post, post_ctx)
         except Exception as e:
             context["error"] = f"Error posting to {platform}: {e}"
             return context

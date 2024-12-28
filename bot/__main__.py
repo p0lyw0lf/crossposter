@@ -73,9 +73,11 @@ Could not parse the url out of that message. Please edit and try again.\
         body=message.content,
     )
 
+    post_ctx = dict()
     for platform, poster in posters.items():
         try:
-            await poster.post(post)
+            # See comment in server/__init__.py
+            post_ctx[platform] = await poster.post(post, post_ctx)
         except Exception as e:
             await interaction.response.send_message(
                 f"Could not post to {platform}: {e}")
