@@ -28,3 +28,5 @@ add_tags=1
 [outputs]
 bot = ["github_cybersec", "mastodon_cybersec"]
 server = ["mastodon_blog", "bluesky_blog", "github_blog"]
+
+TESTING=true

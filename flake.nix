@@ -19,16 +19,19 @@
         devShells.default = pkgs.mkShell {
           venvDir = ".venv";
           packages =
-            (with pkgs; [ python311 ])
+            (with pkgs; [
+              awscli2
+              nodejs
+              python311
+            ])
             ++ (with pkgs.python311Packages; [
               pip
               venvShellHook
               # Needed for binaries that link against libc
               ujson
             ])
-            ++ (with pkgs; [
-              nodejs
-              nodePackages.npm
+            ++ (with pkgs.nodePackages; [
+              npm
             ]);
         };
       }
