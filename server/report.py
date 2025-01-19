@@ -12,8 +12,9 @@ bp = Blueprint("report", url_prefix="/report")
 @login_required
 async def report(request: Request, username: str):
     proc = await asyncio.create_subprocess_exec(
+        "/usr/bin/env",
+        "bash",
         "./server/gen_report.sh",
-        ["gen_report.sh"],
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
     )

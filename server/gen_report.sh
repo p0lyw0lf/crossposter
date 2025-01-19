@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cat <<<EOF > /tmp/report.html
+cat <<EOF > /tmp/report.html
 <!doctype html>
 <html>
   <head>
