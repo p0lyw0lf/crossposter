@@ -18,6 +18,10 @@ body {
   font-size: var(--dim-font-small);
 }
 
+a {
+  color: var(--color-strawberry);
+}
+
 h1,
 h2,
 h3 {

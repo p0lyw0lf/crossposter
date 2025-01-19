@@ -40,9 +40,11 @@ async def get_manifest():
 @app.ext.template("index.html.j2")
 @login_required
 async def index_get(request, username):
+    sites = secrets["logs"].get(username, [])
     return {
         "index": (await get_manifest())["src/index.tsx"],
-        "username": username
+        "username": username,
+        "sites": sites,
     }
 
 
@@ -50,9 +52,11 @@ async def index_get(request, username):
 @app.ext.template("index.html.j2")
 @login_required
 async def index_post(request, username):
+    sites = secrets["logs"].get(username, [])
     context = {
         "index": (await get_manifest())["src/index.tsx"],
         "username": username,
+        "sites": sites,
     }
 
     title = request.form.get("title")

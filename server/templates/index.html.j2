@@ -25,6 +25,13 @@
       {% endif %} {% if error is defined %}
       <p class="message error">{{ error }}</p>
       {% endif %}
+      {% if sites is defined %}
+      {% for site in sites %}
+        <ul>
+          <li><a href="/report?site={{ site }}">{{ site }} analytics</a></li>
+        </ul>
+      {% endfor %}
+      {% endif %}
       <footer>Have a nice day!!</footer>
     </main>
   </body>
