@@ -14,7 +14,7 @@ from poster import posting_target
 
 from .auth import login_required
 from .file_upload import bp as file_upload_bp
-from .report import db as report_bp
+from .report import bp as report_bp
 
 app = Sanic("crossposter")
 app.config.TEMPLATING_PATH_TO_TEMPLATES = "./server/templates"
@@ -23,6 +23,7 @@ app.config.SECRET = secrets["SERVER_SECRET"]
 app.static("/assets", "./server/dist/assets", name="assets")
 app.blueprint(file_upload_bp)
 app.blueprint(report_bp)
+
 
 posters = {
     target: posting_target(target, config, secrets)
