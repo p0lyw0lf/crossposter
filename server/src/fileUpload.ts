@@ -36,7 +36,7 @@ export const uploadFilesAndInsert = async (
 
   const { body } = getFormElements(formRef);
   body.setRangeText(
-    filenames.map((filename) => `![](${filename})`).join("\n\n")
+    filenames.map((filename) => `![alt](<${filename}> "title")`).join("\n\n")
   );
   resizeTextArea(body);
 
