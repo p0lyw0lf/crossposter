@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Must already have things downloaded into AWS_BUCKET_NAME. See ./gen_report.py
+
 set -euo pipefail
 shopt -s globstar
 
@@ -12,9 +14,6 @@ output_folder="tmp/${AWS_BUCKET_NAME}"
 mkdir -p $output_folder
 output_file="tmp/${AWS_BUCKET_NAME}.html"
 touch $output_file
-
-# Must also receive environment variables that allow this to work
-aws s3 sync --delete "s3://${AWS_BUCKET_NAME}" "tmp/${AWS_BUCKET_NAME}" 1>&2
 
 zcat $output_folder/**/*.gz | docker run --rm -i -v ./$output_file:/report.html -e LANG=$LANG allinurl/goaccess -a -o report.html --log-format CLOUDFRONT - 1>&2
 

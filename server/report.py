@@ -37,8 +37,8 @@ async def report(request: Request, username: str):
 
     proc = await asyncio.create_subprocess_exec(
         "/usr/bin/env",
-        "bash",
-        "./server/gen_report.sh",
+        "python3",
+        "./server/gen_report.py",
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
         env=env,
