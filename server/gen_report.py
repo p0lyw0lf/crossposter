@@ -20,7 +20,7 @@ p.check_returncode()
 
 # Then, find all the folders that are before a certain cutoff
 now = date.today()
-cutoff = now - timedelta(days=14) # TODO: make delta configurable ?
+cutoff = now - timedelta(days=28) # TODO: make delta configurable ?
 
 to_remove = []
 
