@@ -6,4 +6,4 @@ npm run build
 cd ..
 # Run the server
 source .venv/bin/activate
-sanic server
+../infrastructure/with_secret_env.sh ../infrastructure/secret.env -- sanic server

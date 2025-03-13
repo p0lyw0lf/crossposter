@@ -1,7 +1,8 @@
 import importlib.resources as impresources
-import tomli
+import yaml
+from yaml import Loader
 
 
-config_file = impresources.files(__name__) / 'config.toml'
+config_file = impresources.files(__name__) / 'config.yaml'
 with open(config_file, 'rb') as f:
-    config = tomli.load(f)
+    config = yaml.load(f, Loader=Loader)

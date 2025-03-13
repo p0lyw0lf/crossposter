@@ -1,7 +1,10 @@
 import importlib.resources as impresources
-import tomli
+import subprocess
+import yaml
+from yaml import Loader
 
 
-secrets_file = impresources.files(__name__) / 'secrets.toml'
-with open(secrets_file, 'rb') as f:
-    secrets = tomli.load(f)
+secrets_file = impresources.files(__name__) / 'secrets.yaml'
+decrypt_secrets = subprocess.run(["sops", "decrypt", secrets_file], stdout=subprocess.PIPE)
+decrypt_secrets.check_returncode()
+secrets = yaml.load(decrypt_secrets.stdout, Loader=Loader)

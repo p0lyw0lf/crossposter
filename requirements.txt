@@ -7,5 +7,5 @@ githubkit[auth-app]
 jinja2
 mistletoe
 sanic[ext]
-tomli
 tzdata
+PyYAML

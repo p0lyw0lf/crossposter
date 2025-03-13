@@ -5,9 +5,6 @@
 __pycache__/
 *.pyc
 
-# Secrets file
-secrets.toml
-
 # Report output directory
 tmp/
 
