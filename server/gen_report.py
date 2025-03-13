@@ -15,12 +15,13 @@ output_folder = f"tmp/{bucket}"
 
 # First, sync bucket. This is so we know everything that's inside.
 # Must also receive environment variables that allow this to work
-p = subprocess.run(["aws", "s3", "sync", "--delete", f"s3://{bucket}", output_folder], stdout=subprocess.PIPE)
+p = subprocess.run(["aws", "s3", "sync", "--delete",
+                   f"s3://{bucket}", output_folder], stdout=subprocess.PIPE)
 p.check_returncode()
 
 # Then, find all the folders that are before a certain cutoff
 now = date.today()
-cutoff = now - timedelta(days=28) # TODO: make delta configurable ?
+cutoff = now - timedelta(days=28)  # TODO: make delta configurable ?
 
 to_remove = []
 
@@ -33,10 +34,12 @@ for folder in glob.iglob(f"{output_folder}/*/*/*/"):
 
 # Then, remove all those folders
 for folder in to_remove:
-    p = subprocess.run(["aws", "s3", "rm", "--recursive", f"s3://{bucket}/{folder}"], stdout=subprocess.PIPE)
+    p = subprocess.run(["aws", "s3", "rm", "--recursive",
+                       f"s3://{bucket}/{folder}"], stdout=subprocess.PIPE)
     p.check_returncode()
 
-    p = subprocess.run(["rm", "-rf", f"{output_folder}/{folder}"], stdout=subprocess.PIPE)
+    p = subprocess.run(
+        ["rm", "-rf", f"{output_folder}/{folder}"], stdout=subprocess.PIPE)
     p.check_returncode()
 
 # Finally, generate the report

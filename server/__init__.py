@@ -73,7 +73,7 @@ async def index_post(request, username):
         description=body[:137].replace(
             "\n", " ").strip() + ("..." if len(body) > 137 else ""),
         tags=tags,
-        published=datetime.now(ZoneInfo(secrets["timezone"])),
+        published=datetime.now(ZoneInfo(config["timezone"])),
         repost_link=None,
         body=body,
     )

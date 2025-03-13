@@ -9,3 +9,6 @@ mistletoe
 sanic[ext]
 tzdata
 PyYAML
+
+# For pyright
+autopep8

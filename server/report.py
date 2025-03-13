@@ -10,7 +10,6 @@ from .auth import login_required
 bp = Blueprint("report", url_prefix="/report")
 
 
-
 @bp.get("/")
 @login_required
 async def report(request: Request, username: str):
@@ -25,7 +24,7 @@ async def report(request: Request, username: str):
     site = secrets.get(site, {}).get("logs", None)
     if site is None:
         return text(f"site {site} not defined", 500)
-    
+
     env = os.environ.copy()
     for var in [
         "AWS_ACCESS_KEY_ID",

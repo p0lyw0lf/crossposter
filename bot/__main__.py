@@ -68,7 +68,7 @@ Could not parse the url out of that message. Please edit and try again.\
         description=None,
         tags=[],
         published=message.created_at.astimezone(
-            ZoneInfo(secrets["timezone"])),
+            ZoneInfo(config["timezone"])),
         repost_link=repost_link,
         body=message.content,
     )

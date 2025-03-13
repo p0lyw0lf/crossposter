@@ -8,8 +8,8 @@ from .posts import posts
 async def main():
     m = BlueskyTarget("bluesky_blog", config, secrets)
     for post in posts:
-        print(f"Posting {post.published.strftime("%Y-%m-%d")} {post.title}...")
-        await m.post(post)
+        print(f"Posting {post.published.strftime('%Y-%m-%d')} {post.title}...")
+        await m.post(post, {})
     print("Complete!")
 
 if __name__ == "__main__":

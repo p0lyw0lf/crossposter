@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from shared.model import Post, parse_repost_link
-from shared.secrets import secrets
+from shared.config import config
 
 
 def to_datetime(timestring: str) -> datetime:
@@ -11,7 +11,7 @@ def to_datetime(timestring: str) -> datetime:
     current timezone
     """
     dt = datetime.strptime(timestring, "%Y-%m-%d").astimezone(
-        ZoneInfo(secrets["timezone"]))
+        ZoneInfo(config["timezone"]))
     dt.replace(hour=12, minute=0, second=0)
     return dt
 
