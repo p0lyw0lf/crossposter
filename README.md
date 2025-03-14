@@ -18,7 +18,7 @@ that need to be followed to get the server running, see `server/README.md`.
 ### Discord
 
 Create an application, and under the Settings > Bot tab, copy the Token value
-and put it in the `DISCORD_TOKEN` variable in `shared/secrets/secrets.toml`.
+and put it in the `DISCORD_TOKEN` variable in `shared/secrets/secrets.yaml`.
 Turn on the Message Content Intent, and when inviting the bot to a server, make
 sure to give it the following permissions:
 
@@ -37,7 +37,7 @@ If you want any other functionality you'll have to edit the bot urself sorry :(
 
 In the developer settings tab, create an application and give it the
 `read:statuses` and `write:statuses` permissions. Then, read the "Your Access
-Token" variable and put it into `MASTODON_TOKEN` variable in `secrets.toml`.
+Token" variable and put it into `MASTODON_TOKEN` variable in `secrets.yaml`.
 
 Also, provide the following environment variables:
 
@@ -56,7 +56,7 @@ First, add your homeserver to `BLUESKY_HOMESERVER` (e.x. `https://bsky.app` or
 ### GitHub
 
 [Create a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
-and put in in the `GITHUB_TOKEN` variable in `secrets.toml`. If creating a
+and put in in the `GITHUB_TOKEN` variable in `secrets.yaml`. If creating a
 fine-grained token, make sure to give it access to the repository you want to
 crosspost to. Specifically, give it read-write access in the following
 categories:
@@ -67,7 +67,7 @@ What this target will do is, for a given post, create a commit adding the post
 file to the main branch. This assumes that the branch has a automatic deploy
 action set on push already.
 
-Additionally, configure the following variables in `config.toml`:
+Additionally, configure the following variables in `config.yaml`:
 
 - `GITHUB_USERNAME`: the owner of the repository
 - `GITHUB_REPO`: the repository name
@@ -80,7 +80,7 @@ what the final filename will look like, see `poster/github/__init__.py`.
 
 ## Running
 
-After configuring the platforms above into the `secrets.toml` file, also put in
+After configuring the platforms above into the `secrets.yaml` file, also put in
 the Discord bot keys into the file. Then, run:
 
 ```zsh
