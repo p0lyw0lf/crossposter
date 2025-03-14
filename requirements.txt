@@ -2,7 +2,6 @@ Mastodon.py
 PyJWT
 PyYAML
 aiofiles
-aiohttp
 atproto
 boto3
 discord.py
