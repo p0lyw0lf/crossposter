@@ -3,7 +3,6 @@ import json
 import os
 
 import aiofiles
-import aiohttp
 import jwt
 from sanic import Request, Sanic
 from sanic.response import redirect
@@ -123,21 +122,3 @@ async def login_post(request):
         return redirect("/", {"Set-Cookie": f"token={token}"})
     else:
         return {"error": "Invalid username/password"}
-
-
-@app.route("/opensearch/<path>")
-@login_required
-async def opensearch_proxy(request: Request, path: str):
-    """
-    y'know, I really should build this in something that actually support
-    proxying. But! I like the simple authentication too much, so it goes here.
-    """
-
-    ctx = request.app.ctx
-    local_resp = await ctx.client.request(request.method, f"{ctx.remote}/{path}", data=request.body, params=request.parsed_args, headers=request.headers, cookies=request.cookies)
-    async with local_resp:
-        remote_resp = await request.respond(status=local_resp.status, headers=local_resp.headers)
-        if remote_resp is None:
-            return
-        async for data in local_resp.content.iter_any():
-            await remote_resp.send(data)
