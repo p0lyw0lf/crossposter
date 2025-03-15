@@ -31,7 +31,7 @@ class GithubTarget(Renderable):
             async_create_or_update_file_contents(
                 self.owner,
                 self.repo,
-                filename,
+                str(filename),
                 message=post.title,
                 content=b64encode(content.encode('utf-8')).decode('utf-8'),
                 branch=self.branch,
