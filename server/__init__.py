@@ -5,7 +5,7 @@ import os
 import aiofiles
 import jwt
 from sanic import Request, Sanic
-from sanic.response import redirect
+from sanic.response import redirect, empty
 from zoneinfo import ZoneInfo
 
 from shared.config import config
@@ -13,7 +13,7 @@ from shared.model import Post
 from shared.secrets import secrets
 from poster import posting_target
 
-from .auth import login_required
+from .auth import check_token, login_required
 from .file_upload import bp as file_upload_bp
 from .report import bp as report_bp
 
@@ -122,3 +122,12 @@ async def login_post(request):
         return redirect("/", {"Set-Cookie": f"token={token}"})
     else:
         return {"error": "Invalid username/password"}
+
+
+@app.route("/auth")
+async def check_auth(request):
+    username = check_token(request)
+    if username:
+        return empty(status=200)
+    else:
+        return empty(status=401)
