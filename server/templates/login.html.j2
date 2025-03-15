@@ -7,15 +7,26 @@
     <meta name="theme-color" content="#000000" />
     <title>PolyWolf's Post Composer - Login</title>
     <style>
-      * {
+      body, form, label {
+	display: flex;
+	flex-direction: column;
+      }
+
+      body {
+	margin: 24px;
         font-family: sans-serif;
         font-size: 16px;
+
+	align-items: center;
       }
 
       form {
-        display: flex;
-        flex-direction: column;
         gap: 24px;
+	align-items: flex-start;
+      }
+
+      label {
+	gap: 8px;
       }
 
       .error {
@@ -25,7 +36,7 @@
   </head>
   <body>
     <h1>Login</h1>
-    <form action="/login" method="POST">
+    <form method="POST">
       <label>Username: <input type="text" name="username" required /></label>
       <label
         >Password: <input type="password" name="password" required

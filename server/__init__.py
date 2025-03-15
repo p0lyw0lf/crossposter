@@ -31,13 +31,6 @@ posters = {
     for target in config["outputs"]["server"]
 }
 
-
-@app.before_server_start
-def setup(app, loop):
-    app.ctx.remote = "http://localhost:5601"
-    app.ctx.client = aiohttp.ClientSession()
-
-
 async def get_manifest():
     async with aiofiles.open("./server/dist/.vite/manifest.json", "rb") as f:
         return json.loads(await f.read())
@@ -109,6 +102,7 @@ async def login_get(request):
 @app.post("/login")
 @app.ext.template("login.html.j2")
 async def login_post(request):
+    to = request.args.get("next", "/")
     username = request.form.get("username")
     password = request.form.get("password")
 
@@ -119,7 +113,7 @@ async def login_post(request):
             request.app.config.SECRET,
             algorithm="HS256",
         )
-        return redirect("/", {"Set-Cookie": f"token={token}"})
+        return redirect(to, {"Set-Cookie": f"token={token}"})
     else:
         return {"error": "Invalid username/password"}
 

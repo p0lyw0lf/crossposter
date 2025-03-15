@@ -29,6 +29,6 @@ def login_required(wrapped):
             kwargs["username"] = username
             return await wrapped(request, *args, **kwargs)
         else:
-            return redirect("/login")
+            return redirect(f"/login?next={request.path}")
 
     return decorated_function
