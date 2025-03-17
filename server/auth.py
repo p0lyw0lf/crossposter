@@ -26,6 +26,7 @@ def check_token(request: Request):
         return None
 
 
+
 def login_required(wrapped):
     @wraps(wrapped)
     async def decorated_function(request: Request, *args, **kwargs):
@@ -42,7 +43,7 @@ def login_required(wrapped):
 
 @bp.get("/login")
 async def login_get(request: Request):
-    return render("login.html.j2")
+    return await render("login.html.j2")
 
 
 @bp.post("/login")
@@ -60,7 +61,7 @@ async def login_post(request: Request):
         )
         return redirect(to, {"Set-Cookie": f"token={token}"})
     else:
-        return render("login.html.j2", context={"error": "Invalid username/password"}, status=401)
+        return await render("login.html.j2", context={"error": "Invalid username/password"}, status=401)
 
 
 @bp.route("/auth")
