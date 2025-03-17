@@ -34,8 +34,12 @@ footer {
   align-items: center;
 }
 
+header,
+footer {
+  gap: 8px;
+}
+
 main {
-  max-width: 40rem;
   padding: 16px;
   margin: auto;
 }

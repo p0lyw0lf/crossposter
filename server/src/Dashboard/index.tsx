@@ -3,6 +3,7 @@ import "vite/modulepreload-polyfill";
 import { render } from "solid-js/web";
 
 import "./index.css";
+import { Dashboard } from "./Dashboard";
 
 const root = document.getElementById("root");
 
@@ -12,4 +13,4 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
-render(() => <h1>Hello, World!</h1>, root!);
+render(() => <Dashboard />, root!);

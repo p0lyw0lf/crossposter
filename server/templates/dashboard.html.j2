@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <title>PolyWolf's Post Composer</title>
+    <title>PolyWolf's Dashboard</title>
     <script type="module" src="/{{ index['file'] }}"></script>
     {% for file in index['css'] %}
     <link rel="stylesheet" href="/{{ file }}" />
@@ -16,23 +16,19 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <main>
       <header>
-        <h2>{{ username }}'s Post Composer</h2>
+        <h2>{{ username }}'s Dashboard</h2>
       </header>
       <div id="root"></div>
-      {% if message is defined %}
-      <p class="message">{{ message }}</p>
-      {% endif %} {% if error is defined %}
+      {% if site is defined %}
+      <input type="hidden" id="site" value="{{ site }}" />
+      {% endif %}
+      {% if error is defined %}
       <p class="message error">{{ error }}</p>
       {% endif %}
-      {% if sites is defined %}
-        <ul>
-      {% for site in sites %}
-          <li><a href="/report?site={{ site }}">{{ site }} analytics</a></li>
-          <li><a href="/dashboard?site={{ site }}">{{ site }} dashboard</a></li>
-      {% endfor %}
-        </ul>
-      {% endif %}
-      <footer>Have a nice day!!</footer>
+      <footer>
+        <a href="/">Home</a>
+        Have a nice day!!
+      </footer>
     </main>
   </body>
 </html>

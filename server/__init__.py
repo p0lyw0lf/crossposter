@@ -3,9 +3,7 @@ import json
 import os
 
 import aiofiles
-import jwt
 from sanic import Request, Sanic
-from sanic.response import redirect, empty
 from zoneinfo import ZoneInfo
 
 from shared.config import config
@@ -13,7 +11,7 @@ from shared.model import Post
 from shared.secrets import secrets
 from poster import posting_target
 
-from .auth import check_token, login_required
+from .auth import login_required, bp as auth_bp
 from .file_upload import bp as file_upload_bp
 from .report import bp as report_bp
 
@@ -24,6 +22,7 @@ app.config.SECRET = os.environ["SERVER_SECRET"]
 app.static("/assets", "./server/dist/assets", name="assets")
 app.blueprint(file_upload_bp)
 app.blueprint(report_bp)
+app.blueprint(auth_bp)
 
 
 posters = {
@@ -40,7 +39,7 @@ async def get_manifest():
 @app.get("/")
 @app.ext.template("index.html.j2")
 @login_required
-async def index_get(request, username):
+async def index_get(request: Request, username):
     sites = secrets["logs"].get(username, [])
     return {
         "index": (await get_manifest())["src/Composer/index.tsx"],
@@ -52,7 +51,7 @@ async def index_get(request, username):
 @app.post("/")
 @app.ext.template("index.html.j2")
 @login_required
-async def index_post(request, username):
+async def index_post(request: Request, username):
     sites = secrets["logs"].get(username, [])
     context = {
         "index": (await get_manifest())["src/index.tsx"],
@@ -94,35 +93,25 @@ async def index_post(request, username):
     return context
 
 
-@app.get("/login")
-@app.ext.template("login.html.j2")
-async def login_get(request):
-    return {}
+@app.get("/dashboard")
+@app.ext.template("dashboard.html.j2")
+@login_required
+async def dashboard(request: Request, username):
+    sites = secrets["logs"].get(username, [])
+    site = request.get_args().get("site")
 
+    ctx = {
+        "index": (await get_manifest())["src/Dashboard/index.tsx"],
+        "username": username,
+    }
 
-@app.post("/login")
-@app.ext.template("login.html.j2")
-async def login_post(request):
-    to = request.args.get("next", "/")
-    username = request.form.get("username")
-    password = request.form.get("password")
-
-    if password is not None and \
-            secrets["server"]["users"].get(username, None) == password:
-        token = jwt.encode(
-            {"username": username},
-            request.app.config.SECRET,
-            algorithm="HS256",
-        )
-        return redirect(to, {"Set-Cookie": f"token={token}"})
+    if len(sites) == 0:
+        ctx["error"] = "Not allowed to access any sites"
+    elif site is None:
+        ctx["error"] = "Must specify a \"site\" argument"
+    elif site not in sites:
+        ctx["error"] = "Not allowed to access that site"
     else:
-        return {"error": "Invalid username/password"}
+        ctx["site"] = site
 
-
-@app.route("/auth")
-async def check_auth(request):
-    username = check_token(request)
-    if username:
-        return empty(status=200)
-    else:
-        return empty(status=401)
+    return ctx

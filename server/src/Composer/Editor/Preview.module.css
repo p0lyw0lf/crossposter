@@ -15,6 +15,10 @@
 
   pre {
     line-height: normal;
+
+    code {
+      display: block;
+    }
   }
 
   /* TODO: directly use post.css from the main repo */
