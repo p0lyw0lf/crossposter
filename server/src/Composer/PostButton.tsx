@@ -2,15 +2,15 @@ import type { Component } from "solid-js";
 import { createSignal, createEffect, onCleanup } from "solid-js";
 import { useSaveDraft, populateFormFromDraft } from "./drafts";
 import styles from "./PostButton.module.css";
-import buttonStyles from "./components/Button.module.css";
+import buttonStyles from "../components/Button.module.css";
 import { getFormElements, useComposerContext } from "./ComposerContext";
 import { v7 as uuidv7 } from "uuid";
-import { resizeTextArea } from "./components/TextArea";
+import { resizeTextArea } from "../components/TextArea";
 
 type Mode = "post" | "save-draft";
 
 export const PostButton: Component = () => {
-  const [mode, setMode] = createSignal<Mode>("post");
+  const [mode, setMode] = createSignal<Mode>("save-draft");
   const { store, setStore } = useComposerContext();
   const saveDraft = useSaveDraft();
 

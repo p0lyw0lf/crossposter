@@ -1,6 +1,6 @@
 import { For, onMount } from "solid-js";
 import type { Component } from "solid-js";
-import { TextInput } from "../../components/TextInput";
+import { TextInput } from "../../../components/TextInput";
 import { Tag } from "./Tag";
 import styles from "./Tags.module.css";
 import { useComposerContext } from "../../ComposerContext";

@@ -1,4 +1,6 @@
 .container {
+  display: flex;
+  flex-wrap: nowrap;
   border-radius: 8px;
   overflow: hidden;
 

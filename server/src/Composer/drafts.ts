@@ -1,4 +1,4 @@
-import { resizeTextArea } from "./components/TextArea";
+import { resizeTextArea } from "../components/TextArea";
 import { getFormElements, useComposerContext } from "./ComposerContext";
 import { produce } from "solid-js/store";
 
@@ -44,7 +44,7 @@ export const draftFromFormData = (f: FormData): Draft | undefined => {
 
 export const populateFormFromDraft = (
   form: HTMLFormElement,
-  draft: Draft
+  draft: Draft,
 ): void => {
   const { draftId, title, body } = getFormElements(form);
   draftId.value = draft.draftId;
@@ -60,7 +60,7 @@ export const populateFormFromDraft = (
 export const listDraftKeys = (): string[] => {
   return [
     ...new Set(
-      (window.localStorage.getItem(allDraftsKey) ?? "").split(",")
+      (window.localStorage.getItem(allDraftsKey) ?? "").split(","),
     ).values(),
   ];
 };
@@ -69,10 +69,10 @@ export const listDrafts = (): Draft[] => {
   const draftMappings = listDraftKeys().flatMap(
     (draftKey): Array<[string, Draft]> => {
       const draft = draftFromString(
-        window.localStorage.getItem(draftKey) ?? "{}"
+        window.localStorage.getItem(draftKey) ?? "{}",
       );
       return draft ? [[draftKey, draft]] : [];
-    }
+    },
   );
 
   const newDraftKeys = draftMappings.map(([draftKey]) => draftKey).join(",");
@@ -111,14 +111,14 @@ export const useSaveDraft = (): (() => boolean) => {
       "drafts",
       produce((drafts) => {
         const existingIndex = drafts.findIndex(
-          (existingDraft) => existingDraft.draftId === draft.draftId
+          (existingDraft) => existingDraft.draftId === draft.draftId,
         );
         if (existingIndex >= 0) {
           drafts[existingIndex] = draft;
         } else {
           drafts[drafts.length] = draft;
         }
-      })
+      }),
     );
 
     return true;

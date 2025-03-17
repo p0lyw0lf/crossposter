@@ -31,6 +31,7 @@ posters = {
     for target in config["outputs"]["server"]
 }
 
+
 async def get_manifest():
     async with aiofiles.open("./server/dist/.vite/manifest.json", "rb") as f:
         return json.loads(await f.read())
@@ -42,7 +43,7 @@ async def get_manifest():
 async def index_get(request, username):
     sites = secrets["logs"].get(username, [])
     return {
-        "index": (await get_manifest())["src/index.tsx"],
+        "index": (await get_manifest())["src/Composer/index.tsx"],
         "username": username,
         "sites": sites,
     }

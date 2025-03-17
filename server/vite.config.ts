@@ -18,7 +18,7 @@ export default defineConfig({
     target: "esnext",
     manifest: true,
     rollupOptions: {
-      input: ["./src/index.tsx"],
+      input: ["./src/Composer/index.tsx", "./src/Dashboard/index.tsx"],
     },
   },
 });

@@ -1,0 +1,30 @@
+@import "../base.css";
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 24px;
+
+  padding: 16px;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.message {
+  background-color: var(--color-longan);
+  color: darkgreen;
+  font-weight: 600;
+
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.error {
+  color: darkred;
+}

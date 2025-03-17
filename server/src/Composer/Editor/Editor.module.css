@@ -1,8 +1,8 @@
 .editor {
   position: relative;
 
-  background-color: var(--color-black);
-  color: var(--color-white);
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
 
   display: flex;
   flex-direction: column;

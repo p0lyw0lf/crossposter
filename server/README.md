@@ -25,7 +25,7 @@ Finally, from the root of the repository, run:
 
 ```bash
 cd server
-npm install
+pnpm install
 ```
 
 ## Running
@@ -37,7 +37,7 @@ In development mode:
 ```bash
 source .venv/bin/activate
 cd server
-npm run dev &
+pnpm dev &
 cd ..
 sanic server
 ```
@@ -47,7 +47,7 @@ In production mode:
 ```bash
 source .venv/bin/activate
 cd server
-npm run build
+pnpm build
 cd ..
 sanic server
 ```

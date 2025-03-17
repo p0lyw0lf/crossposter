@@ -31,7 +31,7 @@
               ujson
             ])
             ++ (with pkgs.nodePackages; [
-              npm
+              pnpm
             ]);
         };
       }

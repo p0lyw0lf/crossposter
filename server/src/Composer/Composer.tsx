@@ -9,7 +9,7 @@ import { listDrafts } from "./drafts";
 import { createStore } from "solid-js/store";
 import { ComposerProvider } from "./ComposerContext";
 import { Editor } from "./Editor/Editor";
-import { FileInput } from "./components/FileInput";
+import { FileInput } from "../components/FileInput";
 import { uploadFilesAndInsert } from "./fileUpload";
 
 export const Composer: Component = () => {
@@ -49,7 +49,7 @@ export const Composer: Component = () => {
                     setStore("error", "");
                     setStore(
                       "message",
-                      `Files uploaded to ${filenames.join(", ")}`
+                      `Files uploaded to ${filenames.join(", ")}`,
                     );
                   })
                   .catch((err) => {

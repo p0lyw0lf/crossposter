@@ -4,19 +4,20 @@
   align-items: stretch;
 
   border-radius: 8px;
-  border: solid 1px var(--color-gray);
+  border: solid 1px var(--color-border-primary);
   overflow: hidden;
 }
 
 .toolbar {
-  background-color: var(--color-not-black);
-  border-top: solid 1px var(--color-gray);
+  background-color: var(--color-background-secondary);
+  border-top: solid 1px var(--color-border-primary);
 
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
 
   padding: 8px;
 }

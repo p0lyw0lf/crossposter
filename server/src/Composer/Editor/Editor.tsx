@@ -1,7 +1,7 @@
 import type { Component } from "solid-js";
 import { createSignal, Show } from "solid-js";
 import { Tags } from "./Tags/Tags";
-import { TextArea } from "../components/TextArea";
+import { TextArea } from "../../components/TextArea";
 import styles from "./Editor.module.css";
 import { uploadFilesAndInsert } from "../fileUpload";
 import { useComposerContext } from "../ComposerContext";

@@ -16,11 +16,11 @@
 }
 
 .secondary {
-  background-color: var(--color-not-black);
-  color: var(--color-white);
-  border: 2px solid var(--color-gray);
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-border-primary);
 
   &:hover {
-    background-color: var(--color-gray);
+    background-color: var(--color-border-primary);
   }
 }

@@ -2,7 +2,7 @@ import type { Component } from "solid-js";
 import { populateFormFromDraft, removeDraft } from "../drafts";
 import type { Draft as DraftModel } from "../drafts";
 import styles from "./Draft.module.css";
-import buttonStyles from "../components/Button.module.css";
+import buttonStyles from "../../components/Button.module.css";
 import { useComposerContext } from "../ComposerContext";
 
 export interface DraftProps {
@@ -30,7 +30,7 @@ export const Draft: Component<DraftProps> = ({ draft }) => {
         onClick={() => {
           removeDraft(draft.draftId);
           setStore("drafts", (drafts: DraftModel[]) =>
-            drafts.filter((oldDraft) => draft.draftId !== oldDraft.draftId)
+            drafts.filter((oldDraft) => draft.draftId !== oldDraft.draftId),
           );
         }}
       >

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Rebuild static files
 cd server
-npm i
-npm run build
+pnpm i
+pnpm build
 cd ..
 # Run the server
 source .venv/bin/activate

@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import styles from "./components/Button.module.css";
+import styles from "../components/Button.module.css";
 import { useComposerContext } from "./ComposerContext";
 
 export const Toggle: Component = () => {
