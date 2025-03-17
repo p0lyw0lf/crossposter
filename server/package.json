@@ -31,5 +31,10 @@
     "solid-js": "^1.9.1",
     "unified": "^11.0.5",
     "uuid": "^10.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
