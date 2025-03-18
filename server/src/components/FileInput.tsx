@@ -6,11 +6,7 @@ interface Props extends JSX.InputHTMLAttributes<HTMLInputElement> {
   buttonClassList?: { [c in string]: boolean };
 }
 
-export const FileInput: ParentComponent<Props> = ({
-  buttonClassList,
-  children: propsChildren,
-  ...props
-}) => {
+export const FileInput: ParentComponent<Props> = (props) => {
   let inputRef!: HTMLInputElement;
   let buttonRef!: HTMLButtonElement;
 
@@ -23,7 +19,7 @@ export const FileInput: ParentComponent<Props> = ({
     });
   });
 
-  const safeChildren = children(() => propsChildren);
+  const safeChildren = children(() => props.children);
 
   return (
     <>
@@ -36,7 +32,7 @@ export const FileInput: ParentComponent<Props> = ({
       <button
         ref={buttonRef}
         type="button"
-        classList={{ [styles.button]: true, ...buttonClassList }}
+        classList={{ [styles.button]: true, ...props.buttonClassList }}
       >
         {safeChildren()}
       </button>

@@ -20,6 +20,7 @@ app.config.TEMPLATING_PATH_TO_TEMPLATES = "./server/templates"
 app.config.SECRET = os.environ["SERVER_SECRET"]
 
 app.static("/assets", "./server/dist/assets", name="assets")
+app.static("/log_files", "./server/log_files", name="log_files")
 app.blueprint(file_upload_bp)
 app.blueprint(report_bp)
 app.blueprint(auth_bp)

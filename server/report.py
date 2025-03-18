@@ -4,6 +4,7 @@ import os
 from sanic.response import text, file
 from sanic import Blueprint, Request
 
+from server.sync_logs import sync_logs
 from shared.secrets import secrets
 from .auth import login_required
 
@@ -17,11 +18,11 @@ async def report(request: Request, username: str):
     if len(sites) == 0:
         return text("no sites for user", 400)
 
-    site = request.args.get("site", sites[0])
-    if site not in sites:
-        return text(f"site {site} not found", 400)
+    site_name = request.args.get("site", sites[0])
+    if site_name not in sites:
+        return text(f"site {site_name} not found", 400)
 
-    site = secrets.get(site, {}).get("logs", None)
+    site = secrets.get(site_name, {}).get("logs", None)
     if site is None:
         return text(f"site {site} not defined", 500)
 
@@ -34,10 +35,11 @@ async def report(request: Request, username: str):
     ]:
         env[var] = site[var]
 
+    await asyncio.to_thread(sync_logs, site_name)
+
     proc = await asyncio.create_subprocess_exec(
-        "/usr/bin/env",
-        "python3",
-        "./server/gen_report.py",
+        "bash",
+        "./server/gen_report.sh",
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
         env=env,

@@ -8,8 +8,6 @@ discord.py
 githubkit[auth-app]
 jinja2
 mistletoe
+pyarrow
 sanic[ext]
 tzdata
-
-# For pyright
-autopep8

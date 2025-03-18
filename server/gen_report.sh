@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Must already have things downloaded into AWS_BUCKET_NAME. See ./gen_report.py
+# Must already have things downloaded into AWS_BUCKET_NAME. See ./sync_logs.py
 
 set -euo pipefail
 shopt -s globstar
@@ -10,9 +10,9 @@ if [[ -z "${AWS_BUCKET_NAME+x}" ]]; then
   exit 1
 fi
 
-output_folder="tmp/${AWS_BUCKET_NAME}"
+output_folder="server/tmp/${AWS_BUCKET_NAME}"
 mkdir -p $output_folder
-output_file="tmp/${AWS_BUCKET_NAME}.html"
+output_file="server/tmp/${AWS_BUCKET_NAME}.html"
 touch $output_file
 
 zcat $output_folder/**/*.gz | docker run --rm -i -v ./$output_file:/report.html -e LANG=$LANG allinurl/goaccess -a -o report.html --log-format CLOUDFRONT - 1>&2

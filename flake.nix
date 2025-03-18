@@ -27,8 +27,12 @@
             ++ (with pkgs.python311Packages; [
               pip
               venvShellHook
-              # Needed for binaries that link against libc
+              # Needed so to replace the default pyarrow binaries
+              pyarrow
+              # Needed for other binaries that link against libc
               ujson
+              # Needed for pyright
+              autopep8
             ])
             ++ (with pkgs.nodePackages; [
               pnpm
