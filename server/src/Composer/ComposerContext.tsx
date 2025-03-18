@@ -1,6 +1,6 @@
 import { createContext, useContext } from "solid-js";
-import type { Draft } from "./drafts";
 import type { SetStoreFunction } from "solid-js/store";
+import type { Draft } from "./drafts";
 
 interface ComposerStore {
   formRef: HTMLFormElement;
@@ -22,7 +22,7 @@ export const useComposerContext = (): Context => {
   const context = useContext(ComposerContext);
   if (context === undefined) {
     throw new Error(
-      "useComposerContext must be used inside a ComposerProvider"
+      "useComposerContext must be used inside a ComposerProvider",
     );
   }
   return context;

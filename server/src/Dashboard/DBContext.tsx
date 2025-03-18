@@ -1,12 +1,6 @@
-import {
-  createContext,
-  createResource,
-  useContext,
-  children,
-  onCleanup,
-} from "solid-js";
-import type { ResourceReturn } from "solid-js";
 import type * as duckdb from "@duckdb/duckdb-wasm";
+import type { ResourceReturn } from "solid-js";
+import { createContext, useContext } from "solid-js";
 
 interface DB {
   conn: ResourceReturn<duckdb.AsyncDuckDBConnection>[0];

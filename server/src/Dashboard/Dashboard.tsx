@@ -1,8 +1,8 @@
 import type { Component } from "solid-js";
 import {
   createEffect,
-  createSignal,
   createResource,
+  createSignal,
   onCleanup,
 } from "solid-js";
 import { DBProvider } from "./DBContext";

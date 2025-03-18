@@ -1,6 +1,6 @@
+import type * as arrow from "apache-arrow";
 import { createResource, For, Show, type Component } from "solid-js";
 import { useDBContext } from "./DBContext";
-import type * as arrow from "apache-arrow";
 
 export const Table: Component = () => {
   const { conn } = useDBContext();

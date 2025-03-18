@@ -1,12 +1,12 @@
-import { For, onMount } from "solid-js";
 import type { Component } from "solid-js";
+import { For, onMount } from "solid-js";
 import { TextInput } from "../../../components/TextInput";
+import { useComposerContext } from "../../ComposerContext";
 import { Tag } from "./Tag";
 import styles from "./Tags.module.css";
-import { useComposerContext } from "../../ComposerContext";
 
 export const Tags: Component = () => {
-  let input: HTMLInputElement;
+  let input!: HTMLInputElement;
 
   const { store, setStore } = useComposerContext();
 
@@ -44,7 +44,7 @@ export const Tags: Component = () => {
           />
         )}
       </For>
-      <TextInput ref={input!} type="text" placeholder="#add tags" />
+      <TextInput ref={input} type="text" placeholder="#add tags" />
     </div>
   );
 };

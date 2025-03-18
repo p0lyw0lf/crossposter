@@ -1,5 +1,5 @@
-import { onMount } from "solid-js";
 import type { Component, JSX } from "solid-js";
+import { onMount } from "solid-js";
 
 export const resizeTextArea = (textArea: HTMLTextAreaElement) => {
   // Magic code from https://stackoverflow.com/a/25621277
@@ -15,7 +15,7 @@ export const resizeTextArea = (textArea: HTMLTextAreaElement) => {
 export const TextArea: Component<
   JSX.TextareaHTMLAttributes<HTMLTextAreaElement>
 > = (props) => {
-  let textarea: HTMLTextAreaElement;
+  let textarea!: HTMLTextAreaElement;
   onMount(() => {
     textarea.style.height = textarea.scrollHeight + "px";
     textarea.style.overflowY = "hidden";
@@ -25,5 +25,5 @@ export const TextArea: Component<
     });
   });
 
-  return <textarea ref={textarea!} {...props} />;
+  return <textarea ref={textarea} {...props} />;
 };

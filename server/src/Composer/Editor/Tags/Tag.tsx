@@ -7,13 +7,13 @@ interface Props {
   onClose: () => void;
 }
 
-export const Tag: Component<Props> = ({ tag, onClose }) => {
+export const Tag: Component<Props> = (props) => {
   return (
     <>
-      <input type="hidden" name="tags" value={tag} />
+      <input type="hidden" name="tags" value={props.tag} />
       <span class={styles.tag}>
-        <button type="button" onclick={onClose} />
-        {tag}
+        <button type="button" onClick={() => props.onClose()} />
+        {props.tag}
       </span>
     </>
   );

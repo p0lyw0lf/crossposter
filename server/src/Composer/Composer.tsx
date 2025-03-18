@@ -1,15 +1,15 @@
-import { createEffect, Show } from "solid-js";
 import type { Component } from "solid-js";
-import { Toggle } from "./Toggle";
-import { PostButton } from "./PostButton";
-import { v7 as uuidv7 } from "uuid";
-import styles from "./Composer.module.css";
-import { DraftList } from "./Drafts/DraftList";
-import { listDrafts } from "./drafts";
+import { createEffect, Show } from "solid-js";
 import { createStore } from "solid-js/store";
-import { ComposerProvider } from "./ComposerContext";
-import { Editor } from "./Editor/Editor";
+import { v7 as uuidv7 } from "uuid";
 import { FileInput } from "../components/FileInput";
+import styles from "./Composer.module.css";
+import { ComposerProvider } from "./ComposerContext";
+import { DraftList } from "./Drafts/DraftList";
+import { Editor } from "./Editor/Editor";
+import { PostButton } from "./PostButton";
+import { Toggle } from "./Toggle";
+import { listDrafts } from "./drafts";
 import { uploadFilesAndInsert } from "./fileUpload";
 
 export const Composer: Component = () => {

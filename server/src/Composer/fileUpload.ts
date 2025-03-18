@@ -1,5 +1,5 @@
-import { getFormElements } from "./ComposerContext";
 import { resizeTextArea } from "../components/TextArea";
+import { getFormElements } from "./ComposerContext";
 
 /**
  * Returns the uploaded file URLs

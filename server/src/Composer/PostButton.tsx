@@ -1,11 +1,11 @@
 import type { Component } from "solid-js";
-import { createSignal, createEffect, onCleanup } from "solid-js";
-import { useSaveDraft, populateFormFromDraft } from "./drafts";
-import styles from "./PostButton.module.css";
-import buttonStyles from "../components/Button.module.css";
-import { getFormElements, useComposerContext } from "./ComposerContext";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 import { v7 as uuidv7 } from "uuid";
+import buttonStyles from "../components/Button.module.css";
 import { resizeTextArea } from "../components/TextArea";
+import { getFormElements, useComposerContext } from "./ComposerContext";
+import { populateFormFromDraft, useSaveDraft } from "./drafts";
+import styles from "./PostButton.module.css";
 
 type Mode = "post" | "save-draft";
 
@@ -16,12 +16,11 @@ export const PostButton: Component = () => {
 
   // Automatically save drafts every 30s
   createEffect(() => {
-    let timeout: NodeJS.Timeout;
     const schedule = () => {
       saveDraft();
       timeout = setTimeout(schedule, 30_000);
     };
-    timeout = setTimeout(schedule, 30_000);
+    let timeout = setTimeout(schedule, 30_000);
     onCleanup(() => clearTimeout(timeout));
   });
 

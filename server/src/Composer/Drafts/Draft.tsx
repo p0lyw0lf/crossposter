@@ -1,25 +1,25 @@
 import type { Component } from "solid-js";
-import { populateFormFromDraft, removeDraft } from "../drafts";
-import type { Draft as DraftModel } from "../drafts";
-import styles from "./Draft.module.css";
 import buttonStyles from "../../components/Button.module.css";
 import { useComposerContext } from "../ComposerContext";
+import type { Draft as DraftModel } from "../drafts";
+import { populateFormFromDraft, removeDraft } from "../drafts";
+import styles from "./Draft.module.css";
 
 export interface DraftProps {
   draft: DraftModel;
 }
 
-export const Draft: Component<DraftProps> = ({ draft }) => {
+export const Draft: Component<DraftProps> = (props) => {
   const { store, setStore } = useComposerContext();
   return (
     <span class={styles.draft}>
-      <span>{draft.title}</span>
+      <span>{props.draft.title}</span>
       <button
         type="button"
         class={buttonStyles.button}
         onClick={() => {
-          populateFormFromDraft(store.formRef, draft);
-          setStore("tags", draft.tags);
+          populateFormFromDraft(store.formRef, props.draft);
+          setStore("tags", props.draft.tags);
         }}
       >
         load
@@ -28,9 +28,12 @@ export const Draft: Component<DraftProps> = ({ draft }) => {
         type="button"
         class={buttonStyles.button}
         onClick={() => {
-          removeDraft(draft.draftId);
+          removeDraft(props.draft.draftId);
+          /* eslint-disable-next-line solid/reactivity */
           setStore("drafts", (drafts: DraftModel[]) =>
-            drafts.filter((oldDraft) => draft.draftId !== oldDraft.draftId),
+            drafts.filter(
+              (oldDraft) => props.draft.draftId !== oldDraft.draftId,
+            ),
           );
         }}
       >

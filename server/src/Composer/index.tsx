@@ -1,9 +1,9 @@
 /* @refresh reload */
-import "vite/modulepreload-polyfill";
 import { render } from "solid-js/web";
+import "vite/modulepreload-polyfill";
 
-import "./index.css";
 import { Composer } from "./Composer";
+import "./index.css";
 
 const root = document.getElementById("root");
 
