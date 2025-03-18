@@ -1,7 +1,7 @@
 /* @refresh reload */
-import { render } from "solid-js/web";
 import "vite/modulepreload-polyfill";
 
+import { render } from "solid-js/web";
 import { Composer } from "./Composer";
 import "./index.css";
 
