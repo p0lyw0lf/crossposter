@@ -15,13 +15,14 @@ interface Props {
   data: Array<Datum>;
 }
 
-const width = 1600;
-const height = 900;
+const width = 800;
+const height = 450;
 const marginTop = 30;
 const marginRight = 0;
 const marginBottom = 30;
 const marginLeft = 40;
 
+// Currently heavily adapted from https://observablehq.com/@d3/zoomable-bar-chart
 export const BarChart: Component<Props> = (props) => {
   const data = () => props.data;
 
@@ -80,7 +81,7 @@ export const BarChart: Component<Props> = (props) => {
     svg()
       ?.selectAll(".bars rect")
       .attr("x", (d) => x()!(new Date((d as Datum).key)) ?? null)
-      .attr("width", 10); // TODO: calculate correct width
+      .attr("width", event.transform.applyX(20) - event.transform.applyX(0));
     svg()
       ?.selectAll(".x-axis")
       .call(xAxis() as any);
@@ -100,7 +101,7 @@ export const BarChart: Component<Props> = (props) => {
       .attr("x", (d) => x()!(new Date(d.key)))
       .attr("y", (d) => y()(d.hits))
       .attr("height", (d) => y()(0) - y()(d.hits))
-      .attr("width", 10); // TODO: calculate correct width
+      .attr("width", 20); // TODO: calculate correct width
 
     // Append the axes
     svg()
