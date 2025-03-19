@@ -4,12 +4,16 @@ import {
   createResource,
   createSignal,
   onCleanup,
+  Show,
 } from "solid-js";
 import { DBProvider } from "./DBContext";
-import { Table } from "./Table";
+import { HitsPerDay } from "./HitsPerDay";
 import { getConn, getDB } from "./duckdb";
 
 export const Dashboard: Component = () => {
+  const [loadingState, setLoadingState] = createSignal<string | null>(
+    "Loading...",
+  );
   const [site, setSite] = createSignal("");
 
   createEffect(() => {
@@ -21,11 +25,11 @@ export const Dashboard: Component = () => {
     site() ? `${window.location.origin}/log_files/${site()}.parquet` : null;
 
   const [conn] = createResource(uri, async (uri) => {
-    console.log("getting db");
+    setLoadingState("Initializing DuckDB...");
     const db = await getDB();
-    console.log("getting conn");
+    setLoadingState("Downloading log files...");
     const conn = await getConn(db, uri);
-    console.log("returning conn");
+    setLoadingState(null);
     return conn;
   });
 
@@ -35,7 +39,9 @@ export const Dashboard: Component = () => {
 
   return (
     <DBProvider value={{ conn }}>
-      <Table />
+      <Show when={!conn.loading} fallback={<h3>{loadingState()}</h3>}>
+        <HitsPerDay />
+      </Show>
     </DBProvider>
   );
 };
