@@ -55,7 +55,7 @@ async def index_get(request: Request, username):
 async def index_post(request: Request, username):
     sites = secrets["logs"].get(username, [])
     context = {
-        "index": (await get_manifest())["src/index.tsx"],
+        "index": (await get_manifest())["src/Composer/index.tsx"],
         "username": username,
         "sites": sites,
     }
