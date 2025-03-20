@@ -1,7 +1,8 @@
 import type * as arrow from "apache-arrow";
-import { createResource, Show, type Component } from "solid-js";
+import type { Component } from "solid-js";
+import { createResource, Show } from "solid-js";
 import { useDBContext } from "./DBContext";
-import { BarChart } from "./charts/BarChart";
+import { DateBarChart } from "./charts/DateBarChart";
 
 export const HitsPerDay: Component = () => {
   const { conn } = useDBContext();
@@ -13,20 +14,23 @@ FROM logs
 GROUP BY date
 ORDER BY date ASC
 `);
-    return data
-      ?.toArray()
-      .map(({ date, hits }) => ({
-        key: new Date(Number(date)).toISOString(),
-        hits: Number(hits),
-      }));
+    return (
+      data?.toArray().map(({ date, hits }) => ({
+        key: new Date(Number(date)),
+        value: Number(hits),
+      })) ?? []
+    );
   });
 
   return (
-    <Show
-      when={data.state === "ready" || data.state === "refreshing"}
-      fallback={<h3>Querying...</h3>}
-    >
-      <BarChart data={data()!} />
-    </Show>
+    <>
+      <h2>Date</h2>
+      <Show
+        when={data.state === "ready" || data.state === "refreshing"}
+        fallback={<h3>Querying...</h3>}
+      >
+        <DateBarChart data={data()!} />
+      </Show>
+    </>
   );
 };

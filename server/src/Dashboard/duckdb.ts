@@ -27,22 +27,25 @@ export const getDB = async (): Promise<duckdb.AsyncDuckDB> => {
 };
 
 /**
- * Get a connection to the database backed by the Parquet file at `uri`. The
+ * Get a connection to the database backed by the Parquet file in `buf`. The
  * file's contents are loaded into the table "logs".
  *
  * MUST call `await c.close()` when this connection is no longer used.
  */
 export const getConn = async (
   db: duckdb.AsyncDuckDB,
-  uri: string,
+  site: string,
+  buf: Uint8Array,
 ): Promise<duckdb.AsyncDuckDBConnection> => {
+  const filename = `${site}.parquet`;
+  await db.registerFileBuffer(filename, buf);
   const c = await db.connect();
   await c.query(`
 DROP TABLE IF EXISTS logs
 `);
   await c.query(`
 CREATE TABLE logs AS
-  SELECT * from "${uri}"
+  SELECT * from "${filename}"
 `);
   return c;
 };
