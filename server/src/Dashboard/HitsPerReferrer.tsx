@@ -1,18 +1,19 @@
 import type { Component } from "solid-js";
 import { createResource, Show } from "solid-js";
 import { LabelBarChart } from "./charts/LabelBarChart";
+import { ClearFilterChip } from "./ClearFilterChip";
 import { createPagingControls } from "./createPagingControls";
 import { useDBContext } from "./DBContext";
 import { PagingControls } from "./PagingControls";
 
 export const HitsPerReferrer: Component = () => {
-  const { conn } = useDBContext();
+  const { ctx, setFilters } = useDBContext();
 
-  const [referrerCount] = createResource(conn, async (conn) => {
+  const [referrerCount] = createResource(ctx, async ({ conn, filters }) => {
     const rows = await conn.query(`
 SELECT COUNT(DISTINCT SPLIT_PART("cs(Referer)", '/', 3)) as count
 FROM logs
-WHERE SPLIT_PART("cs(Referer)", '/', 3) != ''
+WHERE SPLIT_PART("cs(Referer)", '/', 3) != '' AND ${filters}
 `);
     return Number(rows.get(0)?.count ?? 0);
   });
@@ -23,11 +24,11 @@ WHERE SPLIT_PART("cs(Referer)", '/', 3) != ''
     () => refetch(),
   );
 
-  const [data, { refetch }] = createResource(conn, async (conn) => {
+  const [data, { refetch }] = createResource(ctx, async ({ conn, filters }) => {
     const data = await conn.query(`
 SELECT SPLIT_PART("cs(Referer)", '/', 3) as referrer, COUNT() as hits
 FROM logs
-WHERE referrer != ''
+WHERE referrer != '' AND ${filters}
 GROUP BY referrer
 ORDER BY hits DESC
 LIMIT ${paging.limit()}
@@ -42,7 +43,10 @@ OFFSET ${paging.offset()}
   });
   return (
     <>
-      <h2>Referrer</h2>
+      <h2>
+        Referrer
+        <ClearFilterChip keyName="Referrer" />
+      </h2>
       <PagingControls
         enableBack={paging.enableBack()}
         firstPage={paging.firstPage}
@@ -57,7 +61,15 @@ OFFSET ${paging.offset()}
         when={data.state === "ready" || data.state === "refreshing"}
         fallback={<h3>Querying...</h3>}
       >
-        <LabelBarChart data={data()!} />
+        <LabelBarChart
+          data={data()!}
+          onClickFactory={(key) => () => {
+            setFilters(
+              "Referrer",
+              `SPLIT_PART("cs(Referer)", '/', 3) = '${key}'`,
+            );
+          }}
+        />
       </Show>
     </>
   );

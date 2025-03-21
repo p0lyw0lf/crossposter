@@ -8,6 +8,7 @@ interface Datum {
 
 interface Props {
   data: Array<Datum>;
+  onClickFactory?: (key: Date) => () => void;
 }
 
 const width = 800;
@@ -58,10 +59,11 @@ export const DateBarChart: Component<Props> = (props) => {
         height={height}
         style={{ "max-width": "100%", height: "auto" }}
       >
-        <g class="bars" fill="var(--color-background-tertiary)">
+        <g class="bars" fill="var(--color-text-secondary-accent)">
           <For each={data()}>
             {(d) => (
               <rect
+                onClick={props.onClickFactory?.(d.key)}
                 x={x()(d.key)}
                 y={y()(d.value)}
                 height={y()(0) - y()(d.value)}

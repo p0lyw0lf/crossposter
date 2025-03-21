@@ -8,6 +8,7 @@ interface Datum {
 
 interface Props {
   data: Array<Datum>;
+  onClickFactory?: (key: string) => () => void;
 }
 
 const width = 800;
@@ -58,10 +59,11 @@ export const LabelBarChart: Component<Props> = (props) => {
         height={height}
         style={{ "max-width": "100%", height: "auto" }}
       >
-        <g class="bars" fill="var(--color-background-tertiary)">
+        <g class="bars" fill="var(--color-text-primary-accent)">
           <For each={data()}>
             {(d) => (
               <rect
+                onClick={props.onClickFactory?.(d.key)}
                 x={x()(0)}
                 y={y()(d.key)!}
                 width={x()(d.value) - x()(0)}
@@ -70,20 +72,21 @@ export const LabelBarChart: Component<Props> = (props) => {
             )}
           </For>
         </g>
-        <g class="text" fill="var(--color-text-tertiary)" text-anchor="end">
+        <g
+          class="text"
+          fill="var(--color-background-primary)"
+          text-anchor="end"
+        >
           <For each={data()}>
             {(d) => {
               const vx = x()(d.value);
               return (
                 <text
+                  onClick={props.onClickFactory?.(d.key)}
                   x={vx}
                   y={y()(d.key)! + y().bandwidth() / 2}
                   text-anchor={vx < midpoint ? "start" : undefined}
-                  fill={
-                    vx < midpoint
-                      ? "var(--color-text-primary-accent)"
-                      : undefined
-                  }
+                  fill={vx < midpoint ? "var(--color-text-primary)" : undefined}
                   dy="0.35em"
                   dx={vx < midpoint ? 4 : -4}
                 >

@@ -6,11 +6,12 @@ import {
   onCleanup,
   Show,
 } from "solid-js";
+import { createStore } from "solid-js/store";
 import { DBProvider } from "./DBContext";
 import { getConn, getDB } from "./duckdb";
 import { HitsPerDay } from "./HitsPerDay";
 import { HitsPerReferrer } from "./HitsPerReferrer";
-import { HitsPerStatus } from "./HitsPerStatus";
+import { HitsPerStringKey } from "./HitsPerStringKey";
 import { HitsPerUri } from "./HitsPerUri";
 
 export const Dashboard: Component = () => {
@@ -29,10 +30,7 @@ export const Dashboard: Component = () => {
     const db = await getDB();
     setLoadingState("Downloading log files...");
     const uri = `${window.location.origin}/log_files/${site}.parquet`;
-    const res = await fetch(uri);
-    const buf = new Uint8Array(await res.arrayBuffer());
-    setLoadingState("Creating table from logs...");
-    const conn = await getConn(db, site, buf);
+    const conn = await getConn(db, uri);
     setLoadingState(null);
     return conn;
   });
@@ -41,13 +39,26 @@ export const Dashboard: Component = () => {
     await conn()?.close();
   });
 
+  const [filters, setFilters] = createStore({});
+
   return (
-    <DBProvider value={{ conn }}>
+    <DBProvider value={{ conn, filters, setFilters }}>
       <Show when={!conn.loading} fallback={<h3>{loadingState()}</h3>}>
         <HitsPerDay />
         <HitsPerUri />
         <HitsPerReferrer />
-        <HitsPerStatus />
+        <HitsPerStringKey colName="c-ip" keyName="IP" hasPaging />
+        <HitsPerStringKey
+          colName="cs(User-Agent)"
+          keyName="UserAgent"
+          hasPaging
+          transformKey={{ toDisplay: decodeURI, fromDisplay: encodeURI }}
+        />
+        <HitsPerStringKey
+          colName="sc-status"
+          keyName="Status"
+          hasPaging={false}
+        />
       </Show>
     </DBProvider>
   );

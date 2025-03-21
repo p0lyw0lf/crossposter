@@ -1,0 +1,10 @@
+.chip {
+  margin-left: 1em;
+
+  border-radius: 1000rem;
+  border: none;
+  padding: 4px 12px;
+
+  background: var(--color-longan);
+  color: var(--color-black);
+}
