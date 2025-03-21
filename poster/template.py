@@ -42,3 +42,11 @@ class Renderable:
             **asdict(post),
             **ctx,
         )
+
+    async def post(self, post: Post, ctx: dict[str, str]) -> str | None:
+        """
+        Publishes a post, using `self.render` internally.
+
+        Returns the link to the published post, if applicable.
+        """
+        raise NotImplementedError()

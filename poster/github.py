@@ -18,7 +18,7 @@ class GithubTarget(Renderable):
         self.branch = config["GITHUB_BRANCH"]
         self.output_dir = PurePosixPath(config["GITHUB_OUTPUT_DIR"])
 
-    async def post(self, post: Post, ctx: dict[str, str]):
+    async def post(self, post: Post, ctx: dict[str, str]) -> str | None:
         filename = self.output_dir / f"{to_slug(post)}.md"
         # Make copy so this modification doesn't destroy anything
         post = Post(**asdict(post))

@@ -4,5 +4,5 @@ from yaml import Loader
 
 
 config_file = impresources.files(__name__) / 'config.yaml'
-with open(config_file, 'rb') as f:
+with config_file.open('rb') as f:
     config = yaml.load(f, Loader=Loader)

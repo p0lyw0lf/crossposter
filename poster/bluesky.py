@@ -23,7 +23,8 @@ class BlueskyTarget(Renderable):
 
     async def post(self, post: Post, ctx: dict[str, str]):
         post_text = await self.render(post, ctx)
-        builder = mistletoe.markdown(post_text, BlueskyRenderer)
+        builder: client_utils.TextBuilder = mistletoe.markdown(
+            post_text, BlueskyRenderer)
         if self.add_tags and post.tags:
             # Add all tags as a sequence of tagged strings like #tag1 #tag2
             builder.text("\n\n")

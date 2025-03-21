@@ -30,6 +30,9 @@ async def upload(request: Request, username: str):
     if s3 is None or bucket_name is None:
         return text("not implemented", status=501)
 
+    if request.stream is None:
+        return text("No upload stream provided", status=400)
+
     file_name = request.args.get("f", None)
     if not file_name:
         return text("file name not provided", status=400)
@@ -37,11 +40,8 @@ async def upload(request: Request, username: str):
 
     with tempfile.NamedTemporaryFile("wb+") as f:
         # Step 1: read streamed data into file
-        while True:
-            body = await request.stream.read()
-            if body is None:
-                break
-            await asyncio.to_thread(f.write, body)
+        async for data in request.stream:
+            await asyncio.to_thread(f.write, data)
 
         # Step 2: upload file to S3
         f.seek(0)

@@ -2,7 +2,7 @@ from functools import wraps
 
 import jwt
 from sanic import Blueprint, Request
-from sanic.response import redirect, empty
+from sanic.response import redirect, empty, text
 from sanic_ext import render
 
 from shared.secrets import secrets
@@ -26,7 +26,6 @@ def check_token(request: Request):
         return None
 
 
-
 def login_required(wrapped):
     @wraps(wrapped)
     async def decorated_function(request: Request, *args, **kwargs):
@@ -48,6 +47,9 @@ async def login_get(request: Request):
 
 @bp.post("/login")
 async def login_post(request: Request):
+    if request.form is None:
+        return text("Must provide form", status=400)
+
     to = request.args.get("next", "/")
     username = request.form.get("username")
     password = request.form.get("password")

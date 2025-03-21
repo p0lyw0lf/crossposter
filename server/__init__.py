@@ -1,11 +1,11 @@
 from datetime import datetime
 import json
-import os
 
 import aiofiles
 from sanic import Request, Sanic
 from zoneinfo import ZoneInfo
 
+from poster.template import Renderable
 from shared.config import config
 from shared.model import Post
 from shared.secrets import secrets
@@ -17,7 +17,7 @@ from .report import bp as report_bp
 
 app = Sanic("crossposter")
 app.config.TEMPLATING_PATH_TO_TEMPLATES = "./server/templates"
-app.config.SECRET = os.environ["SERVER_SECRET"]
+app.config.SECRET = secrets["SERVER_SECRET"]
 
 app.static("/assets", "./server/dist/assets", name="assets")
 app.static("/log_files", "./server/log_files", name="log_files")
@@ -26,7 +26,7 @@ app.blueprint(report_bp)
 app.blueprint(auth_bp)
 
 
-posters = {
+posters: dict[str, Renderable] = {
     target: posting_target(target, config, secrets)
     for target in config["outputs"]["server"]
 }
@@ -59,6 +59,10 @@ async def index_post(request: Request, username):
         "username": username,
         "sites": sites,
     }
+
+    if request.form is None:
+        context["error"] = "No form passed!"
+        return context
 
     title = request.form.get("title")
     body = request.form.get("body")

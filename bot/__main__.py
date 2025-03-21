@@ -1,6 +1,6 @@
 import discord
 import asyncio
-from discord import app_commands
+from discord import TextChannel, app_commands
 from zoneinfo import ZoneInfo
 
 from shared.secrets import secrets
@@ -45,6 +45,12 @@ async def repost(
     if interaction.user.id != OWNER_ID:
         await interaction.response.send_message("""\
 THAT'S MY PURSE! I DON'T KNOW YOU!!\
+""")
+        return
+
+    if interaction.channel is None or not isinstance(interaction.channel, TextChannel):
+        await interaction.response.send_message(f"""\
+Must only be called from a text channel.
 """)
         return
 
