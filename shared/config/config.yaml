@@ -30,6 +30,7 @@ bluesky_blog:
 
 outputs:
   bot: ["github_cybersec", "mastodon_cybersec"]
-  server: ["mastodon_blog", "bluesky_blog", "github_blog"]
+  server: ["github_blog"]
+  webhook_github_blog: ["mastodon_blog", "bluesky_blog", "github_blog"]
 
 TESTING: true

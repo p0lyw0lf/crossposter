@@ -43,7 +43,7 @@ class Renderable:
             **ctx,
         )
 
-    async def post(self, post: Post, ctx: dict[str, str]) -> str | None:
+    async def post(self, post: Post, ctx: dict[str, str], **kwargs) -> str | None:
         """
         Publishes a post, using `self.render` internally.
 

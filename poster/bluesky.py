@@ -21,7 +21,7 @@ class BlueskyTarget(Renderable):
         )
         self.add_tags = bool(config.get("add_tags", False))
 
-    async def post(self, post: Post, ctx: dict[str, str]):
+    async def post(self, post: Post, ctx: dict[str, str], **kwargs):
         post_text = await self.render(post, ctx)
         builder: client_utils.TextBuilder = mistletoe.markdown(
             post_text, BlueskyRenderer)

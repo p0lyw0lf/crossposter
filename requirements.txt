@@ -9,5 +9,6 @@ githubkit[auth-app]
 jinja2
 mistletoe
 pyarrow
+python-frontmatter
 sanic[ext]
 tzdata

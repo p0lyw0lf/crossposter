@@ -16,6 +16,7 @@ from poster import posting_target
 
 from .auth import login_required, bp as auth_bp
 from .file_upload import bp as file_upload_bp
+from .post_webhook import bp as post_webhook_bp
 from .sync_logs import sync_logs, write_parquet
 
 app = Sanic("crossposter")
@@ -24,8 +25,9 @@ app.config.SECRET = secrets["SERVER_SECRET"]
 
 app.static("/assets", "./server/dist/assets", name="assets")
 app.static("/log_files", "./server/log_files", name="log_files")
-app.blueprint(file_upload_bp)
 app.blueprint(auth_bp)
+app.blueprint(file_upload_bp)
+app.blueprint(post_webhook_bp)
 
 
 posters: dict[str, Renderable] = {

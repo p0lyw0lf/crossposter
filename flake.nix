@@ -23,6 +23,8 @@
               awscli2
               nodejs
               python311
+
+              pyright
             ])
             ++ (with pkgs.python311Packages; [
               pip
@@ -31,7 +33,8 @@
               pyarrow
               # Needed for other binaries that link against libc
               ujson
-              # Needed for pyright
+
+              # For pyright language server
               autopep8
             ])
             ++ (with pkgs.nodePackages; [

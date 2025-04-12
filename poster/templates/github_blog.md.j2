@@ -2,9 +2,9 @@
 title: {{ title | tojson }}
 description: {{ description | tojson }}
 tags: {{ tags | tojson }}
-published: {{ published.timestamp() | int }}
-mastodon: {{ mastodon_blog | tojson }}
-bluesky: {{ bluesky_blog | tojson }}
+published: {{ published.timestamp() | int }}{% if mastodon_blog is defined %}
+mastodon: {{ mastodon_blog | tojson }}{% endif %}{% if bluesky_blog is defined %}
+bluesky: {{ bluesky_blog | tojson }}{% endif %}
 ---
 
 {{ body }}
