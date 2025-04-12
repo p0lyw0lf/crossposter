@@ -20,4 +20,4 @@ rclone --config "${SCRIPT_DIR}/rclone_blog.conf" sync --fast-list --checksum ./d
 # TODO: I probably want to be smarter about the files I invalidate, but for now
 # this is fine; the majority of the cost is uploading so many files (which
 # rclone should help with)
-# aws cloudfront create-invalidation --distribution-id "${AWS_CLOUDFRONT_DISTRIBUTION}" --paths "/*"
+aws cloudfront create-invalidation --distribution-id "${AWS_CLOUDFRONT_DISTRIBUTION}" --paths "/*"
