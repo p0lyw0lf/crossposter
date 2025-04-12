@@ -6,6 +6,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # Assumes that the wolfgirl.dev repo is in the same folder as the crossposter repo
 # I should really merge these into a monorepo at some point, but oh well
 cd "${SCRIPT_DIR}/../../wolfgirl.dev"
+git pull
 
 # I used to have all these separate steps in GitHub actions, but now I have
 # them all on the same machine, which honestly is probably better overall lol
