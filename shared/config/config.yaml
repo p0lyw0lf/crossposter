@@ -10,6 +10,9 @@ github_cybersec:
   # The template to use
   template: "github_cybersec.md.j2"
 
+mastodon_cybersec:
+  template: "mastodon_cybersec.txt.j2"
+
 github_blog:
   GITHUB_USERNAME: "p0lyw0lf"
   GITHUB_REPO: "website"
@@ -17,8 +20,8 @@ github_blog:
   GITHUB_OUTPUT_DIR: "src/content/blog"
   template: "github_blog.md.j2"
 
-mastodon_cybersec:
-  template: "mastodon_cybersec.txt.j2"
+script_blog:
+  path: "scripts/publish_blog.sh"
 
 mastodon_blog:
   template: "mastodon_blog.txt.j2"
@@ -29,8 +32,7 @@ bluesky_blog:
   add_tags: 1
 
 outputs:
-  bot: ["github_cybersec", "mastodon_cybersec"]
-  server: ["github_blog"]
-  webhook_github_blog: ["mastodon_blog", "bluesky_blog", "github_blog"]
+  bot: ["github_cybersec", "mastodon_cybersec", "script_blog"]
+  server: ["github_blog", "script_blog", "mastodon_blog", "bluesky_blog", "github_blog"]
 
 TESTING: true

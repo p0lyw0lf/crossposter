@@ -23,6 +23,7 @@
               awscli2
               nodejs
               python311
+              rclone
 
               pyright
             ])

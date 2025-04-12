@@ -1,6 +1,7 @@
 from .bluesky import BlueskyTarget
 from .github import GithubTarget
 from .mastodon import MastodonTarget
+from .script import ScriptTarget
 from .template import Renderable
 
 
@@ -24,12 +25,14 @@ def mk_stub_post(self: Renderable, target: str):
 
 def posting_target(target: str, config: dict, secrets: dict) -> Renderable:
     out = None
-    if target.startswith("github"):
+    if target.startswith("bluesky"):
+        out = BlueskyTarget(target, config, secrets)
+    elif target.startswith("github"):
         out = GithubTarget(target, config, secrets)
     elif target.startswith("mastodon"):
         out = MastodonTarget(target, config, secrets)
-    elif target.startswith("bluesky"):
-        out = BlueskyTarget(target, config, secrets)
+    elif target.startswith("script"):
+        out = ScriptTarget(target, config, secrets)
 
     if out is None:
         raise ValueError(f"invalid {target=}")

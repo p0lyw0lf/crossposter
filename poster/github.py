@@ -25,7 +25,7 @@ class GithubTarget(Renderable):
         self.branch = config["GITHUB_BRANCH"]
         self.output_dir = PurePosixPath(config["GITHUB_OUTPUT_DIR"])
 
-    async def post(self, post: Post, ctx: dict[str, str], trigger_webhook: bool = True, **kwargs) -> str | None:
+    async def post(self, post: Post, ctx: dict[str, str], **kwargs) -> str | None:
         slug = to_slug(post)
         filename = self.output_dir / f"{slug}.md"
 
@@ -36,14 +36,12 @@ class GithubTarget(Renderable):
         post.body = post.body.replace("\r", "").strip()
         content = await self.render(post, ctx)
 
-        message = f"post: {post.title}" if trigger_webhook else "no-post: {post.title}"
-
         response = await self.gh.rest.repos.\
             async_create_or_update_file_contents(
                 self.owner,
                 self.repo,
                 str(filename),
-                message=message,
+                message=post.title,
                 content=b64encode(content.encode('utf-8')).decode('utf-8'),
                 branch=self.branch,
             )
