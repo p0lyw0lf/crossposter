@@ -7,7 +7,8 @@ from .template import Renderable
 
 class MastodonTarget(Renderable):
     def __init__(self, target: str, config: dict, secrets: dict):
-        self.target = target
+        super().__init__(target, config, secrets)
+
         config = config[target]
         secrets = secrets[target]
         self.m = Mastodon(
@@ -16,7 +17,7 @@ class MastodonTarget(Renderable):
         )
         self.add_tags = bool(config.get("add_tags", False))
 
-    async def post(self, post: Post, ctx: dict[str, str], **kwargs) -> str:
+    async def post(self, post: Post, ctx: dict[str, str]) -> str:
         post_text = await self.render(post, ctx)
         if self.add_tags and post.tags:
             # Add all tags to the rendered post, like #tag1 #tag2

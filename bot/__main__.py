@@ -24,11 +24,7 @@ class Bot(discord.Client):
 
 intents = discord.Intents.default()
 client = Bot(intents=intents)
-
-posters = {
-    target: posting_target(target, config, secrets)
-    for target in config["outputs"]["bot"]
-}
+poster = posting_target(config["outputs"]["bot"], config, secrets)
 
 
 @client.tree.command(
@@ -79,14 +75,12 @@ Could not parse the url out of that message. Please edit and try again.\
         body=message.content,
     )
 
-    post_ctx = dict()
-    for platform, poster in posters.items():
-        try:
-            # See comment in server/__init__.py
-            post_ctx[platform] = await poster.post(post, post_ctx)
-        except Exception as e:
-            await interaction.response.send_message(
-                f"Could not post to {platform}: {e}")
+    try:
+        await poster.post(post, dict())
+    except Exception as e:
+        await interaction.response.send_message(
+            f"Error making post: {e}")
+        return
 
     await interaction.response.send_message(
         f"Successfully posted {title} to all platforms!")

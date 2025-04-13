@@ -1,6 +1,8 @@
 # Timezone to format all dates in
 timezone: "America/New_York"
 
+chain_cybersec: ["github_cybersec", "mastodon_cybersec", "script_blog"]
+
 github_cybersec:
   # The GitHub repository to put blog posts in
   GITHUB_USERNAME: "p0lyw0lf"
@@ -13,6 +15,8 @@ github_cybersec:
 mastodon_cybersec:
   template: "mastodon_cybersec.txt.j2"
 
+chain_blog: ["github_blog", "script_blog", "mastodon_blog", "bluesky_blog", "github_blog", "script_blog"]
+
 github_blog:
   GITHUB_USERNAME: "p0lyw0lf"
   GITHUB_REPO: "website"
@@ -22,7 +26,6 @@ github_blog:
 
 script_blog:
   path: "scripts/publish_blog.sh"
-  template: "github_blog.md.j2"
 
 mastodon_blog:
   template: "mastodon_blog.txt.j2"
@@ -33,7 +36,7 @@ bluesky_blog:
   add_tags: 1
 
 outputs:
-  bot: ["github_cybersec", "mastodon_cybersec", "script_blog"]
-  server: ["github_blog", "script_blog", "mastodon_blog", "bluesky_blog", "github_blog", "script_blog"]
+  bot: "chain_cybersec"
+  server: "chain_blog"
 
 TESTING: true

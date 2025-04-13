@@ -15,7 +15,8 @@ from .template import Renderable
 class GithubTarget(Renderable):
 
     def __init__(self, target: str, config: dict, secrets: dict):
-        self.target = target
+        super().__init__(target, config, secrets)
+
         self.tz = ZoneInfo(config["timezone"])
         config = config[target]
         secrets = secrets[target]
@@ -25,7 +26,7 @@ class GithubTarget(Renderable):
         self.branch = config["GITHUB_BRANCH"]
         self.output_dir = PurePosixPath(config["GITHUB_OUTPUT_DIR"])
 
-    async def post(self, post: Post, ctx: dict[str, str], **kwargs) -> str | None:
+    async def post(self, post: Post, ctx: dict[str, str]) -> str | None:
         slug = to_slug(post)
         filename = self.output_dir / f"{slug}.md"
 
@@ -47,7 +48,7 @@ class GithubTarget(Renderable):
             )
 
         if response.status_code not in {200, 201}:
-            raise ValueError(f"error posting to github: {response.text}")
+            raise ValueError(f"GitHub API response: {response.text}")
 
     async def from_slug(self, slug: str) -> Post | None:
         """
@@ -65,6 +66,9 @@ class GithubTarget(Renderable):
                     "Accept": "application/vnd.github.raw+json",
                 },
             )
+
+        if response.status_code not in {200, 201}:
+            raise ValueError(f"GitHub API response: {response.text}")
 
         meta, body = frontmatter.parse(response.content.decode("utf-8"))
         meta: dict[str, Any] = meta

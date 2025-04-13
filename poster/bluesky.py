@@ -11,7 +11,8 @@ from .template import Renderable
 
 class BlueskyTarget(Renderable):
     def __init__(self, target: str, config: dict, secrets: dict):
-        self.target = target
+        super().__init__(target, config, secrets)
+
         config = config[target]
         secrets = secrets[target]
         self.client = Client(secrets["BLUESKY_HOMESERVER"])

@@ -4,30 +4,33 @@ import os
 import asyncio
 
 from shared.model import Post
-from .template import Renderable
+from .template import Postable
 
 
-class ScriptTarget(Renderable):
+class ScriptTarget(Postable):
     """
     Runs a script with the given post in context.
     """
 
     def __init__(self, target: str, config: dict, secrets: dict):
-        self.target = target
+        super().__init__(target, config, secrets)
+
         config = config[target]
         secrets = secrets[target]
 
         self.script = config["path"]
         self.env = secrets["env"]
 
-    async def post(self, post: Post, ctx: dict[str, str], **kwargs) -> str | None:
+    async def post(self, post: Post, ctx: dict[str, str]) -> str | None:
         env = os.environ.copy()
         for key, value in self.env.items():
             env[key] = value
 
         data = asdict(post)
-        data["published"] = data["published"].timestamp() # Make serializable
+        data["published"] = data["published"].timestamp()  # Make serializable
         env["POST"] = json.dumps(data)
 
         p = await asyncio.create_subprocess_exec(self.script, env=env)
         await p.wait()
+        if p.returncode != 0:
+            raise Exception(f"process failed with exit code {p.returncode}")

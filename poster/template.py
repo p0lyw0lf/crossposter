@@ -23,8 +23,25 @@ templates = {
 }
 
 
-class Renderable:
+class Postable:
+    def __init__(self, target: str, config: dict, secrets: dict):
+        pass
+
+    async def post(self, post: Post, ctx: dict[str, str]) -> str | None:
+        """
+        Publishes a post, using `self.render` internally.
+
+        Returns the link to the published post, if applicable.
+        """
+        raise NotImplementedError()
+
+
+class Renderable(Postable):
     target: str
+
+    def __init__(self, target: str, config: dict, secrets: dict):
+        super().__init__(target, config, secrets)
+        self.target = target
 
     async def render(self, post: Post, ctx: dict[str, str]) -> str:
         """
@@ -42,11 +59,3 @@ class Renderable:
             **asdict(post),
             **ctx,
         )
-
-    async def post(self, post: Post, ctx: dict[str, str], **kwargs) -> str | None:
-        """
-        Publishes a post, using `self.render` internally.
-
-        Returns the link to the published post, if applicable.
-        """
-        raise NotImplementedError()

@@ -1,11 +1,22 @@
+from typing import Callable
+
 from .bluesky import BlueskyTarget
+from .chain import ChainTarget
 from .github import GithubTarget
 from .mastodon import MastodonTarget
 from .script import ScriptTarget
-from .template import Renderable
+from .template import Postable, Renderable
+
+targets: dict[str, Callable[[str, dict, dict], Postable]] = {
+    "bluesky": BlueskyTarget,
+    "chain": ChainTarget,
+    "github": GithubTarget,
+    "mastodon": MastodonTarget,
+    "script": ScriptTarget,
+}
 
 
-def mk_stub_post(self: Renderable, target: str):
+def mk_stub_post(self: Postable, target: str):
     """
     For testing, we won't want to have the posts be live. However, we still
     want to be able to make sure the input mechanism works, so we'll just
@@ -17,22 +28,21 @@ def mk_stub_post(self: Renderable, target: str):
     going to keep it that way for now.
     """
     async def stub_post(post, ctx: dict[str, str]) -> str:
-        post_text = await self.render(post, ctx)
-        print(target, post_text)
+        if isinstance(self, Renderable):
+            post_text = await self.render(post, ctx)
+            print(target, post_text)
+        else:
+            print(target)
         return target
     return stub_post
 
 
-def posting_target(target: str, config: dict, secrets: dict) -> Renderable:
+def posting_target(target: str, config: dict, secrets: dict) -> Postable:
     out = None
-    if target.startswith("bluesky"):
-        out = BlueskyTarget(target, config, secrets)
-    elif target.startswith("github"):
-        out = GithubTarget(target, config, secrets)
-    elif target.startswith("mastodon"):
-        out = MastodonTarget(target, config, secrets)
-    elif target.startswith("script"):
-        out = ScriptTarget(target, config, secrets)
+    for target_prefix, post_class in targets.items():
+        if target.startswith(target_prefix):
+            out = post_class(target, config, secrets)
+            break
 
     if out is None:
         raise ValueError(f"invalid {target=}")

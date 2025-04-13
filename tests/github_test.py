@@ -12,11 +12,13 @@ async def test_posting():
         await gh.post(post, {})
     print("Complete!")
 
+
 async def test_reading():
     gh = GithubTarget("github_blog", config, secrets)
     slug = "2024-09-28-Write-Your-Own-Tools"
     post = await gh.from_slug(slug)
     print(post)
+
 
 async def main():
     await test_reading()

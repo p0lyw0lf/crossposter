@@ -9,7 +9,8 @@ from poster import posting_target
 
 bp = Blueprint(name="post_webhook", url_prefix="/post")
 
-webhooks = filter(lambda output: output.startswith("webhook_"), config["outputs"].keys())
+webhooks = filter(lambda output: output.startswith(
+    "webhook_"), config["outputs"].keys())
 targets = {
     webhook: {
         target: posting_target(target, config, secrets)
@@ -53,4 +54,3 @@ async def github_webhook(request: Request, username: str):
             return text(f"Error posting to {platform}: {e}", status=500)
 
     return empty(status=200)
-

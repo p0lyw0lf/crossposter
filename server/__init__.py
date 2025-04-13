@@ -2,7 +2,6 @@ from datetime import datetime
 import asyncio
 import json
 import os
-import traceback
 
 from sanic import Request, Sanic
 from sanic.response import text, file
@@ -10,7 +9,6 @@ from zoneinfo import ZoneInfo
 import aiofiles
 
 from poster import posting_target
-from poster.template import Renderable
 from shared.config import config
 from shared.model import Post
 from shared.secrets import secrets
@@ -30,11 +28,7 @@ app.blueprint(auth_bp)
 app.blueprint(file_upload_bp)
 app.blueprint(post_webhook_bp)
 
-
-posters: dict[str, Renderable] = {
-    target: posting_target(target, config, secrets)
-    for target in config["outputs"]["server"]
-}
+poster = posting_target(config["outputs"]["server"], config, secrets)
 
 
 async def get_manifest():
@@ -87,18 +81,11 @@ async def index_post(request: Request, username):
         body=body,
     )
 
-    post_ctx = dict()
-    for platform, poster in posters.items():
-        try:
-            # NOTE: We don't track dependencies automatically; if a certain
-            # poster depends on a previous poster, it must be manually
-            # ordered after in the list. This works because Python dicts
-            # have a stable iteration order based on insertion order.
-            post_ctx[platform] = await poster.post(post, post_ctx)
-        except Exception as e:
-            traceback.print_exc()
-            context["error"] = f"Error posting to {platform}: {e}"
-            return context
+    try:
+        await poster.post(post, dict())
+    except Exception as e:
+        context["error"] = f"Error making post: {e}"
+        return context
 
     context["message"] = "Posted successfully!"
     return context
