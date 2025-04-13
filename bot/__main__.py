@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 from shared.secrets import secrets
 from shared.config import config
 from shared.model import Post, parse_repost_link
-from poster import posting_target
+from poster.dispatch import posting_target
 
 GUILD = discord.Object(id=secrets["DISCORD_GUILD_ID"])
 OWNER_ID = secrets["DISCORD_OWNER_ID"]

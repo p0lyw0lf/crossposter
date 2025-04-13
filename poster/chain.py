@@ -1,7 +1,8 @@
 import traceback
-from poster import posting_target
+
+import poster.dispatch
+from poster.template import Postable
 from shared.model import Post
-from .template import Postable
 
 
 class ChainTarget(Postable):
@@ -14,7 +15,7 @@ class ChainTarget(Postable):
 
         self.targets = config[target]
         self.posters = {
-            target: posting_target(target, config, secrets)
+            target: poster.dispatch.posting_target(target, config, secrets)
             for target in self.targets
         }
 

@@ -1,19 +1,20 @@
 from typing import Callable
 
-from .bluesky import BlueskyTarget
-from .chain import ChainTarget
-from .github import GithubTarget
-from .mastodon import MastodonTarget
-from .script import ScriptTarget
-from .template import Postable, Renderable
+from poster.bluesky import BlueskyTarget
+from poster.chain import ChainTarget
+from poster.github import GithubTarget
+from poster.mastodon import MastodonTarget
+from poster.script import ScriptTarget
+from poster.template import Postable, Renderable
 
-targets: dict[str, Callable[[str, dict, dict], Postable]] = {
-    "bluesky": BlueskyTarget,
-    "chain": ChainTarget,
-    "github": GithubTarget,
-    "mastodon": MastodonTarget,
-    "script": ScriptTarget,
-}
+def targets() -> dict[str, Callable[[str, dict, dict], Postable]]:
+    return {
+        "bluesky": BlueskyTarget,
+        "chain": ChainTarget,
+        "github": GithubTarget,
+        "mastodon": MastodonTarget,
+        "script": ScriptTarget,
+    }
 
 
 def mk_stub_post(self: Postable, target: str):
@@ -39,7 +40,7 @@ def mk_stub_post(self: Postable, target: str):
 
 def posting_target(target: str, config: dict, secrets: dict) -> Postable:
     out = None
-    for target_prefix, post_class in targets.items():
+    for target_prefix, post_class in targets().items():
         if target.startswith(target_prefix):
             out = post_class(target, config, secrets)
             break

@@ -8,7 +8,7 @@ from sanic.response import text, file
 from zoneinfo import ZoneInfo
 import aiofiles
 
-from poster import posting_target
+from poster.dispatch import posting_target
 from shared.config import config
 from shared.model import Post
 from shared.secrets import secrets

@@ -5,7 +5,7 @@ from poster.github import GithubTarget
 from server.auth import basic_logic_required
 from shared.config import config
 from shared.secrets import secrets
-from poster import posting_target
+from poster.dispatch import posting_target
 
 bp = Blueprint(name="post_webhook", url_prefix="/post")
 
