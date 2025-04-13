@@ -33,6 +33,6 @@ bluesky_blog:
 
 outputs:
   bot: ["github_cybersec", "mastodon_cybersec", "script_blog"]
-  server: ["github_blog", "script_blog", "mastodon_blog", "bluesky_blog", "github_blog"]
+  server: ["github_blog", "script_blog", "mastodon_blog", "bluesky_blog", "github_blog", "script_blog"]
 
 TESTING: true
