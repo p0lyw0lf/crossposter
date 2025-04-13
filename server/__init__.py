@@ -1,18 +1,19 @@
-import asyncio
 from datetime import datetime
+import asyncio
 import json
 import os
+import traceback
 
-import aiofiles
 from sanic import Request, Sanic
 from sanic.response import text, file
 from zoneinfo import ZoneInfo
+import aiofiles
 
+from poster import posting_target
 from poster.template import Renderable
 from shared.config import config
 from shared.model import Post
 from shared.secrets import secrets
-from poster import posting_target
 
 from .auth import login_required, bp as auth_bp
 from .file_upload import bp as file_upload_bp
@@ -95,6 +96,7 @@ async def index_post(request: Request, username):
             # have a stable iteration order based on insertion order.
             post_ctx[platform] = await poster.post(post, post_ctx)
         except Exception as e:
+            traceback.print_exc()
             context["error"] = f"Error posting to {platform}: {e}"
             return context
 
