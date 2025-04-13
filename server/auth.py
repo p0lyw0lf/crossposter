@@ -45,7 +45,7 @@ def check_basic_auth(request: Request):
     password = request.form.get("password")
 
     # TODO: fix insecure password check
-    if password is None or secrets["server"]["user"].get(username, None) != password:
+    if password is None or secrets["server"]["users"].get(username, None) != password:
         return None
 
     return username
