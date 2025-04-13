@@ -22,13 +22,17 @@ class ScriptTarget(Postable):
         self.env = secrets["env"]
 
     async def post(self, post: Post, ctx: dict[str, str]) -> str | None:
+        return await self.run_script(post)
+
+    async def run_script(self, post: Post | None = None):
         env = os.environ.copy()
         for key, value in self.env.items():
             env[key] = value
 
-        data = asdict(post)
-        data["published"] = data["published"].timestamp()  # Make serializable
-        env["POST"] = json.dumps(data)
+        if post is not None:
+            data = asdict(post)
+            data["published"] = data["published"].timestamp()  # Make serializable
+            env["POST"] = json.dumps(data)
 
         p = await asyncio.create_subprocess_exec(self.script, env=env)
         await p.wait()

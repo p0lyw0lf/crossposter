@@ -23,11 +23,21 @@
       <p class="message">{{ message }}</p>
       {% endif %} {% if error is defined %}
       <p class="message error">{{ error }}</p>
-      {% endif %}
-      {% if sites is defined %}
+      {% endif %} {% if sites is defined %}
         <ul>
       {% for site in sites %}
           <li><a href="/dashboard?site={{ site }}">{{ site }} dashboard</a></li>
+      {% endfor %}
+        </ul>
+      {% endif %} {% if scripts is defined %}
+        <ul>
+      {% for s in scripts %}
+          <li>
+            <form action="/webhook/post" method="post">
+              <input type="hidden" name="site" value="{{ s }}" />
+              <button type="submit">run {{ s }}</button>
+            </form>
+          </li>
       {% endfor %}
         </ul>
       {% endif %}

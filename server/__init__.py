@@ -4,18 +4,18 @@ import json
 import os
 
 from sanic import Request, Sanic
-from sanic.response import text, file
+from sanic.response import redirect, text, file
 from zoneinfo import ZoneInfo
 import aiofiles
 
 from poster.dispatch import posting_target
+from poster.script import ScriptTarget
 from shared.config import config
 from shared.model import Post
 from shared.secrets import secrets
 
 from .auth import login_required, bp as auth_bp
 from .file_upload import bp as file_upload_bp
-from .post_webhook import bp as post_webhook_bp
 from .sync_logs import sync_logs, write_parquet
 
 app = Sanic("crossposter")
@@ -26,7 +26,6 @@ app.static("/assets", "./server/dist/assets", name="assets")
 app.static("/log_files", "./server/log_files", name="log_files")
 app.blueprint(auth_bp)
 app.blueprint(file_upload_bp)
-app.blueprint(post_webhook_bp)
 
 poster = posting_target(config["outputs"]["server"], config, secrets)
 
@@ -36,28 +35,29 @@ async def get_manifest():
         return json.loads(await f.read())
 
 
-@app.get("/")
-@app.ext.template("index.html.j2")
-@login_required
-async def index_get(request: Request, username):
+async def index_context(username: str):
     sites = secrets["logs"].get(username, [])
+    scripts = secrets["scripts"].get(username, [])
     return {
         "index": (await get_manifest())["src/Composer/index.tsx"],
         "username": username,
         "sites": sites,
+        "scripts": scripts,
     }
+
+
+@app.get("/")
+@app.ext.template("index.html.j2")
+@login_required
+async def index_get(request: Request, username):
+    return await index_context(username)
 
 
 @app.post("/")
 @app.ext.template("index.html.j2")
 @login_required
 async def index_post(request: Request, username):
-    sites = secrets["logs"].get(username, [])
-    context = {
-        "index": (await get_manifest())["src/Composer/index.tsx"],
-        "username": username,
-        "sites": sites,
-    }
+    context = await index_context(username)
 
     if request.form is None:
         context["error"] = "No form passed!"
@@ -119,3 +119,27 @@ async def dashboard(request: Request, username):
     await asyncio.to_thread(write_parquet, site)
 
     return ctx
+
+
+@app.post("/webhook/post")
+@app.ext.template("login.html.j2")
+@login_required
+async def webhook_post(request: Request, username):
+    if request.form is None:
+        return text("Form must be provided", status=400)
+
+    site = request.form.get("site", None)
+    scripts = secrets["scripts"].get(username, [])
+    if site is None or site not in config or site not in scripts:
+        return text("Invalid site", status=400)
+
+    if not site.startswith("script"):
+        return text("Error: can only run scripts from this endpoint", status=400)
+
+    poster = ScriptTarget(site, config, secrets)
+    try:
+        await poster.run_script()
+    except Exception as e:
+        return text(f"Error running script: {e}")
+
+    return redirect(app.url_for('index_get'), status=303)
