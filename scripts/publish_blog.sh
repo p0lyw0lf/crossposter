@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap "echo; exit -1" INT
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
@@ -11,6 +12,12 @@ git pull
 # I used to have all these separate steps in GitHub actions, but now I have
 # them all on the same machine, which honestly is probably better overall lol
 # No need to restore caches & install tools every time, it's already all there!
+
+# Use nvm, if installed
+NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Build the site
 pnpm install
 pnpm build
 
