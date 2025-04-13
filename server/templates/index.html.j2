@@ -27,7 +27,6 @@
       {% if sites is defined %}
         <ul>
       {% for site in sites %}
-          <li><a href="/report?site={{ site }}">{{ site }} analytics</a></li>
           <li><a href="/dashboard?site={{ site }}">{{ site }} dashboard</a></li>
       {% endfor %}
         </ul>
