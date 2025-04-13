@@ -22,6 +22,7 @@ github_blog:
 
 script_blog:
   path: "scripts/publish_blog.sh"
+  template: "github_blog.md.j2"
 
 mastodon_blog:
   template: "mastodon_blog.txt.j2"

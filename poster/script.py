@@ -25,7 +25,9 @@ class ScriptTarget(Renderable):
         for key, value in self.env.items():
             env[key] = value
 
-        env["POST"] = json.dumps(asdict(post))
+        data = asdict(post)
+        data["published"] = data["published"].timestamp() # Make serializable
+        env["POST"] = json.dumps(data)
 
         p = await asyncio.create_subprocess_exec(self.script, env=env)
         await p.wait()
