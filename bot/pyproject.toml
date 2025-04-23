@@ -3,15 +3,13 @@ requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 
 [project]
-name = "poster"
+name = "bot"
 version = "0.1.0"
 dependencies = [
-  "Mastodon.py",
-  "PyYAML",
-  "atproto",
-  "githubkit[auth-app]",
-  "jinja2",
-  "mistletoe",
-  "python-frontmatter",
+  "discord.py",
   "tzdata",
+  "poster @ {root:parent:uri}/poster",
 ]
+
+[tool.hatch.metadata]
+allow-direct-references = true

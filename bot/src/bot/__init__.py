@@ -3,9 +3,9 @@ import asyncio
 from discord import TextChannel, app_commands
 from zoneinfo import ZoneInfo
 
-from shared.secrets import secrets
-from shared.config import config
-from shared.model import Post, parse_repost_link
+from poster.secrets import secrets
+from poster.config import config
+from poster.model import Post, parse_repost_link
 from poster.dispatch import posting_target
 
 GUILD = discord.Object(id=secrets["DISCORD_GUILD_ID"])
