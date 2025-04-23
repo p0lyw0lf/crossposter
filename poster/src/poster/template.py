@@ -1,6 +1,6 @@
 from jinja2 import Environment, PackageLoader, select_autoescape
-from shared.model import Post, to_slug
-from shared.config import config
+from poster.model import Post, to_slug
+from poster.config import config
 from dataclasses import asdict
 
 env = Environment(

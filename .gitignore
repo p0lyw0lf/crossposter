@@ -1,6 +1,9 @@
 # Python virtual environment
 .venv/
 
+# Built Python packages
+dist/
+
 # Python bytecode caches
 __pycache__/
 *.pyc

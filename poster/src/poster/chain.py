@@ -2,7 +2,7 @@ import traceback
 
 import poster.dispatch
 from poster.template import Postable
-from shared.model import Post
+from poster.model import Post
 
 
 class ChainTarget(Postable):

@@ -8,7 +8,7 @@ from githubkit import GitHub, TokenAuthStrategy
 from zoneinfo import ZoneInfo
 import frontmatter
 
-from shared.model import Post, to_slug
+from poster.model import Post, to_slug
 from .template import Renderable
 
 

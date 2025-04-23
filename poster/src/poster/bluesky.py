@@ -5,7 +5,7 @@ from atproto import client_utils
 import mistletoe
 from mistletoe.base_renderer import BaseRenderer
 
-from shared.model import Post
+from poster.model import Post
 from .template import Renderable
 
 
