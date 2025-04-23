@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -14,8 +14,11 @@
       system:
       let
         pkgs = import nixpkgs { inherit system; };
+        crossposter = pkgs.callPackage (import ./poster/package.nix) { };
+        bot-crossposter = pkgs.callPackage (import ./bot/package.nix) { inherit crossposter; };
       in
       {
+        inherit crossposter bot-crossposter;
         devShells.default = (import ./shell.nix) { inherit pkgs; };
       }
     );

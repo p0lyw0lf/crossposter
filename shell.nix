@@ -1,6 +1,5 @@
 { pkgs }:
 pkgs.mkShell {
-  venvDir = ".venv";
   packages =
     (with pkgs; [
       awscli2
@@ -8,18 +7,15 @@ pkgs.mkShell {
       python311
       rclone
 
+      # The python environments themselves are managed with hatch
+      hatch
       pyright
     ])
     ++ (with pkgs.python311Packages; [
-      pip
-      venvShellHook
-      # Needed so to replace the default pyarrow binaries
-      pyarrow
-      # Needed for other binaries that link against libc
-      ujson
-
       # For pyright language server
       autopep8
+      # For building packages
+      build
     ])
     ++ (with pkgs.nodePackages; [
       pnpm

@@ -3,6 +3,7 @@
 
 # Built Python packages
 dist/
+result
 
 # Python bytecode caches
 __pycache__/
