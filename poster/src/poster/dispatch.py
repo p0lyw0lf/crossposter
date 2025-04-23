@@ -7,6 +7,7 @@ from poster.mastodon import MastodonTarget
 from poster.script import ScriptTarget
 from poster.template import Postable, Renderable
 
+
 def targets() -> dict[str, Callable[[str, dict, dict], Postable]]:
     return {
         "bluesky": BlueskyTarget,

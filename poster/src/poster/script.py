@@ -31,7 +31,8 @@ class ScriptTarget(Postable):
 
         if post is not None:
             data = asdict(post)
-            data["published"] = data["published"].timestamp()  # Make serializable
+            # Make serializable
+            data["published"] = data["published"].timestamp()
             env["POST"] = json.dumps(data)
 
         p = await asyncio.create_subprocess_exec(self.script, env=env)

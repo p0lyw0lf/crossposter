@@ -5,3 +5,12 @@ build-backend = "hatchling.build"
 [project]
 name = "poster"
 version = "0.1.0"
+dependencies = [
+  "Mastodon.py",
+  "PyYAML",
+  "atproto",
+  "githubkit[auth-app]",
+  "jinja2",
+  "mistletoe",
+  "python-frontmatter",
+]
