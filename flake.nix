@@ -16,10 +16,10 @@
         pkgs = import nixpkgs { inherit system; };
         python3-crossposter-pkgs = pkgs.python3.override {
           packageOverrides = final: prev: {
-            bot-crossposter-lib = final.pkgs.callPackage (import ./bot/package-lib.nix) {
-              crossposter-lib = final.pkgs.crossposter-lib;
+            bot-crossposter-lib = final.callPackage (import ./bot/package-lib.nix) {
+              crossposter-lib = final.crossposter-lib;
             };
-            crossposter-lib = final.pkgs.callPackage (import ./poster/package.nix) { };
+            crossposter-lib = final.callPackage (import ./poster/package.nix) { };
           };
         };
         python3-bot-crossposter-env = python3-crossposter-pkgs.withPackages (ps: [

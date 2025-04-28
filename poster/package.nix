@@ -1,6 +1,19 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
+
+  # Build system
+  hatchling,
+
+  # Third-party dependencies
+  mastodon-py,
+  pyyaml,
+  atproto,
+  githubkit,
+  jinja2,
+  mistletoe,
+  python-frontmatter,
+  tzdata,
 }:
 let
   fs = lib.fileset;
@@ -14,7 +27,6 @@ let
     ]
   );
 in
-with python3Packages;
 buildPythonPackage {
   pname = "crossposter";
   version = "0.1.0";
