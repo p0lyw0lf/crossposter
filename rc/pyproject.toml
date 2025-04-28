@@ -1,0 +1,13 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rc"
+version = "0.1.0"
+dependencies = [
+  "poster @ {root:parent:uri}/poster",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true

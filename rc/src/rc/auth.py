@@ -6,7 +6,7 @@ from sanic import Blueprint, Request
 from sanic.response import redirect, empty, text
 from sanic_ext import render
 
-from shared.secrets import secrets
+from poster.secrets import secrets
 
 bp = Blueprint("auth", url_prefix="/")
 

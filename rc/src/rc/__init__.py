@@ -10,9 +10,9 @@ import aiofiles
 
 from poster.dispatch import posting_target
 from poster.script import ScriptTarget
-from shared.config import config
-from shared.model import Post
-from shared.secrets import secrets
+from poster.config import config
+from poster.model import Post
+from poster.secrets import secrets
 
 from .auth import login_required, bp as auth_bp
 from .file_upload import bp as file_upload_bp

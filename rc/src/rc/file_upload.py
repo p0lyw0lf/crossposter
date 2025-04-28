@@ -6,7 +6,7 @@ import boto3
 from sanic.response import text
 from sanic import Blueprint, Request
 
-from shared.secrets import secrets
+from poster.secrets import secrets
 from .auth import login_required
 
 bp = Blueprint("file_upload", url_prefix="/upload")

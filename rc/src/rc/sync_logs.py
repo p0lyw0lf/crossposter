@@ -14,7 +14,7 @@ from pathlib import Path
 import pyarrow.csv as pv
 import pyarrow.parquet as pq
 
-from shared.secrets import secrets
+from poster.secrets import secrets
 
 current_dir = Path(os.path.dirname(os.path.realpath(__file__)))
 dist_folder = current_dir / "log_files"
