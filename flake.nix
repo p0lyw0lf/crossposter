@@ -14,11 +14,24 @@
       system:
       let
         pkgs = import nixpkgs { inherit system; };
-        crossposter = pkgs.callPackage (import ./poster/package.nix) { };
-        bot-crossposter = pkgs.callPackage (import ./bot/package.nix) { inherit crossposter; };
+        python3-crossposter-pkgs = pkgs.python3.override {
+          packageOverrides = final: prev: {
+            bot-crossposter-lib = final.pkgs.callPackage (import ./bot/package-lib.nix) {
+              crossposter-lib = final.pkgs.crossposter-lib;
+            };
+            crossposter-lib = final.pkgs.callPackage (import ./poster/package.nix) { };
+          };
+        };
+        python3-bot-crossposter-env = python3-crossposter-pkgs.withPackages (ps: [
+          ps.bot-crossposter-lib
+        ]);
+
+        bot-crossposter-bin = pkgs.callPackage (import ./bot/package-bin.nix) {
+          inherit python3-bot-crossposter-env;
+        };
       in
       {
-        inherit crossposter bot-crossposter;
+        packages.bot-crossposter = bot-crossposter-bin;
         devShells.default = (import ./shell.nix) { inherit pkgs; };
       }
     );

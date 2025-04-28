@@ -18,14 +18,15 @@ that need to be followed to get the server running, see `server/README.md`.
 ### Discord
 
 Create an application, and under the Settings > Bot tab, copy the Token value
-and put it in the `DISCORD_TOKEN` variable in `shared/secrets/secrets.yaml`.
-Turn on the Message Content Intent, and when inviting the bot to a server, make
-sure to give it the following permissions:
+and put it in the `DISCORD_TOKEN` variable in
+`poster/src/poster/secrets/secrets.yaml`. Turn on the Message Content Intent,
+and when inviting the bot to a server, make sure to give it the following
+permissions:
 
 - Read Messages/View Channels
 - Send Messages
 
-Also, make sure to set the additional variables in `secrets.toml`:
+Also, make sure to set the additional variables in `secrets.yaml`:
 
 - `DISCORD_GUILD_ID`: The id of the main server you expect to run the bot in
 - `DISCORD_OWNER_ID`: The id of the only authenticated user allowed to run
@@ -81,13 +82,16 @@ what the final filename will look like, see `poster/github/__init__.py`.
 ## Running
 
 After configuring the platforms above into the `secrets.yaml` file, also put in
-the Discord bot keys into the file. Then, run:
+the Discord bot keys into the file. Then run:
 
-```zsh
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python3 -m bot
+```bash
+cd bot && hatch run -- python -m src.bot
+```
+
+Or, if using nix:
+
+```bash
+nix run .#crossposter-bot-bin
 ```
 
 and that's it! enjoy :)))
