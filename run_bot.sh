@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-source .venv/bin/activate
-python3 -m bot
+cd bot
+/home/ubuntu/.local/bin/hatch run -- python -m src.bot
