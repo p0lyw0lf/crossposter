@@ -1,7 +1,8 @@
 from dataclasses import asdict
+import asyncio
+import importlib.resources as impresources
 import json
 import os
-import asyncio
 
 from poster.model import Post
 from .template import Postable
@@ -18,7 +19,7 @@ class ScriptTarget(Postable):
         config = config[target]
         secrets = secrets[target]
 
-        self.script = config["path"]
+        self.script = impresources.files(__name__) / config["path"]
         self.env = secrets["env"]
 
     async def post(self, post: Post, ctx: dict[str, str]) -> str | None:

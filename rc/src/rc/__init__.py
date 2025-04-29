@@ -1,5 +1,6 @@
 from datetime import datetime
 import asyncio
+import importlib.resources as impresources
 import json
 
 import aiofiles
@@ -18,7 +19,8 @@ from .file_upload import bp as file_upload_bp
 from .sync_logs import sync_logs, write_parquet
 
 app = Sanic("crossposter")
-app.config.TEMPLATING_PATH_TO_TEMPLATES = "./src/rc/templates"
+app.config.TEMPLATING_PATH_TO_TEMPLATES = impresources.files(
+    __name__) / "templates"
 app.config.SECRET = secrets["SERVER_SECRET"]
 
 app.static("/assets", "./web/dist/assets", name="assets")
