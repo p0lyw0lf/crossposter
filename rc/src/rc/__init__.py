@@ -1,12 +1,11 @@
 from datetime import datetime
 import asyncio
 import json
-import os
 
-from sanic import Request, Sanic
-from sanic.response import redirect, text, file
-from zoneinfo import ZoneInfo
 import aiofiles
+from sanic import Request, Sanic
+from sanic.response import redirect, text
+from zoneinfo import ZoneInfo
 
 from poster.dispatch import posting_target
 from poster.script import ScriptTarget

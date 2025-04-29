@@ -6,6 +6,12 @@ build-backend = "hatchling.build"
 name = "rc"
 version = "0.1.0"
 dependencies = [
+  "PyJWT",
+  "aiofiles",
+  "boto3",
+  "sanic[ext]",
+  "pyarrow",
+  "tzdata",
   "poster @ {root:parent:uri}/poster",
 ]
 
