@@ -20,4 +20,8 @@ pkgs.mkShell {
     ++ (with pkgs.nodePackages; [
       pnpm
     ]);
+
+  shellHook = ''
+    export SASS_EMBEDDED_BIN_PATH="${pkgs.dart-sass}/bin/sass";
+  '';
 }
