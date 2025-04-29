@@ -18,11 +18,11 @@ from .file_upload import bp as file_upload_bp
 from .sync_logs import sync_logs, write_parquet
 
 app = Sanic("crossposter")
-app.config.TEMPLATING_PATH_TO_TEMPLATES = "./server/templates"
+app.config.TEMPLATING_PATH_TO_TEMPLATES = "./src/rc/templates"
 app.config.SECRET = secrets["SERVER_SECRET"]
 
-app.static("/assets", "./server/dist/assets", name="assets")
-app.static("/log_files", "./server/log_files", name="log_files")
+app.static("/assets", "./web/dist/assets", name="assets")
+app.static("/log_files", "./log_files", name="log_files")
 app.blueprint(auth_bp)
 app.blueprint(file_upload_bp)
 
@@ -30,7 +30,7 @@ poster = posting_target(config["outputs"]["server"], config, secrets)
 
 
 async def get_manifest():
-    async with aiofiles.open("./server/dist/.vite/manifest.json", "rb") as f:
+    async with aiofiles.open("./web/dist/.vite/manifest.json", "rb") as f:
         return json.loads(await f.read())
 
 

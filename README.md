@@ -44,8 +44,9 @@ Also, provide the following environment variables:
 
 - `MASTODON_BASE_URL`: the URL of the server the app is registered in
 
-To edit the post layout, see `poster/templates/mastodon_cybersec.txt.j2`. This
-is laid out using jinja2 templating from the model in `shared/model.py`.
+To edit the post layout, see
+`poster/src/poster/templates/mastodon_cybersec.txt.j2`. This is laid out using
+jinja2 templating from the model in `shared/model.py`.
 
 ### Bluesky
 
