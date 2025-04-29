@@ -3,13 +3,12 @@
 # Enter the venv
 NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-source .venv/bin/activate
 
 # Rebuild static files
-cd server
+cd rc/web
 pnpm i
 pnpm build
 
 # Run the server
 cd ..
-sanic server
+hatch run -- sanic src.rc
