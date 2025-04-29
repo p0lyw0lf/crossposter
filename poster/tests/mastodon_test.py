@@ -1,5 +1,5 @@
-from shared.config import config
-from shared.secrets import secrets
+from poster.config import config
+from poster.secrets import secrets
 from poster.mastodon import MastodonTarget
 import asyncio
 from .posts import posts

@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from shared.model import Post, parse_repost_link
-from shared.config import config
+from poster.model import Post, parse_repost_link
+from poster.config import config
 
 
 def to_datetime(timestring: str) -> datetime:
@@ -29,7 +29,7 @@ class IncompletePost:
         return Post(
             title=self.title,
             description=None,
-            tags=[],
+            tags=["this tag doesn't exist"],
             published=to_datetime(self.timestring),
             repost_link=parse_repost_link(self.body),
             body=self.body,

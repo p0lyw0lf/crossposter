@@ -1,7 +1,7 @@
 import asyncio
 from poster.github import GithubTarget
-from shared.config import config
-from shared.secrets import secrets
+from poster.config import config
+from poster.secrets import secrets
 from .posts import posts
 
 
