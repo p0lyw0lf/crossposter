@@ -20,5 +20,6 @@ export default defineConfig({
     rollupOptions: {
       input: ["./src/Composer/index.tsx", "./src/Dashboard/index.tsx"],
     },
+    chunkSizeWarningLimit: 1024 * 1024,
   },
 });

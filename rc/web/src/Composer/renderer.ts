@@ -1,3 +1,4 @@
+import { rehypeShiki } from "@astrojs/markdown-remark";
 import rehypeRaw from "rehype-raw";
 import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
@@ -9,6 +10,14 @@ const renderer = unified()
   .use(remarkParse)
   .use(remarkGfm)
   .use(remarkRehype, { allowDangerousHtml: true })
+  .use(rehypeShiki, {
+    langs: [],
+    theme: "github-dark",
+    themes: {},
+    wrap: false,
+    transformers: [],
+    langAlias: {},
+  })
   .use(rehypeRaw)
   .use(rehypeStringify);
 
