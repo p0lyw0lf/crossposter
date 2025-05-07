@@ -86,3 +86,18 @@
     padding: 4px 8px;
   }
 }
+
+.tags {
+  background-color: var(--color-background-secondary);
+  border-top: solid 1px var(--color-border-primary);
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 16px;
+
+  span {
+    color: var(--color-text-primary-accent);
+    text-decoration: underline;
+  }
+}
