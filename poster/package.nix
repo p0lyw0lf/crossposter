@@ -1,18 +1,25 @@
 {
   lib,
   buildPythonPackage,
+  makeWrapper,
+
+  # Runtime dependencies
+  awscli2,
+  corepack,
+  gitMinimal,
+  rclone,
 
   # Build system
   hatchling,
 
   # Third-party dependencies
-  mastodon-py,
-  pyyaml,
   atproto,
   githubkit,
   jinja2,
+  mastodon-py,
   mistletoe,
   python-frontmatter,
+  pyyaml,
   tzdata,
 }:
 let
@@ -24,6 +31,7 @@ let
       ./src/poster/config
       ./src/poster/secrets
       ./src/poster/templates
+      ./src/poster/scripts
     ]
   );
 in
@@ -39,16 +47,40 @@ buildPythonPackage {
 
   build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    mastodon-py
-    pyyaml
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
+  buildInputs = [
+    awscli2
+    corepack
+    gitMinimal
+    rclone
+  ];
+
+  propagatedBuildInputs = [
     atproto
     githubkit
     githubkit.optional-dependencies.auth-app
     jinja2
+    mastodon-py
     mistletoe
     python-frontmatter
+    pyyaml
     tzdata
   ];
+
+  postFixup = ''
+    for script in $out/lib/python3*/site-packages/poster/scripts/*.sh; do
+      wrapProgram $script \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            awscli2
+            corepack
+            gitMinimal
+            rclone
+          ]
+        }
+    done
+  '';
 }
