@@ -20,7 +20,7 @@
             crossposter-lib = final.callPackage ./poster/package.nix { };
             rc-crossposter-lib = final.callPackage ./rc/package-lib.nix { };
 
-            # Necessary until (TODO) makes it to nixos-unstable
+            # Necessary until 410691 makes it to nixos-unstable https://nixpk.gs/pr-tracker.html?pr=410691
             sanic-ext = final.callPackage ./vendored/sanic-ext.nix { };
 
             # Neccessary until 409599 makes it to nixos-unstable https://nixpk.gs/pr-tracker.html?pr=409599
