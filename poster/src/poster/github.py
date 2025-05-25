@@ -44,6 +44,7 @@ class GithubTarget(Renderable):
                 str(filename),
                 message=post.title,
                 content=b64encode(content.encode('utf-8')).decode('utf-8'),
+                # sha=TODO: according to https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#create-or-update-file-contents--parameters, I have to provide this when updating a file
                 branch=self.branch,
             )
 
