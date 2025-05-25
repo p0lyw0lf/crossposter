@@ -17,3 +17,18 @@ dependencies = [
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/rc/*.py",
+  "src/rc/*.sh",
+  "src/rc/templates/*",
+]
+# exclude = [
+#   "bin/*",
+#   "web/*",
+#   "*.nix",
+# ]
+
+[tool.hatch.build.targets.wheel]
+packages = [ "src/rc" ]
