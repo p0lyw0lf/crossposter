@@ -12,6 +12,16 @@ async def test_posting():
         await gh.post(post, {})
     print("Complete!")
 
+async def test_updating():
+    gh = GithubTarget("github_blog", config, secrets)
+    post = posts[0]
+    print(f"Posting initial {post.title}")
+    sha_0 = await gh.post(post, {})
+    print(f"First post: {sha_0}")
+    await asyncio.sleep(5) # So as to not spam endpoint
+    print(f"Posting updated {post.title}")
+    sha_1 = await gh.post(post, {"github_blog": sha_0, "bluesky_blog": "bluesky", "mastodon_blog": "mastodon"})
+    print(f"Second post: {sha_1}")
 
 async def test_reading():
     gh = GithubTarget("github_blog", config, secrets)
@@ -22,7 +32,8 @@ async def test_reading():
 
 async def main():
     await test_reading()
-    # test_posting()
+    # await test_posting()
+    await test_updating()
 
 if __name__ == "__main__":
     asyncio.run(main())

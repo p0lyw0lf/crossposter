@@ -53,7 +53,8 @@ class GithubTarget(Renderable):
 
         # We return the blob's sha so that later passes' API calls to update
         # will be correctly-formed
-        return response.content.sha
+        if (content := response.parsed_data.content) and (sha := content.sha):
+            return sha
 
     async def from_slug(self, slug: str) -> Post | None:
         """
