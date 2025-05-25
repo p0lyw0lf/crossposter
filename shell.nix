@@ -4,18 +4,19 @@ pkgs.mkShell {
     (with pkgs; [
       awscli2
       nodejs
-      python311
+      (python311.withPackages (
+        ps: with ps; [
+          # For pyright language server
+          autopep8
+          # For building packages
+          build
+        ]
+      ))
       rclone
 
       # The python environments themselves are managed with hatch
       hatch
       pyright
-    ])
-    ++ (with pkgs.python311Packages; [
-      # For pyright language server
-      autopep8
-      # For building packages
-      build
     ])
     ++ (with pkgs.nodePackages; [
       pnpm

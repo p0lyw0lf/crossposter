@@ -16,8 +16,7 @@
         pkgs = import nixpkgs { inherit system; };
         python3 = pkgs.python3.override {
           packageOverrides = final: prev: {
-            bot-crossposter-lib = final.callPackage ./bot/package-lib.nix {
-            };
+            bot-crossposter-lib = final.callPackage ./bot/package-lib.nix { };
             crossposter-lib = final.callPackage ./poster/package.nix { };
             rc-crossposter-lib = final.callPackage ./rc/package-lib.nix { };
 
