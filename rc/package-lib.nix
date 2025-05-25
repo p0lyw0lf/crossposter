@@ -21,7 +21,8 @@ let
   fs = lib.fileset;
   sourceFiles = fs.unions [
     ./pyproject.toml
-    (fs.fileFilter (file: file.hasExt "py") ./src/rc)
+    (fs.fileFilter (file: file.hasExt "py" || file.hasExt "sh") ./src/rc)
+    ./src/rc/templates
   ];
 in
 buildPythonPackage {
@@ -36,7 +37,7 @@ buildPythonPackage {
 
   build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     boto3
     crossposter-lib

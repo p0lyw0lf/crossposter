@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "rc"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
   "PyJWT",
   "aiofiles",
@@ -24,11 +24,6 @@ include = [
   "src/rc/*.sh",
   "src/rc/templates/*",
 ]
-# exclude = [
-#   "bin/*",
-#   "web/*",
-#   "*.nix",
-# ]
 
 [tool.hatch.build.targets.wheel]
 packages = [ "src/rc" ]
