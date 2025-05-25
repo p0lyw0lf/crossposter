@@ -11,6 +11,7 @@
   pyarrow,
   pyjwt,
   sanic,
+  sanic-ext,
   tzdata,
 
   # First-party dependencies
@@ -42,7 +43,7 @@ buildPythonPackage {
     pyarrow
     pyjwt
     sanic
-    sanic.optional-dependencies.ext
+    sanic-ext
     tzdata
   ];
 }
