@@ -44,12 +44,16 @@ class GithubTarget(Renderable):
                 str(filename),
                 message=post.title,
                 content=b64encode(content.encode('utf-8')).decode('utf-8'),
-                # sha=TODO: according to https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#create-or-update-file-contents--parameters, I have to provide this when updating a file
+                sha=ctx.get(self.target, None),
                 branch=self.branch,
             )
 
         if response.status_code not in {200, 201}:
             raise ValueError(f"GitHub API response: {response.text}")
+
+        # We return the blob's sha so that later passes' API calls to update
+        # will be correctly-formed
+        return response.content.sha
 
     async def from_slug(self, slug: str) -> Post | None:
         """
