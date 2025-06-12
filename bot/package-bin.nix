@@ -8,7 +8,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "bot-crossposter-bin";
-  version = "0.1.0";
+  version = "0.1.1";
 
   buildInputs = [
     python3-bot-crossposter-env

@@ -75,15 +75,18 @@ Could not parse the url out of that message. Please edit and try again.\
         body=message.content,
     )
 
+    response = await interaction.response.send_message("はい、ご主人さま～")
+    if response.message_id is None:
+        raise Exception("huh?")
+
     try:
         await poster.post(post, dict())
     except Exception as e:
-        await interaction.response.send_message(
-            f"Error making post: {e}")
+        await interaction.followup.edit_message(response.message_id,
+            content=f"Error making post: {e}")
         return
 
-    await interaction.response.send_message(
-        f"Successfully posted {title} to all platforms!")
+    await interaction.followup.edit_message(response.message_id, content=f"Successfully posted {title} to all platforms!")
 
 
 @client.tree.command(
@@ -92,7 +95,15 @@ Could not parse the url out of that message. Please edit and try again.\
     guild=GUILD,
 )
 async def awoo(interaction: discord.Interaction):
-    await interaction.response.send_message("awoooo!")
+    response = await interaction.response.send_message("awoo-ing begins in 10 seconds")
+    if response.message_id is None:
+        raise Exception("huh?")
+    await asyncio.sleep(9)
+    prefix = "awoooo"
+    suffix = "!"
+    for i in range(5):
+        await asyncio.sleep(1)
+        await interaction.followup.edit_message(response.message_id, content=prefix+"o"*i+suffix)
 
 
 @client.event
