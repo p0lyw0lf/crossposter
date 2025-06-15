@@ -38,12 +38,21 @@
             ps.bot-crossposter-lib
           ]);
         };
+
+        rc-crossposter-static = pkgs.callPackage ./rc/web/package.nix { };
         rc-crossposter = pkgs.callPackage ./rc/package-bin.nix {
+          inherit rc-crossposter-static;
           python3-rc-crossposter-env = python3.withPackages (ps: [ ps.rc-crossposter-lib ]);
         };
       in
       {
-        packages = { inherit python3 bot-crossposter rc-crossposter; };
+        packages = {
+          inherit
+            python3
+            bot-crossposter
+            rc-crossposter
+            ;
+        };
         devShells.default = (import ./shell.nix) { inherit pkgs; };
       }
     );

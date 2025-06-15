@@ -2,6 +2,7 @@ from datetime import datetime
 import asyncio
 import importlib.resources as impresources
 import json
+import os
 
 import aiofiles
 from sanic import Request, Sanic
@@ -19,12 +20,14 @@ from .file_upload import bp as file_upload_bp
 from .sync_logs import sync_logs, write_parquet
 
 app = Sanic("crossposter")
-app.config.TEMPLATING_PATH_TO_TEMPLATES = impresources.files(
-    __name__) / "templates"
+app.config.TEMPLATING_PATH_TO_TEMPLATES = impresources.files(__name__) / "templates"
 app.config.SECRET = secrets["SERVER_SECRET"]
 
-app.static("/assets", "./web/dist/assets", name="assets")
-app.static("/log_files", "./log_files", name="log_files")
+WEB_FILES = os.environ.get("RC_WEB_FILES", "./web/dist")
+LOG_FILES = os.environ.get("RC_LOG_FILES", "./log_files")
+
+app.static("/assets", f"{WEB_FILES}/assets", name="assets")
+app.static("/log_files", LOG_FILES, name="log_files")
 app.blueprint(auth_bp)
 app.blueprint(file_upload_bp)
 
@@ -32,7 +35,7 @@ poster = posting_target(config["outputs"]["server"], config, secrets)
 
 
 async def get_manifest():
-    async with aiofiles.open("./web/dist/.vite/manifest.json", "rb") as f:
+    async with aiofiles.open(f"{WEB_FILES}/.vite/manifest.json", "rb") as f:
         return json.loads(await f.read())
 
 
