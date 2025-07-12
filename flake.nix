@@ -13,23 +13,12 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = nixpkgs.legacyPackages.${system};
         python3 = pkgs.python3.override {
           packageOverrides = final: prev: {
             bot-crossposter-lib = final.callPackage ./bot/package-lib.nix { };
             crossposter-lib = final.callPackage ./poster/package.nix { };
             rc-crossposter-lib = final.callPackage ./rc/package-lib.nix { };
-
-            # Necessary until 410691 makes it to nixos-unstable https://nixpk.gs/pr-tracker.html?pr=410691
-            sanic-ext = final.callPackage ./vendored/sanic-ext.nix { };
-
-            # Neccessary until 409599 makes it to nixos-unstable https://nixpk.gs/pr-tracker.html?pr=409599
-            tracerite = prev.tracerite.overrideAttrs {
-              propagatedBuildInputs = with final; [
-                html5tagger
-                setuptools
-              ];
-            };
           };
         };
 
