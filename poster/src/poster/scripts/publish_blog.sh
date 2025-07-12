@@ -4,9 +4,12 @@ trap "echo; exit -1" INT
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-# TODO: I should really not make this assumption about global filesystem layout,
-# but oh well
-cd "${HOME}/wolfgirl.dev"
+repo="${RC_DATA_DIR:-$HOME}/wolfgirl.dev"
+if [ ! -d "$repo" ]; then
+  git clone https://github.com/p0lyw0lf/website.git "$repo"
+fi
+
+cd "$repo"
 git pull
 
 # I used to have all these separate steps in GitHub actions, but now I have
