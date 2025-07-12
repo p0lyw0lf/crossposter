@@ -1,29 +1,30 @@
 #!/usr/bin/env python3
 
 """
-Meant to be run periodically, to sync the files in `dist/log_files`
+Meant to be run periodically, to sync the files in `./log_files`
 """
 
 from datetime import date, timedelta
+from pathlib import Path
 import glob
+import importlib.resources as impresources
 import io
 import os
 import subprocess
-from pathlib import Path
 
 import pyarrow.csv as pv
 import pyarrow.parquet as pq
 
 from poster.secrets import secrets
 
-current_dir = Path(os.path.dirname(os.path.realpath(__file__)))
-dist_folder = current_dir / "log_files"
-folder_to_tsv = current_dir / "folder_to_tsv.sh"
+data_dir = Path(os.environ.get("RC_DATA_DIR", os.path.dirname(os.path.realpath(__file__))))
+log_files = data_dir / "log_files"
+folder_to_tsv = impresources.files(__name__) / "folder_to_tsv.sh"
 
 
 def sync_logs(site_name: str, days_delta: int = 28):
     """
-    Syncs all logs corresponding to the given site into the cache (not the observablehq one, a local one)
+    Syncs all logs corresponding to the given site into the cache
     """
     cfg = secrets[site_name]["logs"]
     bucket: str = cfg["AWS_BUCKET_NAME"]
@@ -31,7 +32,7 @@ def sync_logs(site_name: str, days_delta: int = 28):
     for var in ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_REGION_NAME"]:
         env[var] = cfg[var]
 
-    output_folder = str(current_dir / "tmp" / bucket)
+    output_folder = str(data_dir / "tmp" / bucket)
 
     # First, sync bucket. This is so we know everything that's inside.
     p = subprocess.run(
@@ -76,7 +77,7 @@ def write_parquet(site_name: str):
     """
     cfg = secrets[site_name]["logs"]
     bucket: str = cfg["AWS_BUCKET_NAME"]
-    output_folder = str(current_dir / "tmp" / bucket)
+    output_folder = str(data_dir / "tmp" / bucket)
 
     # Generate the TSV from the given folder
     p = subprocess.run(
@@ -89,7 +90,8 @@ def write_parquet(site_name: str):
     table = pv.read_csv(io.BytesIO(p.stdout), parse_options=pv.ParseOptions(
         delimiter="\t", quote_char=False, double_quote=False,
     ))
-    pq.write_table(table, str(dist_folder / f"{site_name}.parquet"))
+    os.makedirs(log_files, exist_ok=True)
+    pq.write_table(table, str(log_files / f"{site_name}.parquet"))
 
 
 if __name__ == "__main__":

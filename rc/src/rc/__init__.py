@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 import asyncio
 import importlib.resources as impresources
 import json
@@ -24,10 +25,10 @@ app.config.TEMPLATING_PATH_TO_TEMPLATES = impresources.files(__name__) / "templa
 app.config.SECRET = secrets["SERVER_SECRET"]
 
 WEB_FILES = os.environ.get("RC_WEB_FILES", "./web/dist")
-LOG_FILES = os.environ.get("RC_LOG_FILES", "./log_files")
+LOG_FILES = Path(os.environ.get("RC_DATA_DIR", ".")) / "log_files"
 
 app.static("/assets", f"{WEB_FILES}/assets", name="assets")
-app.static("/log_files", LOG_FILES, name="log_files")
+app.static("/log_files", str(LOG_FILES), name="log_files")
 app.blueprint(auth_bp)
 app.blueprint(file_upload_bp)
 
