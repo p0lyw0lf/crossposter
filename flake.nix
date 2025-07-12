@@ -40,6 +40,7 @@
             python3
             bot-crossposter
             rc-crossposter
+            rc-crossposter-static
             ;
         };
         devShells.default = (import ./shell.nix) { inherit pkgs; };
