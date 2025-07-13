@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/bin
     cat <<EOF > $out/bin/rc-crossposter
     #!/usr/bin/env bash
-    export RC_WEB_FILES="${rc-crossposter-static}"
+    export RC_WEB_FILES="''${RC_WEB_FILES:-${rc-crossposter-static}}"
     "${python3-rc-crossposter-env}/bin/sanic" rc "\$@"
     EOF
     chmod +x $out/bin/rc-crossposter

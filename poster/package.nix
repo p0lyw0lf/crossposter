@@ -3,13 +3,6 @@
   buildPythonPackage,
   makeWrapper,
 
-  # Runtime dependencies
-  awscli2,
-  corepack,
-  gitMinimal,
-  rclone,
-  sops,
-
   # Build system
   hatchling,
 
@@ -22,6 +15,13 @@
   python-frontmatter,
   pyyaml,
   tzdata,
+
+  # Runtime dependencies
+  awscli2,
+  corepack,
+  gitMinimal,
+  rclone,
+  sops,
 }:
 let
   fs = lib.fileset;
@@ -48,18 +48,7 @@ buildPythonPackage {
 
   build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
-
-  buildInputs = [
-    awscli2
-    corepack
-    gitMinimal
-    rclone
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     atproto
     githubkit
     githubkit.optional-dependencies.auth-app
@@ -69,6 +58,17 @@ buildPythonPackage {
     python-frontmatter
     pyyaml
     tzdata
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    awscli2
+    corepack
+    gitMinimal
+    rclone
   ];
 
   postInstall = ''

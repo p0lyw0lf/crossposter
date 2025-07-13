@@ -10,6 +10,7 @@ import glob
 import importlib.resources as impresources
 import io
 import os
+import shutil
 import subprocess
 
 import pyarrow.csv as pv
@@ -64,11 +65,7 @@ def sync_logs(site_name: str, days_delta: int = 28):
         )
         p.check_returncode()
 
-        p = subprocess.run(
-            ["rm", "-rf", f"{output_folder}/{folder}"],
-            stdout=subprocess.PIPE,
-        )
-        p.check_returncode()
+        shutil.rmtree(f"{output_folder}/{folder}")
 
 
 def write_parquet(site_name: str):
@@ -81,7 +78,7 @@ def write_parquet(site_name: str):
 
     # Generate the TSV from the given folder
     p = subprocess.run(
-        ["bash", str(folder_to_tsv), str(output_folder)],
+        [str(folder_to_tsv), str(output_folder)],
         stdout=subprocess.PIPE,
     )
     p.check_returncode()

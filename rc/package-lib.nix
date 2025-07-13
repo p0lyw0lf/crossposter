@@ -16,6 +16,10 @@
 
   # First-party dependencies
   crossposter-lib,
+
+  # Runtime dependencies
+  awscli2,
+  gzip,
 }:
 let
   fs = lib.fileset;
@@ -47,4 +51,17 @@ buildPythonPackage {
     sanic-ext
     tzdata
   ];
+
+  buildInputs = [
+    awscli2
+    gzip
+  ];
+
+  postInstall = ''
+    substituteInPlace $out/lib/python3*/site-packages/rc/sync_logs.py \
+      --replace-fail "aws" "${awscli2}/bin/aws"
+
+    substituteInPlace $out/lib/python3*/site-packages/rc/folder_to_tsv.sh \
+      --replace-fail "zcat" "${gzip}/bin/zcat"
+  '';
 }
