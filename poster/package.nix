@@ -8,6 +8,7 @@
   corepack,
   gitMinimal,
   rclone,
+  sops,
 
   # Build system
   hatchling,
@@ -70,7 +71,10 @@ buildPythonPackage {
     tzdata
   ];
 
-  postFixup = ''
+  postInstall = ''
+    substituteInPlace $out/lib/python3*/site-packages/poster/secrets/__init__.py \
+      --replace-fail "sops" "${sops}/bin/sops"
+
     for script in $out/lib/python3*/site-packages/poster/scripts/*.sh; do
       wrapProgram $script \
         --prefix PATH : ${
