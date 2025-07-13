@@ -19,6 +19,7 @@
 
   # Runtime dependencies
   awscli2,
+  bashNonInteractive,
   gzip,
 }:
 let
@@ -54,6 +55,7 @@ buildPythonPackage {
 
   buildInputs = [
     awscli2
+    bashNonInteractive
     gzip
   ];
 
