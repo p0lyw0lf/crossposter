@@ -18,6 +18,7 @@
 
   # Runtime dependencies
   awscli2,
+  bashNonInteractive,
   corepack,
   gitMinimal,
   rclone,
@@ -66,6 +67,7 @@ buildPythonPackage {
 
   buildInputs = [
     awscli2
+    bashNonInteractive
     corepack
     gitMinimal
     rclone
