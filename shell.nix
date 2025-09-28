@@ -13,6 +13,7 @@ pkgs.mkShell {
         ]
       ))
       rclone
+      sops
 
       # The python environments themselves are managed with hatch
       hatch
