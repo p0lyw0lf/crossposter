@@ -8,6 +8,7 @@
   # Third-party dependencies
   aiofiles,
   boto3,
+  mistletoe,
   pyarrow,
   pyjwt,
   sanic,
@@ -46,6 +47,7 @@ buildPythonPackage {
     aiofiles
     boto3
     crossposter-lib
+    mistletoe
     pyarrow
     pyjwt
     sanic

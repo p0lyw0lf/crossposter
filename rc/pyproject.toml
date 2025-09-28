@@ -9,8 +9,9 @@ dependencies = [
   "PyJWT",
   "aiofiles",
   "boto3",
-  "sanic[ext]",
+  "mistletoe",
   "pyarrow",
+  "sanic[ext]",
   "tzdata",
   "poster @ {root:parent:uri}/poster",
 ]

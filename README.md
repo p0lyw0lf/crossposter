@@ -92,7 +92,7 @@ cd bot && hatch run -- python -m src.bot
 Or, if using nix:
 
 ```bash
-nix run .#crossposter-bot-bin
+nix run .#bot-crossposter
 ```
 
 and that's it! enjoy :)))

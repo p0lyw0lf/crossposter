@@ -30,24 +30,14 @@ pnpm install
 
 ## Running
 
-All commands run from the root of the repository.
-
-In development mode:
+From this directory:
 
 ```bash
-source .venv/bin/activate
-cd server
-pnpm dev &
-cd ..
-sanic server
+hatch run -- sanic src.rc
 ```
 
-In production mode:
+Or, from the root of the repository:
 
 ```bash
-source .venv/bin/activate
-cd server
-pnpm build
-cd ..
-sanic server
+nix run .#rc-crossposter
 ```

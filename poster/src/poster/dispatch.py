@@ -49,7 +49,7 @@ def posting_target(target: str, config: dict, secrets: dict) -> Postable:
     if out is None:
         raise ValueError(f"invalid {target=}")
 
-    if config.get("TESTING", False):
+    if config.get("TESTING", False) and not isinstance(out, ChainTarget):
         out.post = mk_stub_post(out, target)
 
     return out

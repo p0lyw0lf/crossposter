@@ -5,10 +5,13 @@ import importlib.resources as impresources
 import json
 import os
 
-import aiofiles
+from mistletoe import block_token, span_token
+from mistletoe.base_renderer import BaseRenderer
 from sanic import Request, Sanic
 from sanic.response import redirect, text
 from zoneinfo import ZoneInfo
+import aiofiles
+import mistletoe
 
 from poster.dispatch import posting_target
 from poster.script import ScriptTarget
@@ -58,6 +61,24 @@ async def index_get(request: Request, username):
     return await index_context(username)
 
 
+class DescriptionRenderer(BaseRenderer):
+    limit = 140
+    def render_document(self, token: block_token.Document) -> str:
+        s = ""
+        if token.children is None:
+            return s
+        for child in token.children:
+            s += self.render(child)
+            if len(s) >= self.limit:
+                return s[:self.limit-3] + "..."
+        return s
+
+    def render_paragraph(self, token: block_token.Paragraph) -> str:
+        return self.render_inner(token) + " "
+
+    def render_image(self, token: span_token.Image) -> str:
+        return token.title
+
 @app.post("/")
 @app.ext.template("index.html.j2")
 @login_required
@@ -76,12 +97,13 @@ async def index_post(request: Request, username):
         context["error"] = "Must include title and body!"
         return context
 
+    description = mistletoe.markdown(body, DescriptionRenderer)
+    published = datetime.now(ZoneInfo(config["timezone"]))
     post = Post(
         title=title,
-        description=body[:137].replace(
-            "\n", " ").strip() + ("..." if len(body) > 137 else ""),
+        description=description,
         tags=tags,
-        published=datetime.now(ZoneInfo(config["timezone"])),
+        published=published,
         repost_link=None,
         body=body,
     )
