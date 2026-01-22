@@ -22,10 +22,15 @@ export const HitsPerStringKey: Component<Props> = (props) => {
   const { ctx, setFilters } = useDBContext();
 
   const [count] = createResource(
-    () => props.hasPaging && ctx(),
-    async ({ conn, filters }) => {
+    () => {
+      if (!props.hasPaging) return null;
+      const c = ctx();
+      if (!c) return null;
+      return { ctx: c, colName: props.colName };
+    },
+    async ({ ctx: { conn, filters }, colName }) => {
       const rows = await conn.query<{ count: arrow.Int }>(`
-SELECT COUNT(DISTINCT "${props.colName}") as count
+SELECT COUNT(DISTINCT "${colName}") as count
 FROM logs
 WHERE ${filters}
 `);
@@ -39,32 +44,68 @@ WHERE ${filters}
     () => refetch(),
   );
 
-  const [data, { refetch }] = createResource(ctx, async ({ conn, filters }) => {
-    let query = `
-SELECT "${props.colName}" as "${props.keyName}", COUNT() as hits
+  const [data, { refetch }] = createResource(
+    () => {
+      const c = ctx();
+      if (!c) return null;
+      return {
+        ctx: c,
+        colName: props.colName,
+        keyName: props.keyName,
+        transformKey: props.transformKey,
+        page: props.hasPaging
+          ? { limit: paging.limit(), offset: paging.offset() }
+          : null,
+      };
+    },
+    async ({
+      ctx: { conn, filters },
+      colName,
+      keyName,
+      transformKey,
+      page,
+    }) => {
+      let query = `
+SELECT "${colName}" as "${keyName}", COUNT() as hits
 FROM logs
 WHERE ${filters}
-GROUP BY "${props.keyName}"
+GROUP BY "${keyName}"
 ORDER BY hits DESC
 `;
-    if (props.hasPaging) {
-      query += `
-LIMIT ${paging.limit()}
-OFFSET ${paging.offset()}
+      if (page) {
+        query += `
+LIMIT ${page.limit}
+OFFSET ${page.offset}
 `;
-    }
-    const rows = await conn.query(query);
-    return (
-      rows?.toArray().map((row) => {
-        const key = String(row[props.keyName]);
-        const value = Number(row.hits);
-        return {
-          key: props.transformKey?.toDisplay(key) ?? key,
-          value,
-        };
-      }) ?? []
-    );
-  });
+      }
+      const rows = await conn.query(query);
+      return (
+        rows?.toArray().map((row) => {
+          const key = String(row[keyName]);
+          const value = Number(row.hits);
+          return {
+            key: transformKey?.toDisplay(key) ?? key,
+            value,
+          };
+        }) ?? []
+      );
+    },
+  );
+
+  const [onClickFactory] = createResource(
+    () => ({
+      colName: props.colName,
+      keyName: props.keyName,
+      transformKey: props.transformKey,
+    }),
+    ({ colName, keyName, transformKey }) =>
+      (key: string) =>
+      () => {
+        const realKey = transformKey?.fromDisplay(key) ?? key;
+        setFilters(keyName, `"${colName}" = '${realKey}'`);
+      },
+  );
+
   return (
     <>
       <h2>
@@ -87,13 +128,7 @@ OFFSET ${paging.offset()}
         when={data.state === "ready" || data.state === "refreshing"}
         fallback={<h3>Querying...</h3>}
       >
-        <LabelBarChart
-          data={data()!}
-          onClickFactory={(key) => () => {
-            const realKey = props.transformKey?.fromDisplay(key) ?? key;
-            setFilters(props.keyName, `"${props.colName}" = '${realKey}'`);
-          }}
-        />
+        <LabelBarChart data={data()!} onClickFactory={onClickFactory()} />
       </Show>
     </>
   );

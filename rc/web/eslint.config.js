@@ -1,6 +1,6 @@
 import js from "@eslint/js";
-import solid from "eslint-plugin-solid/configs/typescript";
 import * as tsParser from "@typescript-eslint/parser";
+import solid from "eslint-plugin-solid/configs/typescript";
 import globals from "globals";
 
 export default [
@@ -16,6 +16,11 @@ export default [
       globals: {
         ...globals.browser,
       },
+    },
+  },
+  {
+    rules: {
+      "no-unused-vars": "off",
     },
   },
 ];
