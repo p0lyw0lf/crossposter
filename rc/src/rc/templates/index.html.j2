@@ -1,47 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <title>PolyWolf's Post Composer</title>
-    <script type="module" src="/{{ index['file'] }}"></script>
-    {% for file in index['css'] %}
-    <link rel="stylesheet" href="/{{ file }}" />
-    {% endfor %}
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <main>
-      <header>
-        <h1>{{ username }}'s Post Composer</h1>
-      </header>
-      <div id="root"></div>
-      {% if message is defined %}
-      <p class="message">{{ message }}</p>
-      {% endif %} {% if error is defined %}
-      <p class="message error">{{ error }}</p>
-      {% endif %} {% if sites is defined %}
-        <ul>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>PolyWolf's Post Composer</title>
+  <script type="module" src="/{{ index['file'] }}"></script>
+  {% for file in index['css'] %}
+  <link rel="stylesheet" href="/{{ file }}" />
+  {% endfor %}
+  <script>
+    window.username = "{{ username }}";
+  </script>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <main>
+    <header>
+      <h1>{{ username }}'s Post Composer</h1>
+    </header>
+    <div id="root"></div>
+    {% if message is defined %}
+    <p class="message">{{ message }}</p>
+    {% endif %} {% if error is defined %}
+    <p class="message error">{{ error }}</p>
+    {% endif %} {% if sites is defined %}
+    <ul>
       {% for site in sites %}
-          <li><a href="/dashboard?site={{ site }}">{{ site }} dashboard</a></li>
+      <li><a href="/dashboard?site={{ site }}">{{ site }} dashboard</a></li>
       {% endfor %}
-        </ul>
-      {% endif %} {% if scripts is defined %}
-        <ul>
+    </ul>
+    {% endif %} {% if scripts is defined %}
+    <ul>
       {% for s in scripts %}
-          <li>
-            <form action="/webhook/post" method="post">
-              <input type="hidden" name="site" value="{{ s }}" />
-              <button type="submit">run {{ s }}</button>
-            </form>
-          </li>
+      <li>
+        <form action="/webhook/post" method="post">
+          <input type="hidden" name="site" value="{{ s }}" />
+          <button type="submit">run {{ s }}</button>
+        </form>
+      </li>
       {% endfor %}
-        </ul>
-      {% endif %}
-      <footer>Have a nice day!!</footer>
-    </main>
-  </body>
+    </ul>
+    {% endif %}
+    <footer>Have a nice day!!</footer>
+  </main>
+</body>
+
 </html>

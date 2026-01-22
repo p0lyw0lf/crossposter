@@ -16,7 +16,7 @@ export const Draft: Component<DraftProps> = (props) => {
       <span>{props.draft.title}</span>
       <a
         class={buttonStyles.button}
-        href={`/drafts/render/${props.draft.draftId}`}
+        href={`/drafts/render/${(window as any).username}/${props.draft.draftId}`}
       >
         open
       </a>

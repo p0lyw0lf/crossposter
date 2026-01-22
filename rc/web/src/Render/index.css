@@ -1,0 +1,29 @@
+@import "../base.css";
+@import "../Composer/Editor/Preview.module.css";
+
+/*
+ * TODO: once again I want to directly use styles from my main blog repo, but am instead re-creating
+ * them here, whoops.
+ */
+
+main {
+  display: block;
+
+  border: solid 1px var(--color-dark-gray);
+  background: var(--color-background-primary);
+
+  padding: 0;
+  margin: 32px;
+  max-width: 50rem;
+}
+
+.info {
+  background: var(--color-background-secondary);
+  border-bottom: solid 1px var(--color-dark-gray);
+  padding: 16px;
+}
+
+.info h1 {
+  color: var(--color-text-primary);
+  margin: 0;
+}

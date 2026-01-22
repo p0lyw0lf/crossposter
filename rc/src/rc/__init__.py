@@ -2,7 +2,6 @@ from datetime import datetime
 from pathlib import Path
 import asyncio
 import importlib.resources as impresources
-import json
 import os
 
 from mistletoe import block_token, span_token
@@ -10,7 +9,6 @@ from mistletoe.base_renderer import BaseRenderer
 from sanic import Request, Sanic
 from sanic.response import redirect, text
 from zoneinfo import ZoneInfo
-import aiofiles
 import mistletoe
 
 from poster.dispatch import posting_target
@@ -23,12 +21,12 @@ from .auth import login_required, bp as auth_bp
 from .drafts import bp as drafts_bp
 from .file_upload import bp as file_upload_bp
 from .sync_logs import sync_logs, write_parquet
+from .web import WEB_FILES, get_manifest
 
 app = Sanic("crossposter2")
 app.config.TEMPLATING_PATH_TO_TEMPLATES = impresources.files(__name__) / "templates"
 app.config.SECRET = secrets["SERVER_SECRET"]
 
-WEB_FILES = os.environ.get("RC_WEB_FILES", "./web/dist")
 LOG_FILES = Path(os.environ.get("RC_DATA_DIR", "./src/rc")) / "log_files"
 
 app.static("/assets", f"{WEB_FILES}/assets", name="assets")
@@ -40,16 +38,11 @@ app.blueprint(file_upload_bp)
 poster = posting_target(config["outputs"]["server"], config, secrets)
 
 
-async def get_manifest():
-    async with aiofiles.open(f"{WEB_FILES}/.vite/manifest.json", "rb") as f:
-        return json.loads(await f.read())
-
-
 async def index_context(username: str):
     sites = secrets["logs"].get(username, [])
     scripts = secrets["scripts"].get(username, [])
     return {
-        "index": (await get_manifest())["src/Composer/index.tsx"],
+        "index": await get_manifest("Composer"),
         "username": username,
         "sites": sites,
         "scripts": scripts,
@@ -128,7 +121,7 @@ async def dashboard(request: Request, username):
     site = request.get_args().get("site")
 
     ctx = {
-        "index": (await get_manifest())["src/Dashboard/index.tsx"],
+        "index": await get_manifest("Dashboard"),
         "username": username,
     }
 

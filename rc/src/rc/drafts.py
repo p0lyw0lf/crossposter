@@ -1,6 +1,5 @@
 from dataclasses import asdict
 from datetime import datetime
-from os.path import basename
 from pathlib import Path
 import os
 from typing import Tuple
@@ -9,11 +8,14 @@ import aiofiles
 from sanic import Blueprint, Request
 from sanic.request import RequestParameters
 from sanic.response import json, text
+from sanic_ext import render
+import mistletoe
 
 from poster.model import Post, to_slug
 from poster.template import templates
 
 from .auth import login_required
+from .web import get_manifest
 
 data_dir = Path(os.environ.get("RC_DATA_DIR", os.path.dirname(os.path.realpath(__file__))))
 drafts_dir = data_dir / "drafts"
@@ -138,6 +140,18 @@ async def render_draft(request: Request, username: str, id: str):
     """
 
     file = drafts_dir / username / f"{id}.md"
-    post = await post_from_file(file)
+    try:
+        post = await post_from_file(file)
+    except:
+        return text("Not found", status=400)
 
-    return text("Not Implemented", status=500)
+    body = mistletoe.markdown(post.body)
+    return await render(
+        "render.html.j2",
+        context={
+            "index": await get_manifest("Render"),
+            "body": body,
+            "title": post.title,
+            "tags": post.tags,
+        },
+    )
