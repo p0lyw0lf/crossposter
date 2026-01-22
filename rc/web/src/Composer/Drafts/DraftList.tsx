@@ -5,6 +5,7 @@ import { useSaveDraft } from "../drafts";
 import type { DraftProps } from "./Draft";
 import { Draft } from "./Draft";
 import styles from "./DraftList.module.css";
+import { ReloadDraftButton } from "./ReloadDraftButton";
 import { SaveDraftButton } from "./SaveDraftButton";
 
 export const DraftList: Component<Omit<DraftProps, "draft">> = (props) => {
@@ -24,6 +25,11 @@ export const DraftList: Component<Omit<DraftProps, "draft">> = (props) => {
 
   return (
     <>
+      <div class={styles.buttonContainer}>
+        <SaveDraftButton andCreateNewDraft={true} />
+        <SaveDraftButton andCreateNewDraft={false} />
+        <ReloadDraftButton />
+      </div>
       <ul class={styles.list}>
         <For each={store.drafts} fallback={<li>no drafts</li>}>
           {(draft) => (
@@ -33,11 +39,6 @@ export const DraftList: Component<Omit<DraftProps, "draft">> = (props) => {
           )}
         </For>
       </ul>
-
-      <div class={styles.buttonContainer}>
-        <SaveDraftButton andCreateNewDraft={true} />
-        <SaveDraftButton andCreateNewDraft={false} />
-      </div>
     </>
   );
 };

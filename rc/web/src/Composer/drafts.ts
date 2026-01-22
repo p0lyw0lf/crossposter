@@ -95,7 +95,10 @@ export const listDrafts = async (
 };
 
 /** Returns undefined if the fetch was unsuccessful for any reason. */
-export const getDraft = async (draftId: string): Promise<Draft | undefined> => {
+export const getDraft = async (
+  draftId: string,
+  setError: (error: string) => void,
+): Promise<Draft | undefined> => {
   try {
     const response = await fetch(`/drafts/by_id/${draftId}`);
     if (!response.ok) {
@@ -103,8 +106,8 @@ export const getDraft = async (draftId: string): Promise<Draft | undefined> => {
     }
     const rawDraft = await response.json();
     return draftFromObject(rawDraft);
-  } catch {
-    // TODO: real error message here
+  } catch (err) {
+    setError(String(err));
     return undefined;
   }
 };

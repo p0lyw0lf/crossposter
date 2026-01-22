@@ -73,6 +73,14 @@ async def serialize_post(post: Post) -> str:
     )
     return rendered
 
+def json_from_post(id: str, post: Post) -> object:
+    return {
+        "draftId": id,
+        "title": post.title,
+        "body": post.body,
+        "tags": post.tags,
+    }
+
 @bp.get("list")
 @login_required
 async def list_drafts(request: Request, username: str):
@@ -84,15 +92,7 @@ async def list_drafts(request: Request, username: str):
         drafts.append((f.stem, await post_from_file(f)))
     drafts.sort(key=lambda p: p[1].title)
 
-    return json([
-        {
-            "draftId": id,
-            "title": draft.title,
-            "body": draft.body,
-            "tags": draft.tags,
-        }
-        for id, draft in drafts
-    ])
+    return json([json_from_post(id, draft) for id, draft in drafts])
 
 @bp.get("by_id/<id:slug>")
 @login_required
@@ -105,7 +105,7 @@ async def get_draft(request: Request, username: str, id: str):
     file = drafts_dir / username / f"{id}.md"
     draft = await post_from_file(file)
 
-    return json(draft)
+    return json(json_from_post(id, draft))
 
 @bp.put("by_id/<id:slug>")
 @login_required

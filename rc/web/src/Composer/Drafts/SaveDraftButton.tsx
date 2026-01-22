@@ -18,8 +18,8 @@ export const SaveDraftButton: Component<Props> = (props: Props) => {
     <button
       type="button"
       class={buttonStyles.button}
-      onClick={() => {
-        if (!saveDraft()) {
+      onClick={async () => {
+        if (!(await saveDraft())) {
           return;
         }
 
