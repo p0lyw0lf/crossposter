@@ -72,9 +72,17 @@ export const Composer: Component = () => {
       </form>
       <Show when={store.error}>
         <p classList={{ message: true, error: true }}>{store.error}</p>
+        <button type="button" onClick={() => setStore("error", "")}>
+          x
+        </button>
       </Show>
       <Show when={store.message}>
-        <p classList={{ message: true }}>{store.message}</p>
+        <p classList={{ message: true }}>
+          {store.message}
+          <button type="button" onClick={() => setStore("message", "")}>
+            x
+          </button>
+        </p>
       </Show>
       <DraftList />
     </ComposerProvider>

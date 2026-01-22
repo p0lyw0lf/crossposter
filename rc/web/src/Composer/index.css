@@ -17,6 +17,10 @@ header {
 }
 
 .message {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+
   background-color: var(--color-longan);
   color: darkgreen;
   font-weight: 600;
