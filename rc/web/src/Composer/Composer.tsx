@@ -9,7 +9,7 @@ import { DraftList } from "./Drafts/DraftList";
 import { Editor } from "./Editor/Editor";
 import { PostButton } from "./PostButton";
 import { Toggle } from "./Toggle";
-import { listDrafts } from "./drafts";
+import { Draft, listDrafts } from "./drafts";
 import { uploadFilesAndInsert } from "./fileUpload";
 
 export const Composer: Component = () => {
@@ -24,7 +24,7 @@ export const Composer: Component = () => {
     tags: [] as string[],
     message: "",
     error: "",
-    drafts: drafts() ?? [],
+    drafts: [] as Draft[],
   });
   setError = (error: string): void => {
     setStore("error", error);
@@ -34,6 +34,14 @@ export const Composer: Component = () => {
     // NOTE: we need to make this reactive because, if it isn't, the base store
     // contains an undefined `formRef` despite our non-null assertion.
     setStore("formRef", formRef);
+  });
+
+  createEffect(() => {
+    // Needs to be an effect in order to properly populate the list of drafts when the list is fetched.
+    const fetchedDrafts = drafts();
+    if (fetchedDrafts) {
+      setStore("drafts", fetchedDrafts);
+    }
   });
 
   return (

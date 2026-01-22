@@ -21,6 +21,7 @@ const hasStringKeys = (a: any, ks: string[]): boolean => {
 /** Parses o as Draft object. Returns undefined if parsing fails. */
 const draftFromObject = (o: unknown): Draft | undefined => {
   try {
+    console.log("trying to parse", o);
     if (
       typeof o === "object" &&
       o !== null &&
@@ -29,6 +30,7 @@ const draftFromObject = (o: unknown): Draft | undefined => {
       Array.isArray(o.tags) &&
       o.tags.every((tag: any) => typeof tag === "string")
     ) {
+      console.log("did parse !");
       return o as Draft;
     }
     return undefined;
@@ -82,9 +84,10 @@ export const listDrafts = async (
     }
 
     const drafts = await response.json();
-    return Object.values(drafts)
-      .map(draftFromObject)
-      .filter((d) => d !== undefined);
+    if (!Array.isArray(drafts)) {
+      return [];
+    }
+    return drafts.map(draftFromObject).filter((d) => d !== undefined);
   } catch (err) {
     setError(String(err));
     return [];

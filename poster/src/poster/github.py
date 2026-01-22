@@ -6,7 +6,6 @@ from typing import Any
 
 from githubkit import GitHub, TokenAuthStrategy
 from zoneinfo import ZoneInfo
-import frontmatter
 
 from poster.model import Post, to_slug
 from .template import Renderable
@@ -76,19 +75,6 @@ class GithubTarget(Renderable):
         if response.status_code not in {200, 201}:
             raise ValueError(f"GitHub API response: {response.text}")
 
-        meta, body = frontmatter.parse(response.content.decode("utf-8"))
-        meta: dict[str, Any] = meta
-
-        if timestamp := meta.get("published", None) is not None:
-            published = datetime.fromtimestamp(timestamp)
-        else:
-            published = datetime.now(tz=self.tz)
-
-        return Post(
-            title=meta["title"],
-            description=meta.get("description", None),
-            tags=meta.get("tags", []),
-            published=published,
-            repost_link=meta.get("repost_link", None),
-            body=body,
-        )
+        post = Post.from_string(response.content.decode("utf-8"))
+        post.published = post.published.astimezone(self.tz)
+        return post

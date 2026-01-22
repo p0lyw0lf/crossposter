@@ -1,8 +1,10 @@
 from dataclasses import dataclass
-from typing import TypeAlias
+from typing import Any, TypeAlias
 from datetime import datetime
 import re
 from typing import Optional
+
+import frontmatter
 
 Url: TypeAlias = str
 
@@ -19,6 +21,25 @@ class Post:
     published: datetime  # absolute time, tz-aware
     repost_link: Optional[Url]
     body: str
+
+    @classmethod
+    def from_string(cls, s: str) -> "Post":
+        meta, body = frontmatter.parse(s)
+        meta: dict[str, Any] = meta
+
+        if timestamp := meta.get("published", None) is not None:
+            published = datetime.fromtimestamp(timestamp)
+        else:
+            published = datetime.now()
+
+        return Post(
+            title=meta["title"],
+            description=meta.get("description", None),
+            tags=meta.get("tags", []),
+            published=published,
+            repost_link=meta.get("repost_link", None),
+            body=body,
+        )
 
 
 # Very not secure. Fortunately I think only I'll be using it?
