@@ -14,6 +14,12 @@ export const Draft: Component<DraftProps> = (props) => {
   return (
     <span class={styles.draft}>
       <span>{props.draft.title}</span>
+      <a
+        class={buttonStyles.button}
+        href={`/drafts/render/${props.draft.draftId}`}
+      >
+        open
+      </a>
       <button
         type="button"
         class={buttonStyles.button}
@@ -22,7 +28,7 @@ export const Draft: Component<DraftProps> = (props) => {
           setStore("tags", props.draft.tags);
         }}
       >
-        load
+        edit
       </button>
       <button
         type="button"
