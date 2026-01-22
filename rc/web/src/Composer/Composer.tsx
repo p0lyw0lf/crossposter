@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import { createEffect, Show } from "solid-js";
+import { createEffect, createResource, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import { v7 as uuidv7 } from "uuid";
 import { FileInput } from "../components/FileInput";
@@ -14,6 +14,9 @@ import { uploadFilesAndInsert } from "./fileUpload";
 
 export const Composer: Component = () => {
   let formRef!: HTMLFormElement;
+  let setError!: (error: string) => void;
+
+  const [drafts] = createResource(async () => listDrafts(setError));
 
   const [store, setStore] = createStore({
     formRef,
@@ -21,8 +24,11 @@ export const Composer: Component = () => {
     tags: [] as string[],
     message: "",
     error: "",
-    drafts: listDrafts(),
+    drafts: drafts() ?? [],
   });
+  setError = (error: string): void => {
+    setStore("error", error);
+  };
 
   createEffect(() => {
     // NOTE: we need to make this reactive because, if it isn't, the base store

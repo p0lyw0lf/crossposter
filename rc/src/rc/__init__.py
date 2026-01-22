@@ -20,19 +20,21 @@ from poster.model import Post
 from poster.secrets import secrets
 
 from .auth import login_required, bp as auth_bp
+from .drafts import bp as drafts_bp
 from .file_upload import bp as file_upload_bp
 from .sync_logs import sync_logs, write_parquet
 
-app = Sanic("crossposter")
+app = Sanic("crossposter2")
 app.config.TEMPLATING_PATH_TO_TEMPLATES = impresources.files(__name__) / "templates"
 app.config.SECRET = secrets["SERVER_SECRET"]
 
 WEB_FILES = os.environ.get("RC_WEB_FILES", "./web/dist")
-LOG_FILES = Path(os.environ.get("RC_DATA_DIR", ".")) / "log_files"
+LOG_FILES = Path(os.environ.get("RC_DATA_DIR", "./src/rc")) / "log_files"
 
 app.static("/assets", f"{WEB_FILES}/assets", name="assets")
 app.static("/log_files", str(LOG_FILES), name="log_files")
 app.blueprint(auth_bp)
+app.blueprint(drafts_bp)
 app.blueprint(file_upload_bp)
 
 poster = posting_target(config["outputs"]["server"], config, secrets)
