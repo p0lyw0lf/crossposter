@@ -9,6 +9,11 @@ export interface Draft {
   tags: string[];
 }
 
+/** Returns whether the draft is empty. If it is, it should not be saved. */
+export const isEmptyDraft = (draft: Draft): boolean => {
+  return !draft.title && !draft.body && !draft.tags.length;
+};
+
 const hasStringKeys = (a: any, ks: string[]): boolean => {
   return ks.every((k) => k in a && typeof a[k] === "string");
 };
@@ -145,6 +150,10 @@ export const useSaveDraft = (): (() => Promise<boolean>) => {
     if (!draft) {
       setStore("message", "");
       setStore("error", "ERROR: something went wrong");
+      return false;
+    }
+
+    if (isEmptyDraft(draft)) {
       return false;
     }
 
