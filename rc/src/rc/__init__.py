@@ -63,7 +63,11 @@ class DescriptionRenderer(BaseRenderer):
         if token.children is None:
             return s
         for child in token.children:
-            s += self.render(child)
+            try:
+                s += self.render(child)
+            except:
+                # error rendering child (hline?), just continue
+                pass
             if len(s) >= self.limit:
                 return s[:self.limit-3] + "..."
         return s
