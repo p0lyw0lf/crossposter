@@ -1,0 +1,25 @@
+{#
+title: string;
+entries: Array<{ type: "dir" ; name: string; } & { type: "file" ; title: string; name: string; }>;
+  #}
+
+  {% extends "base.html.j2" %}
+  {% block slot %}
+  <main>
+    <div class="info">
+      <h1>{{ title }}</h1>
+    </div>
+    <article class="preview">
+      <ul>
+        <li><a href="../">../</a></li>
+        {% for entry in entries %}
+        {% if entry["type"] == "dir" %}
+        <li><a href="{{ entry['name'] }}/">{{ entry['name'] }}/</a></li>
+        {% elif entry["type"] == "file" %}
+        <li><a href="{{ entry['name'] }}">{{ entry['title'] | e }}</a></li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </article>
+  </main>
+  {% endblock %}
