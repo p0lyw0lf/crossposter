@@ -1,12 +1,12 @@
 import type { JSX, ParentComponent } from "solid-js";
 import { children, onMount } from "solid-js";
-import styles from "./Button.module.css";
+import styles from "../Button.module.css";
 
 interface Props extends JSX.InputHTMLAttributes<HTMLInputElement> {
   buttonClassList?: Record<string, boolean>;
 }
 
-export const FileInput: ParentComponent<Props> = (props) => {
+export const FileInputButton: ParentComponent<Props> = (props) => {
   let inputRef!: HTMLInputElement;
   let buttonRef!: HTMLButtonElement;
 

@@ -1,23 +1,12 @@
 .composer {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  justify-content: center;
+  align-items: center;
 
   border-radius: 8px;
   border: solid 1px var(--color-border-primary);
   overflow: hidden;
-}
 
-.toolbar {
-  background-color: var(--color-background-secondary);
-  border-top: solid 1px var(--color-border-primary);
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-
-  padding: 8px;
+  min-height: min(16rem, 90vh);
 }

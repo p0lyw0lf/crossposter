@@ -1,0 +1,21 @@
+.area {
+  position: relative;
+}
+
+.overlay {
+  pointer-events: none;
+
+  position: absolute;
+  inset: 0;
+
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+
+  border-radius: 8px;
+  border: thick dashed white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
