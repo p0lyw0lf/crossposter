@@ -44,7 +44,6 @@ async def post_from_file(p: Path) -> Post:
     return post
 
 @bp.get("/<subdir:path>")
-@bp.get("/", name="get_drafts_index")
 async def get_drafts(request: Request, subdir=None):
     """
     This endpoint shows a simple file explorer for the drafts directory, rendering any ".md" files into HTML.
@@ -56,7 +55,6 @@ async def get_drafts(request: Request, subdir=None):
         path = path / subdir
 
     try:
-        print(path)
         path = path.resolve(strict=True)
         if not path.is_relative_to(drafts_dir):
             return text("hahaha no", status=400)
@@ -66,7 +64,7 @@ async def get_drafts(request: Request, subdir=None):
     if not path.exists():
         return text("Path doesn't exist", status=404)
     elif path.is_dir():
-        if subdir is not None and not subdir.endswith("/"):
+        if subdir and not subdir.endswith("/"):
             return redirect(f"/drafts/{subdir}/")
         return await list_dir(path)
     elif path.is_file():
@@ -106,7 +104,6 @@ async def list_dir(path: Path):
             })
 
     entries.sort(key=lambda e: e["type"] + e["name"])
-    print(path, entries)
     return await render(
         "drafts/dir.html.j2",
         context={
