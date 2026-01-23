@@ -1,33 +1,31 @@
+{#
+title: string;
+index: ViteManifest;
+#}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+  {% block head %}
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <title>PolyWolf's Post Composer</title>
+  <title>{{ title }}</title>
   <script type="module" src="/{{ index['file'] }}"></script>
   {% for file in index['css'] %}
   <link rel="stylesheet" href="/{{ file }}" />
   {% endfor %}
+  <script>
+    window.username = "{{ username }}";
+  </script>
+  {% endblock %}
 </head>
 
 <body>
-  <main>
-    <div class="info">
-      <h1>DRAFT: {{ title }}</h1>
-    </div>
-    <article class="preview">
-      {{ body }}
-    </article>
-    <div class="tags">
-      {% for tag in tags %}
-      <span>#{{ tag }}</span>
-      {% endfor %}
-    </div>
-  </main>
+  {% block slot %}{% endblock %}
 </body>
 
 </html>

@@ -1,37 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
+{#
+username: string;
+site: string | undefined;
+error: string | undefined;
+#}
 
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <title>PolyWolf's Dashboard</title>
-  <script type="module" src="/{{ index['file'] }}"></script>
-  {% for file in index['css'] %}
-  <link rel="stylesheet" href="/{{ file }}" />
-  {% endfor %}
-</head>
+{% set title = username ~ "'s Dashboard" %}
 
-<body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <main>
-    <header>
-      <h1>{{ username }}'s Dashboard</h1>
-    </header>
-    <div id="root"></div>
-    {% if site is defined %}
-    <input type="hidden" id="site" value="{{ site }}" />
-    {% endif %}
-    {% if error is defined %}
-    <p class="message error">{{ error }}</p>
-    {% endif %}
-    <footer>
-      <a href="/">Home</a>
-      Have a nice day!!
-    </footer>
-  </main>
-</body>
-
-</html>
+{% extends "base.html.j2" %}
+{% block slot %}
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<main>
+  <header>
+    <h1>{{ title }}/h1>
+  </header>
+  <div id="root"></div>
+  {% if site is defined %}
+  <input type="hidden" id="site" value="{{ site }}" />
+  {% endif %}
+  {% if error is defined %}
+  <p class="message error">{{ error }}</p>
+  {% endif %}
+  <footer>
+    <a href="/">Home</a>
+    Have a nice day!!
+  </footer>
+</main>
+{% endblock %}
