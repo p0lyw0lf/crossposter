@@ -11,7 +11,6 @@ from sanic.response import redirect, text
 from zoneinfo import ZoneInfo
 import mistletoe
 
-from poster.dispatch import posting_target
 from poster.script import ScriptTarget
 from poster.config import config
 from poster.model import Post
@@ -35,8 +34,6 @@ app.blueprint(auth_bp)
 app.blueprint(drafts_bp)
 app.blueprint(file_upload_bp)
 
-poster = posting_target(config["outputs"]["server"], config, secrets)
-
 
 async def index_context(username: str):
     sites = secrets["logs"].get(username, [])
@@ -54,67 +51,6 @@ async def index_context(username: str):
 @login_required
 async def index_get(request: Request, username):
     return await index_context(username)
-
-
-class DescriptionRenderer(BaseRenderer):
-    limit = 140
-    def render_document(self, token: block_token.Document) -> str:
-        s = ""
-        if token.children is None:
-            return s
-        for child in token.children:
-            try:
-                s += self.render(child)
-            except:
-                # error rendering child (hline?), just continue
-                pass
-            if len(s) >= self.limit:
-                return s[:self.limit-3] + "..."
-        return s
-
-    def render_paragraph(self, token: block_token.Paragraph) -> str:
-        return self.render_inner(token) + " "
-
-    def render_image(self, token: span_token.Image) -> str:
-        return token.title
-
-@app.post("/")
-@app.ext.template("index.html.j2")
-@login_required
-async def index_post(request: Request, username):
-    context = await index_context(username)
-
-    if request.form is None:
-        context["error"] = "No form passed!"
-        return context
-
-    title = request.form.get("title")
-    body = request.form.get("body")
-    tags = request.form.getlist("tags")
-
-    if title is None or body is None:
-        context["error"] = "Must include title and body!"
-        return context
-
-    description = mistletoe.markdown(body, DescriptionRenderer)
-    published = datetime.now(ZoneInfo(config["timezone"]))
-    post = Post(
-        title=title,
-        description=description,
-        tags=tags,
-        published=published,
-        repost_link=None,
-        body=body,
-    )
-
-    try:
-        await poster.post(post, dict())
-    except Exception as e:
-        context["error"] = f"Error making post: {e}"
-        return context
-
-    context["message"] = "Posted successfully!"
-    return context
 
 
 @app.get("/dashboard")

@@ -5,6 +5,28 @@
  * them here, whoops.
  */
 
+header {
+  display: block;
+  margin: 32px;
+
+  button {
+    background-color: var(--color-mango);
+    color: var(--color-black);
+
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: none;
+
+    font: inherit;
+
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--color-longan);
+    }
+  }
+}
+
 main {
   display: block;
 
@@ -56,6 +78,7 @@ main {
 
     code {
       display: block;
+      overflow: auto;
     }
   }
 
@@ -128,5 +151,12 @@ main {
   span {
     color: var(--color-text-primary-accent);
     text-decoration: underline;
+  }
+}
+
+@media (max-width: 600px) {
+  header,
+  main {
+    margin: 16px;
   }
 }

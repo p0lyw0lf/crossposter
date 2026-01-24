@@ -1,11 +1,32 @@
 {#
+// part of the post itself
 title: string;
 body: HTML;
 tags: string[];
+// part of how we display the page for interaction
+errors: string[];
+messages: string[];
+username: string | undefined;
 #}
 
 {% extends "base.html.j2" %}
 {% block slot %}
+<header>
+  {% for error in errors %}
+  <div class="message error">{{ error }}</div>
+  {% endfor %}
+  {% for message in messages %}
+  <div class="message">{{ message }}</div>
+  {% endfor %}
+  {% if username %}
+  <form method="POST">
+    <label for="submit">Very Dangerous!!</label>
+    <button id="submit" type="submit">
+      Publish Post Now
+    </button>
+  </form>
+  {% endif %}
+</header>
 <main>
   <div class="info">
     <h1>{{ title }}</h1>
