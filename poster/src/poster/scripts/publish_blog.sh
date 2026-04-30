@@ -16,13 +16,8 @@ git pull
 # them all on the same machine, which honestly is probably better overall lol
 # No need to restore caches & install tools every time, it's already all there!
 
-# Use nvm, if installed
-NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 # Build the site
-pnpm install
-pnpm build
+just build
 
 # Uses the strategy at https://rclone.org/s3/#avoiding-get-requests-to-read-directory-listings
 rclone --config "${SCRIPT_DIR}/rclone_blog.conf" sync --fast-list --checksum ./dist/ "s3:${AWS_BUCKET_NAME}"
