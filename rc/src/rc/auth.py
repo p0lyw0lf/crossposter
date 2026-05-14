@@ -80,7 +80,7 @@ def basic_logic_required(wrapped):
 
 
 @bp.get("/login")
-async def login_get(request: Request):
+async def login_get(_: Request):
     return await render("login.html.j2")
 
 

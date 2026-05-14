@@ -1,19 +1,13 @@
-from datetime import datetime
 from pathlib import Path
 import asyncio
 import importlib.resources as impresources
 import os
 
-from mistletoe import block_token, span_token
-from mistletoe.base_renderer import BaseRenderer
 from sanic import Request, Sanic
 from sanic.response import redirect, text
-from zoneinfo import ZoneInfo
-import mistletoe
 
 from poster.script import ScriptTarget
 from poster.config import config
-from poster.model import Post
 from poster.secrets import secrets
 
 from .auth import login_required, bp as auth_bp
@@ -49,7 +43,7 @@ async def index_context(username: str):
 @app.get("/")
 @app.ext.template("index.html.j2")
 @login_required
-async def index_get(request: Request, username):
+async def index_get(_: Request, username):
     return await index_context(username)
 
 

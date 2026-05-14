@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 import os
@@ -171,7 +170,7 @@ async def render_post(post: Post, username=None, messages=[], errors=[]):
 
 @bp.post("/<subdir:path>")
 @login_required
-async def post_draft(request: Request, username, subdir=None):
+async def post_draft(_: Request, username, subdir=None):
     path = validate_path(subdir)
     if not isinstance(path, Path):
         return path
@@ -196,7 +195,10 @@ async def post_draft(request: Request, username, subdir=None):
     if len(errors) > 0:
         return await render_post(post, messages, errors)
 
-    description = mistletoe.markdown(post.body, DescriptionRenderer)
+    description = post.description
+    if not description:
+        description = mistletoe.markdown(post.body, DescriptionRenderer)
+
     published = datetime.now(ZoneInfo(config["timezone"]))
     full_post = Post(
         title=post.title,

@@ -40,7 +40,7 @@ async def upload(request: Request, username: str):
 
     with tempfile.NamedTemporaryFile("wb+") as f:
         # Step 1: read streamed data into file
-        async for data in request.stream:
+        async for data in request.stream: # pyright: ignore reportGeneralTypeIssues
             await asyncio.to_thread(f.write, data)
 
         # Step 2: upload file to S3
