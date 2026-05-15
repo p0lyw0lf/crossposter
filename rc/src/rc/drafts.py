@@ -104,7 +104,7 @@ async def get_drafts(request: Request, subdir=None):
         return await list_dir(path)
     elif path.is_file():
         if path.suffix == ".md":
-            return await render_file(request, path, request.args.get("full") is not None)
+            return await render_file(request, path, request.args.get("preview") is not None)
         else:
             return await file(path)
     else:
@@ -148,7 +148,7 @@ async def list_dir(path: Path):
         },
     )
 
-async def render_file(request: Request, path: Path, is_full: bool):
+async def render_file(request: Request, path: Path, is_preview: bool):
     """
     Given a markdown file at `path`, renders it as HTML.
     REQUIRES: path.exists() and path.is_file()
@@ -156,10 +156,24 @@ async def render_file(request: Request, path: Path, is_full: bool):
 
     username = check_token(request)
     post = await post_from_file(path)
-    if is_full:
-        return await render_post(post)
-    else:
+    if is_preview:
         return await preview_post(post, username)
+    else:
+        return await render_post(post)
+
+async def preview_post(post: Post, username=None, messages=[], errors=[]):
+    return await render(
+        "drafts/file.html.j2",
+        context={
+            "index": await get_manifest("Render"),
+            "title": post.title,
+            "description": post.description,
+            "tags": post.tags,
+            "username": username,
+            "messages": messages,
+            "errors": errors,
+        },
+    )
 
 async def render_post(post: Post):
     """
@@ -205,20 +219,6 @@ def run_driver(filename: str):
         cwd=website_dir,
     )
     p.check_returncode()
-
-async def preview_post(post: Post, username=None, messages=[], errors=[]):
-    return await render(
-        "drafts/file.html.j2",
-        context={
-            "index": await get_manifest("Render"),
-            "title": post.title,
-            "description": post.description,
-            "tags": post.tags,
-            "username": username,
-            "messages": messages,
-            "errors": errors,
-        },
-    )
 
 @bp.post("/<subdir:path>")
 @login_required
