@@ -1,19 +1,23 @@
 from datetime import datetime
 from pathlib import Path
+import asyncio
 import os
+import subprocess
 import urllib.parse
 
-import aiofiles
+from aiofiles.tempfile import NamedTemporaryFile
 from sanic import Blueprint, Request
-from sanic.response import HTTPResponse, text, file, redirect
+from sanic.response import HTTPResponse, html, text, file, redirect
 from sanic_ext import render
-import mistletoe
 from zoneinfo import ZoneInfo
+import aiofiles
+import mistletoe
 
-from poster.dispatch import posting_target
 from poster.config import config
+from poster.dispatch import posting_target
 from poster.model import Post
 from poster.secrets import secrets
+from poster.template import Renderable
 
 from .auth import check_token, login_required
 from .markdown import DescriptionRenderer
@@ -25,7 +29,12 @@ data_dir = Path(os.environ.get("RC_DRAFTS_DIR", os.path.dirname(os.path.realpath
 drafts_dir = (data_dir / "drafts").resolve()
 
 poster = posting_target(config["outputs"]["server"], config, secrets)
+renderer = posting_target(config["outputs"]["drafts"], config, secrets)
 
+driver_bin = Path(os.environ.get("RC_DRIVER_BIN", "/usr/bin/false"))
+website_dir = Path(os.environ.get("RC_WEBSITE_DIR", os.path.join(os.path.dirname(os.path.realpath(__file__)), "website")))
+website_drafts_dir = (website_dir / "drafts").resolve()
+website_dist_dir = website_drafts_dir / "dist"
 
 UNTITLED = "<Untitled>"
 
@@ -95,7 +104,7 @@ async def get_drafts(request: Request, subdir=None):
         return await list_dir(path)
     elif path.is_file():
         if path.suffix == ".md":
-            return await render_file(request, path)
+            return await render_file(request, path, request.args.get("full") is not None)
         else:
             return await file(path)
     else:
@@ -139,7 +148,7 @@ async def list_dir(path: Path):
         },
     )
 
-async def render_file(request: Request, path: Path):
+async def render_file(request: Request, path: Path, is_full: bool):
     """
     Given a markdown file at `path`, renders it as HTML.
     REQUIRES: path.exists() and path.is_file()
@@ -147,20 +156,63 @@ async def render_file(request: Request, path: Path):
 
     username = check_token(request)
     post = await post_from_file(path)
-    return await render_post(post, username)
+    if is_full:
+        return await render_post(post)
+    else:
+        return await preview_post(post, username)
 
-async def render_post(post: Post, username=None, messages=[], errors=[]):
+async def render_post(post: Post):
     """
     Given a parsed post object, renders it using the corresponding jinja template.
     """
 
-    body = mistletoe.markdown(post.body)
+    # 1: fully render post to text
+    if not isinstance(renderer, Renderable):
+        return text("cannot render post", status=500)
+    content = await renderer.render(post, dict())
+
+    # 2: copy post into website source directory
+    # (this does require that directory to be mutable, but that's OK)
+    async with NamedTemporaryFile(dir=(website_drafts_dir / "src")) as f:
+        await f.write(content.encode("utf-8"))
+        await f.flush()
+
+        # 3: Run the renderer with that file
+        filename = os.path.basename(str(f.name))
+        await asyncio.to_thread(run_driver, filename)
+
+        # 4: Collect the outputs
+        async with aiofiles.open(website_dist_dir / f"{filename}.html") as body_file:
+            body = await body_file.read()
+
+    return html(body)
+
+def run_driver(filename: str):
+    """
+    REQUIRES: website_dir / "drafts" / "src" / filename exists and contains a valid post
+    ENSURES: website_dir / "drafts" / "dist" / f"{filename}.html" exists. 
+    """
+
+    p = subprocess.run(
+        [
+            str(driver_bin),
+            "--dist", str(website_dist_dir),
+            "--cache", str(website_drafts_dir / ".driver"),
+            "run", "--no-delete-missing", str(website_dir / "DRAFT.js"),
+            "--",
+            filename,
+        ],
+        cwd=website_dir,
+    )
+    p.check_returncode()
+
+async def preview_post(post: Post, username=None, messages=[], errors=[]):
     return await render(
         "drafts/file.html.j2",
         context={
             "index": await get_manifest("Render"),
-            "body": body,
             "title": post.title,
+            "description": post.description,
             "tags": post.tags,
             "username": username,
             "messages": messages,
@@ -187,13 +239,13 @@ async def post_draft(_: Request, username, subdir=None):
 
     messages = []
     errors = []
-    if post.title == UNTITLED:
+    if not post.title or post.title == UNTITLED:
         errors.append("Must include title property!")
-    if len(post.tags) == 0:
+    if not post.tags or len(post.tags) == 0:
         errors.append("Must include tags!")
 
     if len(errors) > 0:
-        return await render_post(post, messages, errors)
+        return await preview_post(post, messages, errors)
 
     description = post.description
     if not description:
@@ -217,4 +269,4 @@ async def post_draft(_: Request, username, subdir=None):
     if len(errors) == 0:
         messages.append("Posted successfully!")
 
-    return await render_post(post, username, messages, errors)
+    return await preview_post(post, username, messages, errors)

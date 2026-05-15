@@ -1,7 +1,7 @@
 {#
 // part of the post itself
 title: string;
-body: HTML;
+description: string;
 tags: string[];
 // part of how we display the page for interaction
 errors: string[];
@@ -12,27 +12,40 @@ username: string | undefined;
 {% extends "base.html.j2" %}
 {% block slot %}
 <header>
-  {% for error in errors %}
-  <div class="message error">{{ error }}</div>
-  {% endfor %}
-  {% for message in messages %}
-  <div class="message">{{ message }}</div>
-  {% endfor %}
-  {% if username %}
-  <form method="POST">
-    <label for="submit">Very Dangerous!!</label>
-    <button id="submit" type="submit">
-      Put Thoughts Online
-    </button>
-  </form>
-  {% endif %}
+  <h2><a href="./">../</a></h2>
 </header>
 <main>
   <div class="info">
     <h1>{{ title }}</h1>
   </div>
   <article class="preview">
-    {{ body }}
+    {{ description }}
+    {% if errors %}
+    <hr>
+    {% endif %}
+    {% for error in errors %}
+    <div class="message error">{{ error }}</div>
+    {% endfor %}
+    {% if messages %}
+    <hr>
+    {% endif %}
+    {% for message in messages %}
+    <div class="message">{{ message }}</div>
+    {% endfor %}
+    <hr>
+    <h2><a href="?full=1">See Full Post</a></h2>
+    {% if username %}
+    <hr>
+    <br><br><br><br>
+    <form method="POST">
+      <label for="submit">Very Dangerous!!</label>
+      &nbsp;
+      <button id="submit" type="submit">
+        Put Thoughts Online
+      </button>
+    </form>
+    <br><br><br><br>
+    {% endif %}
   </article>
   <div class="tags">
     {% for tag in tags %}
