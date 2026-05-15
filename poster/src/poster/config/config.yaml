@@ -38,5 +38,6 @@ bluesky_blog:
 outputs:
   bot: "chain_cybersec"
   server: "chain_blog"
+  drafts: "github_blog"
 
 TESTING: true
