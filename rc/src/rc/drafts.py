@@ -210,9 +210,11 @@ def run_driver(filename: str):
     p = subprocess.run(
         [
             str(driver_bin),
-            "--dist", str(website_dist_dir),
             "--cache", str(website_drafts_dir / ".driver"),
-            "run", "--no-delete-missing", str(website_dir / "DRAFT.js"),
+            "run",
+            "--dist", str(website_dist_dir),
+            "--no-delete-missing",
+            str(website_dir / "DRAFT.js"),
             "--",
             filename,
         ],
