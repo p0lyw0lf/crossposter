@@ -6,17 +6,33 @@ import { createPagingControls } from "./createPagingControls";
 import { useDBContext } from "./DBContext";
 import { PagingControls } from "./PagingControls";
 
-export const HitsPerReferrer: Component = () => {
-  const { ctx, setFilters } = useDBContext();
+const REFERRER = `"cs(Referer)"`;
+const REFERRER_HOST = `SPLIT_PART("cs(Referer)", '/', 3)`;
 
-  const [referrerCount] = createResource(ctx, async ({ conn, filters }) => {
-    const rows = await conn.query(`
-SELECT COUNT(DISTINCT SPLIT_PART("cs(Referer)", '/', 3)) as count
+export const HitsPerReferrer: Component = () => {
+  const { ctx, filters, setFilters } = useDBContext();
+
+  const hasHost = () => filters["Referrer-Host"] !== undefined;
+  const filterBy = () => (hasHost() ? REFERRER : REFERRER_HOST);
+
+  // Wishing I had a simple `Option::map` right now...
+  const ctxWithCol = () => {
+    const maybeCtx = ctx();
+    if (maybeCtx) return { ...maybeCtx, col: filterBy() };
+    else return null;
+  };
+
+  const [referrerCount] = createResource(
+    ctxWithCol,
+    async ({ conn, filters, col }) => {
+      const rows = await conn.query(`
+SELECT COUNT(DISTINCT ${col}) as count
 FROM logs
-WHERE SPLIT_PART("cs(Referer)", '/', 3) != '' AND ${filters}
+WHERE ${col} != '' AND ${filters}
 `);
-    return Number(rows.get(0)?.count ?? 0);
-  });
+      return Number(rows.get(0)?.count ?? 0);
+    },
+  );
 
   const paging = createPagingControls(
     referrerCount,
@@ -24,27 +40,32 @@ WHERE SPLIT_PART("cs(Referer)", '/', 3) != '' AND ${filters}
     () => refetch(),
   );
 
-  const [data, { refetch }] = createResource(ctx, async ({ conn, filters }) => {
-    const data = await conn.query(`
-SELECT SPLIT_PART("cs(Referer)", '/', 3) as referrer, COUNT() as hits
+  const [data, { refetch }] = createResource(
+    ctxWithCol,
+    async ({ conn, filters, col }) => {
+      const query = `
+SELECT ${col} as referrer, COUNT() as hits
 FROM logs
-WHERE referrer != '' AND ${filters}
+WHERE referrer != '' AND referrer != '-' AND ${filters}
 GROUP BY referrer
 ORDER BY hits DESC
 LIMIT ${paging.limit()}
 OFFSET ${paging.offset()}
-`);
-    return (
-      data?.toArray().map(({ referrer, hits }) => ({
-        key: String(referrer),
-        value: Number(hits),
-      })) ?? []
-    );
-  });
+`;
+      const data = await conn.query(query);
+      return (
+        data?.toArray().map(({ referrer, hits }) => ({
+          key: String(referrer),
+          value: Number(hits),
+        })) ?? []
+      );
+    },
+  );
   return (
     <>
       <h2>
         Referrer
+        <ClearFilterChip keyName="Referrer-Host" />
         <ClearFilterChip keyName="Referrer" />
       </h2>
       <PagingControls
@@ -63,12 +84,15 @@ OFFSET ${paging.offset()}
       >
         <LabelBarChart
           data={data()!}
-          onClickFactory={(key) => () => {
-            setFilters(
-              "Referrer",
-              `SPLIT_PART("cs(Referer)", '/', 3) = '${key}'`,
-            );
-          }}
+          onClickFactory={
+            hasHost()
+              ? (key) => () => {
+                  setFilters("Referrer", `${REFERRER} = '${key}'`);
+                }
+              : (key) => () => {
+                  setFilters("Referrer-Host", `${REFERRER_HOST} = '${key}'`);
+                }
+          }
         />
       </Show>
     </>

@@ -6,6 +6,7 @@ import { SetStoreFunction } from "solid-js/store";
 const filterKeys = [
   "Date",
   "URI",
+  "Referrer-Host",
   "Referrer",
   "IP",
   "UserAgent",
