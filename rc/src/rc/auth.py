@@ -99,7 +99,8 @@ async def login_post(request: Request):
         algorithm="HS256",
     )
     to = request.args.get("next", "/")
-    return redirect(to, {"Set-Cookie": f"token={token}"})
+    # Expire cookie after 1 week
+    return redirect(to, {"Set-Cookie": f"token={token}; Max-Age={7 * 24 * 60 * 60}"})
 
 
 @bp.route("/auth")
