@@ -16,16 +16,20 @@ const height = 450;
 const marginTop = 30;
 const marginRight = 0;
 const marginBottom = 30;
-const marginLeft = 40;
+const marginLeft = 60;
 
 export const DateBarChart: Component<Props> = (props) => {
   const data = () => props.data;
 
-  const x = () =>
-    d3
-      .scaleUtc()
+  const barWidth = () => (width - marginRight - marginLeft) / data().length;
+
+  const x = () => {
+    const bw = barWidth();
+    return d3
+      .scaleTime()
       .domain([d3.min(data(), (d) => d.key)!, d3.max(data(), (d) => d.key)!])
-      .range([marginLeft, width - marginRight]);
+      .range([marginLeft + bw / 2, width - marginRight - bw / 2]);
+  };
 
   const xAxis = () => d3.axisBottom(x()!);
 
@@ -36,9 +40,6 @@ export const DateBarChart: Component<Props> = (props) => {
       .range([height - marginBottom, marginTop]);
 
   const yAxis = () => d3.axisLeft(y());
-
-  const barWidth = () =>
-    ((width - marginRight - marginLeft) / data().length) * 0.95;
 
   let gx!: SVGGElement;
   let gy!: SVGGElement;
@@ -59,17 +60,24 @@ export const DateBarChart: Component<Props> = (props) => {
         height={height}
         style={{ "max-width": "100%", height: "auto" }}
       >
-        <g class="bars" fill="var(--color-text-secondary-accent)">
+        <g
+          class="bars"
+          fill="var(--color-text-secondary-accent)"
+          stroke="var(--color-background-secondary)"
+        >
           <For each={data()}>
-            {(d) => (
-              <rect
-                onClick={props.onClickFactory?.(d.key)}
-                x={x()(d.key)}
-                y={y()(d.value)}
-                height={y()(0) - y()(d.value)}
-                width={barWidth()}
-              />
-            )}
+            {(d) => {
+              const bw = barWidth();
+              return (
+                <rect
+                  onClick={props.onClickFactory?.(d.key)}
+                  x={x()(d.key) - bw / 2}
+                  y={y()(d.value)}
+                  height={y()(0) - y()(d.value)}
+                  width={bw}
+                />
+              );
+            }}
           </For>
         </g>
         <g
