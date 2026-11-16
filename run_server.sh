@@ -11,4 +11,4 @@ pnpm build
 
 # Run the server
 cd ..
-/home/ubuntu/.local/bin/hatch run -- sanic src.rc
+exec $HOME/.local/bin/hatch run -- sanic src.rc
