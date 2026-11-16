@@ -208,7 +208,7 @@ def run_driver(filename: str):
 
     p = subprocess.run(
         [
-            "nix", "develop", "./nix", "--command",
+            "direnv", "exec", str(website_dir),
             "driver",
             "--cache", str(website_drafts_dir / ".driver"),
             "run",
