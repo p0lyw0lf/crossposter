@@ -214,7 +214,7 @@ def run_driver(filename: str):
             "run",
             "--dist", str(website_dist_dir),
             "--no-delete-missing",
-            str(website_dir / "DRAFT.js"),
+            "DRAFT.js",
             "--",
             filename,
         ],
