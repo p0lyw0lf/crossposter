@@ -31,7 +31,6 @@ drafts_dir = (data_dir / "drafts").resolve()
 poster = posting_target(config["outputs"]["server"], config, secrets)
 renderer = posting_target(config["outputs"]["drafts"], config, secrets)
 
-driver_bin = Path(os.environ.get("RC_DRIVER_BIN", "/usr/bin/false"))
 website_dir = Path(os.environ.get("RC_WEBSITE_DIR", os.path.join(os.path.dirname(os.path.realpath(__file__)), "website")))
 website_drafts_dir = (website_dir / "drafts").resolve()
 website_dist_dir = website_drafts_dir / "dist"
@@ -209,7 +208,8 @@ def run_driver(filename: str):
 
     p = subprocess.run(
         [
-            str(driver_bin),
+            "nix", "develop", "./nix", "--command",
+            "driver",
             "--cache", str(website_drafts_dir / ".driver"),
             "run",
             "--dist", str(website_dist_dir),
