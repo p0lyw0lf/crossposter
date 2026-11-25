@@ -20,7 +20,10 @@
   awscli2,
   bashNonInteractive,
   corepack,
+  direnv,
   gitMinimal,
+  nix,
+  nix-direnv,
   rclone,
   sops,
 }:
@@ -69,7 +72,10 @@ buildPythonPackage {
     awscli2
     bashNonInteractive
     corepack
+    direnv
     gitMinimal
+    nix
+    nix-direnv
     rclone
   ];
 

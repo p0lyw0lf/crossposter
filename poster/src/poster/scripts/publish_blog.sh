@@ -17,7 +17,7 @@ git pull
 # No need to restore caches & install tools every time, it's already all there!
 
 # Build the site
-just build
+direnv exec . just build
 
 # Uses the strategy at https://rclone.org/s3/#avoiding-get-requests-to-read-directory-listings
 rclone --config "${SCRIPT_DIR}/rclone_blog.conf" sync --fast-list --checksum ./dist/ "s3:${AWS_BUCKET_NAME}"
