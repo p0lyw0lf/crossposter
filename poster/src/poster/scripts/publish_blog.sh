@@ -16,8 +16,8 @@ git pull
 # them all on the same machine, which honestly is probably better overall lol
 # No need to restore caches & install tools every time, it's already all there!
 
-# Build the site
-direnv exec . just build
+# Build the site. Bit of a hack to include nix but whatever
+PATH="$PATH:/nix/var/nix/profiles/default/bin" direnv exec . just build
 
 # Uses the strategy at https://rclone.org/s3/#avoiding-get-requests-to-read-directory-listings
 rclone --config "${SCRIPT_DIR}/rclone_blog.conf" sync --fast-list --checksum ./dist/ "s3:${AWS_BUCKET_NAME}"
