@@ -3,6 +3,8 @@
   stdenvNoCC,
   nodejs,
   pnpm,
+  pnpmConfigHook,
+  fetchPnpmDeps,
 }:
 let
   fs = lib.fileset;
@@ -25,15 +27,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-b/ZWXZ6qhAubLl+Qb18ZTRiHGVgWpAr8Wq0jZB12uCA=";
+    inherit pnpm;
+    fetcherVersion = 5;
+    hash = "sha256-ogaABbVzpH8qmBihhEFRpZV16IpXVW9Ek+1eo3tuuso=";
   };
 
   installPhase = ''
+    runHook preInstall
     pnpm build --outDir $out --emptyOutDir
+    runHook postInstall
   '';
 })
