@@ -41,8 +41,8 @@ let
   );
 in
 buildPythonPackage {
-  pname = "crossposter";
-  version = "0.1.0";
+  pname = "poster";
+  version = "0.1.1";
   pyproject = true;
 
   src = fs.toSource {

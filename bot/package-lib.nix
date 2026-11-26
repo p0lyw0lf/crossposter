@@ -20,7 +20,7 @@ let
   ];
 in
 buildPythonPackage {
-  pname = "bot-crossposter-lib";
+  pname = "bot";
   version = "0.1.1";
   pyproject = true;
 

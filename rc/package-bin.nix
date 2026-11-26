@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation {
     rc-crossposter-static
   ];
 
-  src = ./bin;
+  src = null;
   dontUnpack = true;
 
   installPhase = ''

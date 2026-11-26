@@ -1,11 +1,7 @@
 {
-  lib,
   stdenvNoCC,
   python3-bot-crossposter-env,
 }:
-let
-  fs = lib.fileset;
-in
 stdenvNoCC.mkDerivation {
   pname = "bot-crossposter-bin";
   version = "0.1.1";
@@ -14,7 +10,7 @@ stdenvNoCC.mkDerivation {
     python3-bot-crossposter-env
   ];
 
-  src = ./bin;
+  src = null;
   dontUnpack = true;
 
   installPhase = ''
@@ -23,7 +19,7 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/bin
     cat <<EOF > $out/bin/bot-crossposter
     #!/usr/bin/env bash
-    "${python3-bot-crossposter-env}/bin/python3" -m bot
+    exec "${python3-bot-crossposter-env}/bin/python3" -m bot
     EOF
     chmod +x $out/bin/bot-crossposter
 

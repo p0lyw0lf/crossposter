@@ -32,7 +32,7 @@ let
   ];
 in
 buildPythonPackage {
-  pname = "rc-crossposter-lib";
+  pname = "rc";
   version = "0.1.1";
   pyproject = true;
 
