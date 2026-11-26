@@ -29,7 +29,7 @@
 }:
 let
   fs = lib.fileset;
-  sourceFiles = fs.intersection (fs.gitTracked ./.) (
+  sourceFiles = fs.intersection (fs.gitTracked ../.) (
     fs.unions [
       ./pyproject.toml
       (fs.fileFilter (file: file.hasExt "py") ./src/poster)
@@ -55,7 +55,9 @@ buildPythonPackage {
   dependencies = [
     atproto
     githubkit
-    githubkit.optional-dependencies.auth-app
+  ]
+  ++ githubkit.optional-dependencies.auth-app
+  ++ [
     jinja2
     mastodon-py
     mistletoe
@@ -89,7 +91,9 @@ buildPythonPackage {
           lib.makeBinPath [
             awscli2
             corepack
+            direnv
             gitMinimal
+            nix
             rclone
           ]
         }
