@@ -24,12 +24,10 @@ let
   };
 in
 {
-  packages = {
-    inherit
-      python3
-      bot-crossposter
-      rc-crossposter
-      rc-crossposter-static
-      ;
-  };
+  inherit
+    python3
+    bot-crossposter
+    rc-crossposter
+    rc-crossposter-static
+    ;
 }
